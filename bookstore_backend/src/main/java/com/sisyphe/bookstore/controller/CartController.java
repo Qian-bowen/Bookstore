@@ -1,0 +1,62 @@
+package com.sisyphe.bookstore.controller;
+
+import com.google.gson.Gson;
+import com.sisyphe.bookstore.Json.CartJsonSend;
+import com.sisyphe.bookstore.constant.Constant;
+import com.sisyphe.bookstore.entity.Book;
+import com.sisyphe.bookstore.entity.Cart;
+import com.sisyphe.bookstore.service.BookService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.sisyphe.bookstore.service.CartService;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@CrossOrigin
+public class CartController {
+    @Autowired
+    private CartService cartService;
+    @Autowired
+    private BookService bookService;
+
+    @RequestMapping(value="/bookdetail/add_cart",method = RequestMethod.POST)
+    @CrossOrigin
+    public void storeCart(@RequestBody Map<String,Integer> params)
+    {
+        Integer user_id=params.get(Constant.USER_ID);
+        Integer book_id=params.get(Constant.BOOK_ID);
+        Integer piece=params.get(Constant.PIECE);
+        System.out.println("cart get:"+user_id+" book_id:"+book_id);
+        Cart cart=new Cart(user_id,book_id,piece);
+        cartService.storeCart(cart);
+    }
+
+    @RequestMapping(value="/cart")
+    @CrossOrigin
+    public String pushCarts(@RequestBody Map<String,Integer> params)
+    {
+        System.out.println("call push cart");
+        Integer user_id=params.get(Constant.USER_ID);
+        System.out.println("controller user_id:"+user_id);
+        List<Cart> carts=cartService.pushCarts(user_id);
+
+        CartJsonSend cartJsonSend=new CartJsonSend();
+        cartJsonSend.user_id=user_id;
+
+        for(Cart cart : carts)
+        {
+            int book_id=cart.get_book_id();
+            Book book= bookService.findBookById(book_id);
+            cartJsonSend.books.add(book);
+            System.out.println("book_id:"+book_id);
+        }
+
+        Gson gson = new Gson();
+        // convert list to json
+        String cart_json = gson.toJson(cartJsonSend);
+        return cart_json;
+    }
+}
