@@ -14,14 +14,12 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
 
     @RequestMapping(value="/cart/order",method = RequestMethod.POST)
-    @CrossOrigin
     public String storeOrder(@RequestBody String order_str)
     {
         System.out.println("order str:"+order_str);

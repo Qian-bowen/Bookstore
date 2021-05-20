@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin
 public class CartController {
     @Autowired
     private CartService cartService;
@@ -23,7 +22,6 @@ public class CartController {
     private BookService bookService;
 
     @RequestMapping(value="/bookdetail/add_cart",method = RequestMethod.POST)
-    @CrossOrigin
     public void storeCart(@RequestBody Map<String,Integer> params)
     {
         Integer user_id=params.get(Constant.USER_ID);
@@ -35,20 +33,19 @@ public class CartController {
     }
 
     @RequestMapping(value="/cart")
-    @CrossOrigin
-    public String pushCarts(@RequestBody Map<String,Integer> params)
+    public String getCart(@RequestBody Map<String,Integer> params)
     {
         System.out.println("call push cart");
         Integer user_id=params.get(Constant.USER_ID);
         System.out.println("controller user_id:"+user_id);
-        List<Cart> carts=cartService.pushCarts(user_id);
+        List<Cart> carts=cartService.getCart(user_id);
 
         CartJsonSend cartJsonSend=new CartJsonSend();
         cartJsonSend.user_id=user_id;
 
         for(Cart cart : carts)
         {
-            int book_id=cart.get_book_id();
+            int book_id=cart.get_cart_id().get_book_id();
             Book book= bookService.findBookById(book_id);
             cartJsonSend.books.add(book);
             System.out.println("book_id:"+book_id);

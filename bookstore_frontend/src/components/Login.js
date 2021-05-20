@@ -1,8 +1,9 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import * as userService from "../services/userService";
 
-export default class Login extends React.Component {
+class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state={
@@ -70,3 +71,5 @@ export default class Login extends React.Component {
         );
     }
 }
+
+export default withRouter(Login);

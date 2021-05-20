@@ -3,21 +3,28 @@ package com.sisyphe.bookstore.entity;
 import java.io.Serializable;
 import java.sql.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sisyphe.bookstore.Json.OrderItemJsonRec;
 import com.sisyphe.bookstore.Json.OrderJsonRec;
 import com.sisyphe.bookstore.domain.OrderItem;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /*
 * every piece of item you purchase
 *  */
+@Entity
+@Table(name="orders")
 public class Order implements Serializable {
+    @Id
     private int order_id;
     private int user_id;
     private double total_price;
     private Timestamp timestamp;
+    @ElementCollection
     private List<OrderItem> orderItems;
 
     public Order()

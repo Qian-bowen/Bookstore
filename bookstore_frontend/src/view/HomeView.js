@@ -1,6 +1,7 @@
 import React from 'react';
 import NavHead from "../components/head/NavHead";
 import HomeBanner from "../components/HomeBanner";
+import {withRouter} from "react-router-dom";
 
 /*
 * activity format
@@ -28,7 +29,17 @@ let activity3={
 
 let activity_test=[activity1,activity2,activity3];
 
-export default class Home extends React.Component{
+class Home extends React.Component{
+    constructor(props) {
+        super(props);
+
+    }
+
+    componentDidMount(){
+        let user = localStorage.getItem("user");
+        this.setState({user:user});
+    }
+
     render()
     {
         return(
@@ -39,3 +50,5 @@ export default class Home extends React.Component{
         );
     }
 }
+
+export default withRouter(Home);

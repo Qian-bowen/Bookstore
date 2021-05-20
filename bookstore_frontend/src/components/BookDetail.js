@@ -7,9 +7,10 @@ class BookCard extends React.Component{
 
     add_to_cart=()=>{
         let book_id=this.props.book.id;
-        let user_id=localStorage.getItem('user_id');
-        console.log("add to cart user_id:"+user_id+" book id:"+book_id);
-        let obj={"user_id":user_id,"book_id":book_id,"piece":1};
+        let user_str=localStorage.getItem('user');
+        let user=JSON.parse(user_str);
+        console.log("add to cart user_id:"+user['userID']+" book id:"+book_id);
+        let obj={"user_id":user['userID'],"book_id":book_id,"piece":1};
         addCart(obj);
     }
 

@@ -18,14 +18,12 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin
 public class BookController {
 
     @Autowired
     private BookService bookService;
 
     @RequestMapping(value={"/recmd","/manage"})
-    @CrossOrigin
     public String getBooks(@RequestBody Map<String,Integer> params) {
         System.out.println(params);
         Integer fetch_num=params.get(Constant.FETCH_NUM);
@@ -40,7 +38,6 @@ public class BookController {
     }
 
     @RequestMapping("/bookdetail")
-    @CrossOrigin
     public String getBook(@RequestBody Map<String,Integer> params){
         Integer id=params.get(Constant.BOOK_ID);
         System.out.println("query for book"+id);

@@ -1,16 +1,23 @@
 package com.sisyphe.bookstore.entity;
 
-public class Cart {
-    private int user_id;
-    private int book_id;
+import com.sisyphe.bookstore.entity.entityId.CartId;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name="cartitem")
+public class Cart implements Serializable {
+    @EmbeddedId
+    private CartId cartId;
     private int piece;
+
+    public Cart(){}
     public Cart(int uid,int bid,int p)
     {
-        user_id=uid;
-        book_id=bid;
+        cartId=new CartId(uid,bid);
         piece=p;
     }
-    public int get_user_id(){return user_id;}
-    public int get_book_id(){return book_id;}
+    public CartId get_cart_id(){return cartId;}
     public int get_piece(){return piece;}
 }

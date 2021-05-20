@@ -12,5 +12,8 @@ export const addCart = (data) => {
 
 export const getCarts = (data,callback) => {
     const url = 'http://localhost:8080/cart';
+    let user_str=localStorage.getItem('user');
+    let user=JSON.parse(user_str);
+    data={"user_id":user['userID']};
     postRequest(url, data, callback);
 };

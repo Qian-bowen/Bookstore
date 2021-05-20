@@ -79,13 +79,7 @@ export default class CartView extends React.Component{
     //TODO:REDIRECT TO LOGIN AND MODIFY USERID TO VAR
     //TODO:HANDLE PIECE FROM BACKEND TO FRONTEND
     componentDidMount() {
-        let user_id=localStorage.getItem('user_id');
-        if(user_id==null)
-        {
-
-        }
-
-        cartService.getCarts({"user_id":user_id},this.get_cart_content);
+        cartService.getCarts({},this.get_cart_content);
     }
 
     get_cart_content=(data)=>{

@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface CartDao {
     void storeCart(Cart cart);
-    List<Cart> pushCarts(int user_id);
+
+    List<Cart> getCart(int user_id);
 }

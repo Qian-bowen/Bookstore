@@ -21,9 +21,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<Cart> pushCarts(int user_id)
+    public List<Cart> getCart(int user_id)
     {
-        return cartDao.pushCarts(user_id);
+        return cartDao.getCart(user_id);
     }
 
 }

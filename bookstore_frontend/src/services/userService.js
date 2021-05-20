@@ -1,6 +1,7 @@
 import {postRequest} from "../utils/ajax";
 import React from "react";
 import {history} from "../utils/history";
+//import config from 'config';
 
 export const login = (data) => {
     console.log("post in login:"+data);
@@ -10,9 +11,19 @@ export const login = (data) => {
         console.log("back:"+data.status);
         if(data.status>=0)
         {
-            localStorage.setItem('user_id',data.user_id);
+            localStorage.setItem('user',JSON.stringify(data.data));
             history.push("/");
+            alert("LOGIN SUCCESS");
+        }
+        else
+        {
+            alert("LOGIN FAIL");
         }
     };
     postRequest(url, data, callback);
+};
+
+export const checkSession=(callback)=>{
+    const url = 'http://localhost:8080/checkSession';
+    postRequest(url, {}, callback);
 };
