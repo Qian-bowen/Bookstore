@@ -1,10 +1,13 @@
 package com.sisyphe.bookstore.controller;
 
 import com.google.gson.Gson;
+import com.sisyphe.bookstore.Json.CartJsonRec;
 import com.sisyphe.bookstore.Json.CartJsonSend;
 import com.sisyphe.bookstore.constant.Constant;
+import com.sisyphe.bookstore.constant.Operation;
 import com.sisyphe.bookstore.entity.Book;
 import com.sisyphe.bookstore.entity.Cart;
+import com.sisyphe.bookstore.entity.entityId.CartId;
 import com.sisyphe.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -46,8 +49,10 @@ public class CartController {
         for(Cart cart : carts)
         {
             int book_id=cart.get_cart_id().get_book_id();
+            int piece=cart.get_piece();
             Book book= bookService.findBookById(book_id);
             cartJsonSend.books.add(book);
+            cartJsonSend.cart_piece.add(piece);
             System.out.println("book_id:"+book_id);
         }
 
@@ -55,5 +60,14 @@ public class CartController {
         // convert list to json
         String cart_json = gson.toJson(cartJsonSend);
         return cart_json;
+    }
+
+    @RequestMapping(value="/cart/modify")
+    public void modifyCartItem(@RequestBody CartJsonRec cartJsonRec)
+    {
+        System.out.println("cart modify controller:"+cartJsonRec.user_id+" "+cartJsonRec.book_id+" "+cartJsonRec.cart_op);
+        Operation cart_op=cartJsonRec.cart_op;
+        CartId cartId=new CartId(cartJsonRec.user_id,cartJsonRec.book_id);
+        cartService.modifyCartItem(cartId,cart_op);
     }
 }

@@ -14,8 +14,15 @@ public class Constant {
     public static final String BOOK_ID="book_id";
     public static final String PIECE="piece";
 
+    public static final String CART_OP="cart_op";
+
     public static final String FETCH_NUM="fetch_num";
     public static final String FETCH_BEGIN="fetch_begin";
+
+    //cart operation
+    public static final int CART_ADD=0;
+    public static final int CART_SUB=1;
+    public static final int CART_DEL=2;
 
 }
 

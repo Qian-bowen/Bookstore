@@ -1,13 +1,16 @@
 package com.sisyphe.bookstore.daoimpl;
 
+import com.sisyphe.bookstore.constant.Operation;
 import com.sisyphe.bookstore.dao.CartDao;
 import com.sisyphe.bookstore.entity.Cart;
+import com.sisyphe.bookstore.entity.entityId.CartId;
 import com.sisyphe.bookstore.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class CartDaoImpl implements CartDao {
@@ -27,5 +30,40 @@ public class CartDaoImpl implements CartDao {
         System.out.println("dao impl push cart");
         List<Cart> cart=cartRepository.getCart();
         return cart;
+    }
+
+    @Override
+    public void modifyCartItem(CartId cartId, Operation op)
+    {
+        switch(op)
+        {
+            case ADD:
+            {
+                Optional<Cart> cart=cartRepository.findById(cartId);
+                Cart origin_cart=cart.get();
+                origin_cart.add_piece();
+                //using save will update
+                cartRepository.save(origin_cart);
+                System.out.println("add item in cart");
+                break;
+            }
+            case SUB:
+            {
+                Optional<Cart> cart=cartRepository.findById(cartId);
+                Cart origin_cart=cart.get();
+                if(origin_cart.get_piece()<=0) return;
+                origin_cart.sub_piece();
+                cartRepository.save(origin_cart);
+                System.out.println("sub item in cart");
+                break;
+            }
+            case DEL:
+            {
+                cartRepository.deleteById(cartId);
+                System.out.println("del item in cart");
+                break;
+            }
+        }
+
     }
 }
