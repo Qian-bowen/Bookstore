@@ -11,13 +11,12 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
+//TODO:modify JDBC TO ORM
 @Repository
 public class OrderDaoImpl implements OrderDao {
 

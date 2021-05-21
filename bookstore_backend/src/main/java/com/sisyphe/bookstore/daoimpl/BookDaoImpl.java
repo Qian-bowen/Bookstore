@@ -13,8 +13,13 @@ import java.util.List;
 @Repository
 public class BookDaoImpl implements BookDao {
 
-    @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    public BookDaoImpl(BookRepository bookRepository)
+    {
+        this.bookRepository=bookRepository;
+    }
 
     @Override
     public Book findOne(Integer id){

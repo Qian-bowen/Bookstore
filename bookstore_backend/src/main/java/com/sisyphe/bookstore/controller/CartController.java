@@ -9,6 +9,9 @@ import com.sisyphe.bookstore.entity.Book;
 import com.sisyphe.bookstore.entity.Cart;
 import com.sisyphe.bookstore.entity.entityId.CartId;
 import com.sisyphe.bookstore.service.BookService;
+import com.sisyphe.bookstore.utils.msgutils.Msg;
+import com.sisyphe.bookstore.utils.msgutils.MsgCode;
+import com.sisyphe.bookstore.utils.msgutils.MsgUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,20 +22,32 @@ import java.util.Map;
 
 @RestController
 public class CartController {
-    @Autowired
+
     private CartService cartService;
-    @Autowired
     private BookService bookService;
 
+    @Autowired
+    public CartController(CartService cartService,BookService bookService)
+    {
+        this.cartService=cartService;
+        this.bookService=bookService;
+    }
+
     @RequestMapping(value="/bookdetail/add_cart",method = RequestMethod.POST)
-    public void storeCart(@RequestBody Map<String,Integer> params)
+    public Msg storeCart(@RequestBody Map<String,Integer> params)
     {
         Integer user_id=params.get(Constant.USER_ID);
         Integer book_id=params.get(Constant.BOOK_ID);
         Integer piece=params.get(Constant.PIECE);
         System.out.println("cart get:"+user_id+" book_id:"+book_id);
         Cart cart=new Cart(user_id,book_id,piece);
-        cartService.storeCart(cart);
+        boolean store=cartService.storeCart(cart);
+        Msg msg;
+        if(store)
+            msg = MsgUtil.makeMsg(MsgCode.SUCCESS,MsgUtil.ADD_CART_ITEM_MSG);
+        else
+            msg=MsgUtil.makeMsg(MsgCode.ERROR);
+        return msg;
     }
 
     @RequestMapping(value="/cart")

@@ -16,8 +16,12 @@ import java.util.Map;
 @RestController
 public class LoginController {
 
-    @Autowired
     private UserService userService;
+
+    public LoginController(UserService userService)
+    {
+        this.userService=userService;
+    }
     
     @RequestMapping(value = "/login")
     public Msg login(@RequestBody Map<String,String> params){

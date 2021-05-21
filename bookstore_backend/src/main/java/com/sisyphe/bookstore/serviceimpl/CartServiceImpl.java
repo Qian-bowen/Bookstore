@@ -17,9 +17,9 @@ public class CartServiceImpl implements CartService {
     private CartDao cartDao;
 
     @Override
-    public void storeCart(Cart cart)
+    public boolean storeCart(Cart cart)
     {
-        cartDao.storeCart(cart);
+        return cartDao.storeCart(cart);
     }
 
     @Override

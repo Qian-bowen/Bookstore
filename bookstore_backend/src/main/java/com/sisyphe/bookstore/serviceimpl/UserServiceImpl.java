@@ -2,6 +2,7 @@ package com.sisyphe.bookstore.serviceimpl;
 
 import com.sisyphe.bookstore.dao.UserDao;
 
+import com.sisyphe.bookstore.entity.User;
 import com.sisyphe.bookstore.entity.UserAuth;
 import com.sisyphe.bookstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,5 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public boolean registerUser(UserAuth userAuth){return userDao.registerUser(userAuth);}
+    public boolean registerUser(UserAuth userAuth,User user){return userDao.registerUser(userAuth,user);}
 }

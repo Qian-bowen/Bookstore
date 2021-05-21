@@ -14,14 +14,21 @@ import java.util.Optional;
 
 @Repository
 public class CartDaoImpl implements CartDao {
-    @Autowired
+
     CartRepository cartRepository;
 
+    @Autowired
+    public CartDaoImpl(CartRepository cartRepository)
+    {
+        this.cartRepository=cartRepository;
+    }
+
     @Override
-    public void storeCart(Cart cart)
+    public boolean storeCart(Cart cart)
     {
         System.out.println("dao impl store cart");
         cartRepository.save(cart);
+        return true;
     }
 
     @Override

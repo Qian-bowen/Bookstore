@@ -111,7 +111,6 @@ export default class CartView extends React.Component{
     * calculate the sum money of all items checked
     * */
     check_out=()=>{
-
         let tmp_sum=0;
         //let tmp_cart=this.state.cart_pool;
         cart_pool.map((it,key)=>{
@@ -175,14 +174,7 @@ export default class CartView extends React.Component{
     * */
     on_remove_item=(cart_id)=>{
         let del_book_id;
-        for(let cart in cart_pool)
-        {
-            if(cart_id===cart.cart_id)
-            {
-                del_book_id=cart.book_id;
-                break;
-            }
-        }
+        del_book_id=cart_pool.find(item=>item.cart_id===cart_id).book_id;
         console.log("del book id:"+del_book_id);
         let obj={book_id:del_book_id,cart_op:DEL };
         cart_pool=cart_pool.filter(item => item.cart_id !== cart_id);
@@ -247,13 +239,9 @@ export default class CartView extends React.Component{
 
     /*
     * generate the order based on the chosen item
-    * TODO: generate order number
-    *  TODO:convey book_id is enough
-    *   TODO:add pieces to database table
+    *  TODO: clear the the items purchased after checkout
     * */
     on_checkout=()=>{
-
-        let tmp_user_id=localStorage.getItem('user_id');
         let tmp_sum=this.state.sum;
         let tmp_items_array=[];
 
@@ -266,9 +254,11 @@ export default class CartView extends React.Component{
             }
         }
 
+        this.setState({cart_show:cart_pool.filter((it)=>it.chosen===false)},
+            ()=>{this.check_out();});
+
 
         let submit_order={
-            user_id:tmp_user_id,
             total_price:tmp_sum,
             orderItems:tmp_items_array
         };

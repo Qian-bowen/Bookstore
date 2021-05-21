@@ -20,8 +20,13 @@ import java.util.Map;
 @RestController
 public class BookController {
 
-    @Autowired
     private BookService bookService;
+
+    @Autowired
+    public BookController(BookService bookService)
+    {
+        this.bookService=bookService;
+    }
 
     @RequestMapping(value={"/recmd","/manage"})
     public String getBooks(@RequestBody Map<String,Integer> params) {

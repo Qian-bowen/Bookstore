@@ -7,8 +7,7 @@ import com.sisyphe.bookstore.entity.entityId.CartId;
 import java.util.List;
 
 public interface CartService {
-    void storeCart(Cart cart);
+    boolean storeCart(Cart cart);
     void modifyCartItem(CartId cartId, Operation op);
     List<Cart> getCart(int user_id);
-
 }

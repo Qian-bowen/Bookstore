@@ -6,6 +6,10 @@ export const addCart = (data) => {
     const url = 'http://localhost:8080/bookdetail/add_cart';
     const callback = (data) => {
         console.log("add cart");
+        if(data.status>=0)
+        {
+            alert(data.msg);
+        }
     };
     postRequest(url, data, callback);
 };

@@ -14,7 +14,4 @@ public interface CartRepository extends JpaRepository<Cart, CartId> {
     @Query("select c from Cart c")
     List<Cart> getCart();
 
-    @Modifying
-    @Query("delete from Cart c where c.cartId=:cartId")
-    void deleteCartItem(@Param("cartId") CartId cartId);
 }

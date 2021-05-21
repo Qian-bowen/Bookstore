@@ -11,8 +11,14 @@ import java.util.Map;
 
 @RestController
 public class RegisterController {
-    @Autowired
+
     private UserService userService;
+
+    @Autowired
+    public RegisterController(UserService userService)
+    {
+        this.userService=userService;
+    }
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     public String register(@RequestBody Map<String,String> params){
