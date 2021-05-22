@@ -78,7 +78,9 @@ CREATE TABLE `user_auth` (
                              `user_id` int(11) NOT NULL,
                              `username` varchar(255) NOT NULL,
                              `password` varchar(255) NOT NULL,
-                             `user_type` int(11) NOT NULL
+                             `user_type` int(11) NOT NULL,
+                             PRIMARY KEY (`user_id`),
+							 FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

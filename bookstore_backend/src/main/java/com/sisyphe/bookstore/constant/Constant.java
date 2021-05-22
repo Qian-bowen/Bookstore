@@ -19,6 +19,11 @@ public class Constant {
     public static final String FETCH_NUM="fetch_num";
     public static final String FETCH_BEGIN="fetch_begin";
 
+    public static final int USER=0;
+    public static final int ADMIN=1;
+    public static final String ADMIN_PWD="admin";
+
+
     //cart operation
     public static final int CART_ADD=0;
     public static final int CART_SUB=1;

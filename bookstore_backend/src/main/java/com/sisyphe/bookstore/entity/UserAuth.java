@@ -17,9 +17,8 @@ public class UserAuth {
 
     private Integer userType;
 
-    public UserAuth(Integer id,String name,String pwd,Integer type)
+    public UserAuth(String name,String pwd,Integer type)
     {
-        userId=id;
         username=name;
         password=pwd;
         userType=type;
@@ -36,4 +35,5 @@ public class UserAuth {
     }
     public Integer getUserType(){return userType;}
     public Integer getUserID(){return userId;}
+    public void setUserId(Integer userId){this.userId=userId;}
 }

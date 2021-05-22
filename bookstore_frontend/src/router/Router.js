@@ -30,7 +30,7 @@ class BasicRoute extends React.Component{
                     <LoginRoute exact path="/login" component={Login}/>
                     <PrivateRoute exact path="/cart" component={CartView} />
                     <PrivateRoute exact path="/manage" component={AdminManageView} />
-                    <PrivateRoute exact path="/register" component={Register} />
+                    <Route exact path="/register" component={Register} />
                     <PrivateRoute exact path="/hotgds" component={HotGdsView} />
                     <Redirect from="/*" to="/" />
                 </Switch>

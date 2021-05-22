@@ -1,7 +1,6 @@
 import {postRequest} from "../utils/ajax";
 import React from "react";
 import {history} from "../utils/history";
-//import config from 'config';
 
 export const login = (data) => {
     console.log("post in login:"+data);
@@ -18,6 +17,23 @@ export const login = (data) => {
         else
         {
             alert("LOGIN FAIL");
+        }
+    };
+    postRequest(url, data, callback);
+};
+
+export const register = (data) => {
+    console.log("post in login:"+data);
+    const url = 'http://localhost:8080/register';
+    const callback = (data) => {
+        if(data.status>=0)
+        {
+            history.push("/login");
+            alert(data.msg);
+        }
+        else
+        {
+            alert(data.msg);
         }
     };
     postRequest(url, data, callback);

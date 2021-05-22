@@ -239,7 +239,6 @@ export default class CartView extends React.Component{
 
     /*
     * generate the order based on the chosen item
-    *  TODO: clear the the items purchased after checkout
     * */
     on_checkout=()=>{
         let tmp_sum=this.state.sum;

@@ -29,7 +29,17 @@ public class UserDaoImpl implements UserDao{
 
     public boolean registerUser(UserAuth userAuth, User user)
     {
-        userRepository.save(user);
+        //check whether there is already exist same username
+        UserAuth dup=userAuthRepository.checkUsernameExist(userAuth.getUsername());
+        if(dup!=null)
+        {
+            return false;
+        }
+        User user_saved=userRepository.saveAndFlush(user);
+        int user_id=user_saved.getUserId();
+        System.out.println("user_id:"+user_id);
+        userAuth.setUserId(user_id);
+        userAuthRepository.save(userAuth);
         return true;
     }
 }
