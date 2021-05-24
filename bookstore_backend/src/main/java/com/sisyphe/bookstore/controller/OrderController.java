@@ -1,20 +1,19 @@
 package com.sisyphe.bookstore.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.sisyphe.bookstore.Json.OrderJsonRec;
+import com.sisyphe.bookstore.Json.OrderJsonSend;
+import com.sisyphe.bookstore.constant.Constant;
 import com.sisyphe.bookstore.constant.Operation;
+import com.sisyphe.bookstore.entity.OrderItem;
 import com.sisyphe.bookstore.entity.entityId.CartId;
 import com.sisyphe.bookstore.service.CartService;
 import com.sisyphe.bookstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import com.sisyphe.bookstore.entity.Order;
-import com.sisyphe.bookstore.domain.OrderItem;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -37,17 +36,17 @@ public class OrderController {
 
         Gson gson=new Gson();
         OrderJsonRec orderJsonRec=gson.fromJson(order_str, OrderJsonRec.class);
-        Order order=new Order(orderJsonRec);
-        Order stored_order=orderService.storeOrder(order);
-        int user_id=order.get_user_id();
-
-        //remove items in cart
-        for(OrderItem orderItem : order.get_items())
+        Order stored_order=orderService.storeOrder(orderJsonRec);
+        OrderJsonSend orderJsonSend=new OrderJsonSend(stored_order);
+        //remove from cart after make order
+        List<OrderItem> items=stored_order.get_items();
+        int user_id=stored_order.get_user_id();
+        for(OrderItem item:items)
         {
-            CartId tmpId=new CartId(user_id,orderItem.get_book_id());
-            cartService.modifyCartItem(tmpId, Operation.DEL);
+            CartId cartId=new CartId(user_id,item.get_book_id());
+            cartService.modifyCartItem(cartId, Operation.DEL);
         }
 
-        return gson.toJson(stored_order);
+        return gson.toJson(orderJsonSend);
     }
 }

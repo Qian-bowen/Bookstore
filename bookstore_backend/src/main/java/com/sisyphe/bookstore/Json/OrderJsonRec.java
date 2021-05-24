@@ -5,7 +5,7 @@ import java.util.List;
 public class OrderJsonRec {
     public int user_id;
     public double total_price;
-    public List<OrderItemJsonRec> orderItems;
+    public List<OrderItemJson> orderItems;
 
     public OrderJsonRec(){}
 }

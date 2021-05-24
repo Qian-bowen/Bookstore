@@ -1,9 +1,10 @@
 package com.sisyphe.bookstore.service;
 
+import com.sisyphe.bookstore.Json.OrderJsonRec;
 import com.sisyphe.bookstore.entity.Order;
 
 import java.sql.Timestamp;
 
 public interface OrderService {
-    Order storeOrder(Order order);
+    Order storeOrder(OrderJsonRec orderJsonRec);
 }

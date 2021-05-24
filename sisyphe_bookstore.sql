@@ -97,7 +97,7 @@ CREATE TABLE `orders` (
                         `order_id` int(11) NOT NULL AUTO_INCREMENT,
                         `user_id` int(11) NOT NULL,
                         `total_price` decimal(10,2) DEFAULT NULL,
-                        `created_time` datetime NOT NULL,
+                        `created_time` datetime DEFAULT CURRENT_TIMESTAMP,
 
                         PRIMARY KEY (`order_id`),
                         FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
@@ -112,7 +112,7 @@ CREATE TABLE `orderItem` (
                         `book_id` int(11) NOT NULL,
                         `order_id` int(11) NOT NULL,
                         `price` decimal(10,2) DEFAULT NULL,
-						`created_time` datetime NOT NULL,
+						`created_time` datetime DEFAULT CURRENT_TIMESTAMP,
                         
                         PRIMARY KEY (`order_item_id`),
 
