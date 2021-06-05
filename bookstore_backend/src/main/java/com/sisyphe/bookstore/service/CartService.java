@@ -2,7 +2,7 @@ package com.sisyphe.bookstore.service;
 
 import com.sisyphe.bookstore.constant.Operation;
 import com.sisyphe.bookstore.entity.Cart;
-import com.sisyphe.bookstore.entity.entityId.CartId;
+import com.sisyphe.bookstore.entity.entityComp.CartId;
 
 import java.util.List;
 

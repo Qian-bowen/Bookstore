@@ -1,11 +1,12 @@
 package com.sisyphe.bookstore.controller;
 
+import com.sisyphe.bookstore.Json.BookJson;
 import com.sisyphe.bookstore.constant.Constant;
-import com.sisyphe.bookstore.entity.UserAuth;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.sisyphe.bookstore.domain.BookSearch;
+import com.sisyphe.bookstore.utils.msgutils.Msg;
+import com.sisyphe.bookstore.utils.msgutils.MsgCode;
+import com.sisyphe.bookstore.utils.msgutils.MsgUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import com.sisyphe.bookstore.entity.Book;
@@ -13,7 +14,6 @@ import com.sisyphe.bookstore.service.BookService;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +42,14 @@ public class BookController {
         return book_json;
     }
 
+    @RequestMapping("/book/search")
+    public String searchBooks(@RequestBody BookSearch bookSearch) {
+        List<Book> books=bookService.searchBooks(bookSearch);
+        Gson gson = new Gson();
+        String book_json = gson.toJson(books);
+        return book_json;
+    }
+
     @RequestMapping("/bookdetail")
     public String getBook(@RequestBody Map<String,Integer> params){
         Integer id=params.get(Constant.BOOK_ID);
@@ -51,6 +59,33 @@ public class BookController {
         String book_json = gson.toJson(book);
         System.out.println(book_json);
         return book_json;
+    }
+
+    @RequestMapping(value="/manage/admin/book/add",method = RequestMethod.POST)
+    public Msg addBook(@RequestBody BookJson bookJson){
+        Book book=new Book(bookJson);
+        boolean op=bookService.addBook(book);
+        if(op==true)
+            return MsgUtil.makeMsg(MsgCode.SUCCESS,"ADD BOOK SUCCESS!");
+        return MsgUtil.makeMsg(MsgCode.ERROR,"ADD BOOK FAIL!");
+    }
+
+    @RequestMapping(value="/manage/admin/book/modify",method = RequestMethod.POST)
+    public Msg modifyBook(@RequestBody BookJson bookJson){
+        Book book=new Book(bookJson);
+        boolean op=bookService.modifyBook(book);
+        if(op==true)
+            return MsgUtil.makeMsg(MsgCode.SUCCESS,"MODIFY BOOK SUCCESS!");
+        return MsgUtil.makeMsg(MsgCode.ERROR,"MODIFY BOOK FAIL!");
+    }
+
+    @RequestMapping(value="/manage/admin/book/del",method = RequestMethod.POST)
+    public Msg delBook(@RequestBody BookJson bookJson){
+        Book book=new Book(bookJson);
+        boolean op=bookService.delBook(book.getBookId());
+        if(op==true)
+            return MsgUtil.makeMsg(MsgCode.SUCCESS,"DEL BOOK SUCCESS!");
+        return MsgUtil.makeMsg(MsgCode.ERROR,"DEL BOOK FAIL!");
     }
 
 }

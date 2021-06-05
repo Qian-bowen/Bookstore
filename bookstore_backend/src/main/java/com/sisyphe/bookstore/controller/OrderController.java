@@ -3,10 +3,11 @@ package com.sisyphe.bookstore.controller;
 import com.google.gson.Gson;
 import com.sisyphe.bookstore.Json.OrderJsonRec;
 import com.sisyphe.bookstore.Json.OrderJsonSend;
-import com.sisyphe.bookstore.constant.Constant;
 import com.sisyphe.bookstore.constant.Operation;
+import com.sisyphe.bookstore.constant.SearchType;
+import com.sisyphe.bookstore.domain.OrderSearch;
 import com.sisyphe.bookstore.entity.OrderItem;
-import com.sisyphe.bookstore.entity.entityId.CartId;
+import com.sisyphe.bookstore.entity.entityComp.CartId;
 import com.sisyphe.bookstore.service.CartService;
 import com.sisyphe.bookstore.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.sisyphe.bookstore.entity.Order;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -48,5 +50,38 @@ public class OrderController {
         }
 
         return gson.toJson(orderJsonSend);
+    }
+
+    //TODO CHECK SESSION! CANNOT SEARCH OTHERS ORDERS
+    @RequestMapping(value="/order/search/private",method = RequestMethod.GET)
+    public String searchOrder(@RequestBody OrderSearch orderSearch)
+    {
+        List<Order> orders;
+        if(orderSearch.getType()== SearchType.BY_USER_ID)
+        {
+            orders=orderService.searchOrderByUser(orderSearch);
+        }
+        else if(orderSearch.getType()== SearchType.BY_TIME)
+        {
+            orders=orderService.searchOrderByTime(orderSearch);
+        }
+        else if(orderSearch.getType()== SearchType.BY_NAME)
+        {
+            orders=orderService.searchOrderByBookName(orderSearch);
+        }
+        else
+        {
+            return null;
+        }
+
+
+        List<OrderJsonSend> sendOrders=new ArrayList<>();
+        for(Order order : orders)
+        {
+            OrderJsonSend orderJsonSend=new OrderJsonSend(order);
+            sendOrders.add(orderJsonSend);
+        }
+        Gson gson=new Gson();
+        return gson.toJson(sendOrders);
     }
 }

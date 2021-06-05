@@ -7,7 +7,7 @@ import com.sisyphe.bookstore.constant.Constant;
 import com.sisyphe.bookstore.constant.Operation;
 import com.sisyphe.bookstore.entity.Book;
 import com.sisyphe.bookstore.entity.Cart;
-import com.sisyphe.bookstore.entity.entityId.CartId;
+import com.sisyphe.bookstore.entity.entityComp.CartId;
 import com.sisyphe.bookstore.service.BookService;
 import com.sisyphe.bookstore.utils.msgutils.Msg;
 import com.sisyphe.bookstore.utils.msgutils.MsgCode;

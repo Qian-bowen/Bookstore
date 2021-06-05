@@ -3,10 +3,9 @@ package com.sisyphe.bookstore.daoimpl;
 import com.sisyphe.bookstore.constant.Operation;
 import com.sisyphe.bookstore.dao.CartDao;
 import com.sisyphe.bookstore.entity.Cart;
-import com.sisyphe.bookstore.entity.entityId.CartId;
+import com.sisyphe.bookstore.entity.entityComp.CartId;
 import com.sisyphe.bookstore.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -1,12 +1,19 @@
 package com.sisyphe.bookstore.entity;
 
-import com.sisyphe.bookstore.entity.entityId.CartId;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.sisyphe.bookstore.entity.entityComp.CartId;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name="cartitem")
+@JsonIgnoreProperties(value={"handler","hibernateLazyInitializer","fieldHandler"})
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "cartId")
 public class Cart implements Serializable {
     @EmbeddedId
     private CartId cartId;

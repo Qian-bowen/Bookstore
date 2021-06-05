@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -15,6 +19,10 @@ import java.util.Set;
 *  */
 @Entity
 @Table(name="orders")
+@JsonIgnoreProperties(value={"handler","hibernateLazyInitializer","fieldHandler"})
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "order_id")
 public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +36,7 @@ public class Order implements Serializable {
     @CreationTimestamp
     private Timestamp timestamp;
 
+    //TODO:modified from order to orders maybe bugs
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;

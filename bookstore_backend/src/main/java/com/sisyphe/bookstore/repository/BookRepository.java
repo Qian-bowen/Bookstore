@@ -13,4 +13,11 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
 
     @Query(value = "from Book where bookId = :id")
     Book getOne(@Param("id") Integer id);
+
+    @Query("select b from Book b where b.name like concat('%',:name,'%')")
+    List<Book> getBooksByName(@Param("name") String name);
+
+    @Query("select b from Book b where b.name=:name")
+    List<Book> getBooksByExactName(@Param("name") String name);
+
 }

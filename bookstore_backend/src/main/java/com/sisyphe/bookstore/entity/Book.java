@@ -3,32 +3,47 @@ package com.sisyphe.bookstore.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.Data;
+import com.sisyphe.bookstore.Json.BookJson;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 
 @Entity
 @Table(name = "book")
-@JsonIgnoreProperties(value = {"handler","hibernateLazyInitializer","fieldHandler"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "bookId")
+@JsonIgnoreProperties(value={"handler","hibernateLazyInitializer","fieldHandler"})
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "bookId")
 public class Book {
 
     @Id
     @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bookId;
 
+    @Column(name="isbn")
     private String isbn;
+
+    @Column(name="name")
     private String name;
+
+    @Column(name="type")
     private String type;
+
+    @Column(name="author")
     private String author;
+
+    @Column(name="price")
     private BigDecimal price;
+
+    @Column(name="description")
     private String description;
+
+    @Column(name="inventory")
     private Integer inventory;
+
+    @Column(name="image")
     private String image;
 
     public Book() { }
@@ -46,8 +61,26 @@ public class Book {
         image=p_img;
     }
 
+    public Book(BookJson bookJson)
+    {
+        bookId=bookJson.bookId;
+        isbn= bookJson.isbn;
+        name= bookJson.name;
+        type= bookJson.type;
+        author= bookJson.author;
+        price= bookJson.price;
+        description= bookJson.description;
+        inventory= bookJson.inventory;
+        image= bookJson.image;
+    }
+
     public String get_name()
     {
         return name;
     }
+    public int getBookId(){return bookId;}
+    public String getIsbn(){return isbn;}
+    public String getType(){return type;}
+    public String getAuthor(){return author;}
+    public BigDecimal getPrice(){return price;}
 }

@@ -1,5 +1,9 @@
 package com.sisyphe.bookstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -7,6 +11,10 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "user_Auth")
+@JsonIgnoreProperties(value={"handler","hibernateLazyInitializer","fieldHandler"})
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "userId")
 public class UserAuth {
 
     @Id

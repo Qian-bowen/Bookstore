@@ -1,4 +1,4 @@
-package com.sisyphe.bookstore.entity.entityId;
+package com.sisyphe.bookstore.entity.entityComp;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;

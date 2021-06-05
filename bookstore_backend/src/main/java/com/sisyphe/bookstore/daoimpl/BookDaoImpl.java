@@ -31,4 +31,29 @@ public class BookDaoImpl implements BookDao {
         return bookRepository.getBooks();
     }
 
+    @Override
+    public List<Book> getBooksByName(String name){return bookRepository.getBooksByName(name);}
+
+    @Override
+    public List<Book> getBooksByExactName(String name){return bookRepository.getBooksByExactName(name);}
+
+    @Override
+    public Book addBook(Book book){ return bookRepository.save(book);}
+
+    @Override
+    public Book modifyBook(Book book)
+    {
+        return bookRepository.saveAndFlush(book);
+    }
+
+    @Override
+    public void delBook(Integer id)
+    {
+        bookRepository.deleteById(id);
+    }
+
+    //TODO:REDUCE INVENTORY
+    @Override
+    public boolean reduceInventory(Integer id,Integer purchaseNum){return true;}
+
 }
