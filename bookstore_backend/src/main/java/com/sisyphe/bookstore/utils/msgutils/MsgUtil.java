@@ -15,11 +15,15 @@ public class MsgUtil {
     public static final String LOGOUT_ERR_MSG = "登出异常！";
     public static final String ERROR_MSG = "错误！";
     public static final String LOGIN_USER_ERROR_MSG = "用户名或密码错误，请重新输入！";
+    public static final String LOGIN_USER_PROHIBIT_MSG = "您已被管理员禁止登入！";
     public static final String NOT_LOGGED_IN_ERROR_MSG = "登录失效，请重新登录！";
 
     public static final String ADD_CART_ITEM_MSG="加入购物车成功！";
     public static final String CHECK_OUT_MSG="结账成功！";
 
+    public static final String ADMIN_OPERATION_SUCCESS = "管理员操作成功！";
+    public static final String ADMIN_OPERATION_FAIL = "管理员操作失败！";
+    public static final String ADMIN_NO_AUTH = "您没有管理员权限";
 
 
     public static Msg makeMsg(MsgCode code, JSONObject data){

@@ -12,4 +12,5 @@ public interface BookService {
     boolean addBook(Book book);
     boolean modifyBook(Book book);
     boolean delBook(Integer id);
+    boolean reduceInventory(Integer id,Integer reduceNum);
 }

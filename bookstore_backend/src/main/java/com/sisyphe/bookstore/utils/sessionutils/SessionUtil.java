@@ -43,6 +43,34 @@ public class SessionUtil {
         return null;
     }
 
+    public static Integer getUserId(){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        // Session
+        if(requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            HttpSession session = request.getSession(false);
+
+            if(session != null) {
+                return (Integer)session.getAttribute(Constant.USER_ID);
+            }
+        }
+        return null;
+    }
+
+    public static Integer getUserType(){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        // Session
+        if(requestAttributes != null) {
+            HttpServletRequest request = requestAttributes.getRequest();
+            HttpSession session = request.getSession(false);
+
+            if(session != null) {
+                return (Integer)session.getAttribute(Constant.USER_TYPE);
+            }
+        }
+        return null;
+    }
+
     public static void setSession(JSONObject data){
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         // Session

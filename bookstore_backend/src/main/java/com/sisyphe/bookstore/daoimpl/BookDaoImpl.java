@@ -43,7 +43,8 @@ public class BookDaoImpl implements BookDao {
     @Override
     public Book modifyBook(Book book)
     {
-        return bookRepository.saveAndFlush(book);
+
+        return bookRepository.save(book);
     }
 
     @Override
@@ -52,8 +53,14 @@ public class BookDaoImpl implements BookDao {
         bookRepository.deleteById(id);
     }
 
-    //TODO:REDUCE INVENTORY
     @Override
-    public boolean reduceInventory(Integer id,Integer purchaseNum){return true;}
+    public boolean reduceInventory(Integer id,Integer reduceNum)
+    {
+        Book book=bookRepository.getOne(id);
+        if(!book.reduceInventory(reduceNum))
+            return false;
+        bookRepository.save(book);
+        return true;
+    }
 
 }

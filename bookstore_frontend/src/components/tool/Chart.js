@@ -77,6 +77,74 @@ class TendencyChart extends React.Component {
     }
 }
 
+class TableCell extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            is_input:this.props.input,
+            cell_text:this.props.text
+        }
+    }
+
+    handle_input=(e)=>{
+        this.setState({cell_text:e.target.value});
+    }
+
+
+    render()
+    {
+        if(this.state.is_input){
+            return(
+                <th><input className="input is-primary" type="text" placeholder={this.props.text} onChange={this.handle_input}/></th>
+            );
+        }
+        else
+        {
+            return(
+                <th onClick={this.props.change_to_input}>{this.state.cell_text}</th>
+            );
+        }
+    }
+}
+
+class TableRow extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            line:this.props.line,
+            cell_mode:new Array(this.props.col_num).fill(false),
+        }
+    }
+
+
+    submit_change=()=>{
+        this.setState({cell_mode:new Array(this.props.col_num).fill(false)});
+    }
+
+    handle_change_to_input=(idx)=>{
+        let tmp=this.state.cell_mode;
+        tmp[idx]=true;
+        //this.setState({cell_mode:tmp});
+    }
+
+    render()
+    {
+        return(
+            <tr>
+                {this.state.line.map((col,col_idx)=>{
+                    return (
+                        <TableCell input={this.state.cell_mode[col_idx]} text={col} change_to_input={this.handle_change_to_input(col_idx)}/>
+                    );
+                })}
+                <th>
+                    <div className={"button is-small is-primary"} onClick={this.submit_change}>提交</div>
+                    <div className={"button is-small is-danger"}>删除</div>
+                </th>
+            </tr>
+        );
+    }
+}
+
 /*
 * ordinary table
 * */
@@ -88,6 +156,11 @@ class StatisticTable extends React.Component{
         }
     }
 
+    input_table_text=()=>{
+
+    }
+
+
     render()
     {
         const {table}=this.props;
@@ -97,22 +170,17 @@ class StatisticTable extends React.Component{
             <table className={"table is-striped is-bordered is-fullwidth"}>
                 <thead>
                     <tr>
-                        {this.props.table.tab_title.map((it)=>{
+                        {this.props.table.headers.map((it)=>{
                             return (<th>{it}</th>);
                         })}
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.table.line.map(li=>{
-                        return(<tr>
-                            {li.map(col=>{
-                                return (<th>{col}</th>);
-                            })}
-                            <th>
-                                <div className={"button is-small is-danger"}>删除</div>
-                            </th>
-                        </tr>);
+                    {this.props.table.line.map((li,li_idx)=>{
+                        return(
+                            <TableRow line={li} col_num={li.length}/>
+                        );
                     })}
                 </tbody>
             </table>
@@ -144,4 +212,5 @@ class EditTable extends React.Component{
 }
 
 
-export {RankingChart,TendencyChart,StatisticTable,EditTable};
+
+export {RankingChart,TendencyChart,StatisticTable};

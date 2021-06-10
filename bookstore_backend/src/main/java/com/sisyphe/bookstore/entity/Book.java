@@ -83,4 +83,14 @@ public class Book {
     public String getType(){return type;}
     public String getAuthor(){return author;}
     public BigDecimal getPrice(){return price;}
+    public Integer getInventory(){return inventory;}
+
+    public boolean reduceInventory(Integer reduceNum)
+    {
+        if(reduceNum>inventory)
+            return false;
+        inventory-=reduceNum;
+        return true;
+    }
+
 }

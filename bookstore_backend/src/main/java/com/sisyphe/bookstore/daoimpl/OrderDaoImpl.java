@@ -3,13 +3,14 @@ package com.sisyphe.bookstore.daoimpl;
 import com.sisyphe.bookstore.dao.OrderDao;
 import com.sisyphe.bookstore.entity.OrderItem;
 import com.sisyphe.bookstore.entity.Order;
-import com.sisyphe.bookstore.entity.entityComp.BookSellComp;
+import com.sisyphe.bookstore.entity.entityComp.BookBuyComp;
+import com.sisyphe.bookstore.entity.entityComp.BookComp;
+import com.sisyphe.bookstore.entity.entityComp.UserConsumeComp;
 import com.sisyphe.bookstore.repository.OrderItemRepository;
 import com.sisyphe.bookstore.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
@@ -43,6 +44,12 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
+    public List<Order> getOrders(Integer fetch_num,Integer fetch_begin)
+    {
+        return orderRepository.getOrders();
+    }
+
+    @Override
     public List<Order> searchOrderByUser(int user_id)
     {
         return orderRepository.searchOrderByUser(user_id);
@@ -62,10 +69,24 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<BookSellComp> bestSellBook(int num)
+    public List<BookComp> bestSellBook(int num, Timestamp lt, Timestamp ut)
     {
         Pageable pageRequest=PageRequest.of(0, num);
-        return orderItemRepository.bestSellBook(pageRequest);
+        return orderItemRepository.bestSellBook(pageRequest,lt,ut);
+    }
+
+    @Override
+    public List<UserConsumeComp> userMostConsume(int num, Timestamp lt, Timestamp ut)
+    {
+        Pageable pageRequest=PageRequest.of(0, num);
+        return orderRepository.userMostConsume(pageRequest,lt,ut);
+    }
+
+    @Override
+    public List<BookBuyComp> PersonalMostConsume(int num, int user_id, Timestamp lt, Timestamp ut)
+    {
+        Pageable pageRequest=PageRequest.of(0, num);
+        return orderRepository.PersonalMostConsume(pageRequest,user_id,lt,ut);
     }
 
 }

@@ -248,7 +248,7 @@ export default class CartView extends React.Component{
         {
             if(cart_pool[item].chosen===true)
             {
-                let tmp_order_item={book_id:cart_pool[item].book_id,price:cart_pool[item].money};
+                let tmp_order_item={book_id:cart_pool[item].book_id,piece:cart_pool[item].piece,price:cart_pool[item].money};
                 tmp_items_array.push(tmp_order_item);
             }
         }

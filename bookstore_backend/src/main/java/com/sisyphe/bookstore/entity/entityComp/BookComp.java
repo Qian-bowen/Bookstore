@@ -5,11 +5,11 @@ import com.sisyphe.bookstore.entity.Book;
 import javax.persistence.Entity;
 
 
-public class BookSellComp {
+public class BookComp {
     private int bookId;
     private Long sell_num;
-    public BookSellComp(){}
-    public BookSellComp(int bookId, Long sell_num)
+    public BookComp(){}
+    public BookComp(int bookId, Long sell_num)
     {
         this.bookId=bookId;
         this.sell_num=sell_num;

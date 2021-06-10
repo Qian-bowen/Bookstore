@@ -16,5 +16,5 @@ public interface BookDao {
     Book modifyBook(Book book);
     void delBook(Integer id);
 
-    boolean reduceInventory(Integer id,Integer purchaseNum);
+    boolean reduceInventory(Integer id,Integer reduceNum);
 }

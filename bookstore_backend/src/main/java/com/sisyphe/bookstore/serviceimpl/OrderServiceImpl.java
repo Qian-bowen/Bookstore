@@ -10,6 +10,7 @@ import com.sisyphe.bookstore.entity.Book;
 import com.sisyphe.bookstore.entity.OrderItem;
 import com.sisyphe.bookstore.entity.Order;
 import com.sisyphe.bookstore.service.OrderService;
+import com.sisyphe.bookstore.utils.convert.TimeConvert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,15 +48,24 @@ public class OrderServiceImpl implements OrderService {
         for(OrderItemJson itemJson:orderItems)
         {
             int book_id=itemJson.book_id;
+            Integer piece=itemJson.piece;
             BigDecimal price=itemJson.price;
-            OrderItem orderItem=new OrderItem(book_id,price,order);
+            BigDecimal item_total_price=price.multiply(new BigDecimal(piece));
+            OrderItem orderItem=new OrderItem(book_id,piece,item_total_price,order);
             items.add(orderItem);
 
             //reduce inventory book
-
+            if(!bookDao.reduceInventory(book_id,piece))
+                return null;
         }
 
         return orderDao.storeOrder(order,items);
+    }
+
+    @Override
+    public List<Order> getOrders(Integer fetch_num,Integer fetch_begin)
+    {
+        return orderDao.getOrders(fetch_num,fetch_begin);
     }
 
     @Override
@@ -68,17 +78,13 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> searchOrderByTime(OrderSearch orderSearch)
     {
         System.out.println("by time");
+        TimeConvert timeConvert=new TimeConvert("yyyy-MM-dd hh:mm:ss","UTC");
         try{
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-            Date upper_date = dateFormat.parse(orderSearch.getUpper_time());
-            Date lower_date = dateFormat.parse(orderSearch.getLower_time());
-            System.out.println("Date:"+upper_date+" "+lower_date);
-            Timestamp lower_timestamp = new java.sql.Timestamp(lower_date.getTime());
-            Timestamp upper_timestamp = new java.sql.Timestamp(upper_date.getTime());
-            System.out.println("timestamp:"+lower_timestamp+" "+upper_timestamp);
+            Timestamp lower_timestamp=timeConvert.StringToTimestamp(orderSearch.getLower_time());
+            Timestamp upper_timestamp=timeConvert.StringToTimestamp(orderSearch.getUpper_time());
             return orderDao.searchOrderByTime(lower_timestamp,upper_timestamp);
-        }catch(Exception e) {
+        }catch(Exception e)
+        {
 
         }
         return null;

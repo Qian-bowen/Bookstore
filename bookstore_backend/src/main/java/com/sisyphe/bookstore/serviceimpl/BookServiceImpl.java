@@ -70,4 +70,14 @@ public class BookServiceImpl implements BookService {
         bookDao.delBook(id);
         return true;
     }
+
+    @Override
+    public boolean reduceInventory(Integer id,Integer reduceNum)
+    {
+        Book book=bookDao.findOne(id);
+        if(book.getInventory()<reduceNum||reduceNum<0)
+            return false;
+        bookDao.addBook(book);
+        return true;
+    }
 }

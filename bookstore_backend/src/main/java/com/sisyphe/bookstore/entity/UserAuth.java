@@ -44,4 +44,5 @@ public class UserAuth {
     public Integer getUserType(){return userType;}
     public Integer getUserID(){return userId;}
     public void setUserId(Integer userId){this.userId=userId;}
+    public void setUserType(Integer userType){this.userType=userType;}
 }

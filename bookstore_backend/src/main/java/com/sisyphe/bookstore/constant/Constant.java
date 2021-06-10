@@ -21,6 +21,7 @@ public class Constant {
 
     public static final int USER=0;
     public static final int ADMIN=1;
+    public static final int BANNED_USER=2;
     public static final String ADMIN_PWD="admin";
 
 

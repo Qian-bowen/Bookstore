@@ -1,10 +1,16 @@
 import React,{useState,useEffect} from 'react';
 import {ManagePanel} from "../components/Manage";
-import {RankingChart,TendencyChart,StatisticTable,EditTable} from "../components/tool/Chart"
+import {RankingChart,TendencyChart,StatisticTable} from "../components/tool/Chart"
 import {ManageHead} from "../components/head/ManageHead";
 import {Avatar} from "../components/tool/Avatar";
+import {EditTable} from "../components/table/EditTable";
+import UserEditTable from "../components/table/UserEditTable";
+import PlainTable from "../components/table/PlainTable";
 import * as bookService from '../services/bookService';
+import * as manageService from '../services/manageService';
+import * as orderService from '../services/orderService';
 import one from "../asserts/lufei.jpg";
+import * as tableData from '../utils/tableData';
 
 const avatar_info={
     username:"guagua",
@@ -42,14 +48,12 @@ const test= {
 * standard table format
 * */
 const table_test={
-    tab_title:["书籍名称","ISBN","销售量"],
+    headers:["书籍名称","ISBN","销售量"],
     line:[
         ["平凡的世界","1234",200],
         ["我的天才女友","1234",100],
         ["CSAPP","1234",2000],
-
     ]
-
 };
 
 export default class AdminManageView extends React.Component{
@@ -60,13 +64,12 @@ export default class AdminManageView extends React.Component{
             statistic_display:false,
             user_display:false,
             book_display:false,
+            order_display:false,
             display_mod:true,//true means show in graph,false in list
 
-            edit_table:{
-                ptr:0,//beginning line to database
-                step:10,//pull how many line each time
-                table:[],
-            }
+            table:null,
+            user_table:null,
+            order_table:null,
         }
     }
 
@@ -78,25 +81,41 @@ export default class AdminManageView extends React.Component{
         this.setState({
             user_display:false,
             book_display:false,
+            order_display:false,
             statistic_display:true
         });
     }
 
     on_user_manage=()=>{
+        this.get_user_data();
         this.setState({
             statistic_display:false,
             book_display:false,
+            order_display:false,
             user_display:true
         });
     }
 
     on_book_manage=()=>{
+        this.get_table_data();
         this.setState({
             user_display:false,
             statistic_display:false,
+            order_display:false,
             book_display:true,
         });
     }
+
+    on_order_manage=()=>{
+        this.get_order_data();
+        this.setState({
+            user_display:false,
+            statistic_display:false,
+            book_display:false,
+            order_display:true,
+        });
+    }
+
 
     /*
     * change the display mod
@@ -106,6 +125,36 @@ export default class AdminManageView extends React.Component{
         this.setState({display_mod:!cur_mod});
     }
 
+    //search items and update the table
+    on_search_items=(search_text)=>{
+        let book_search={
+            "type":0,//by name
+            "name":search_text
+        };
+        const update_table=(data)=>{
+            let converted=tableData.convert_book_to_table(data);
+            this.setState({table:converted});
+        }
+        manageService.searchBook(book_search,update_table);
+    }
+
+    on_search_order_by_book_name=(name)=>{
+        const update_table=(data)=>{
+            let converted=tableData.convert_order_to_table(data);
+            this.setState({order_table:converted});
+        }
+        orderService.searchOrderByName(name,update_table);
+    }
+
+    on_search_by_time=(begin_time,end_time)=>{
+        const update_table=(data)=>{
+            let converted=tableData.convert_order_to_table(data);
+            this.setState({order_table:converted});
+        }
+        orderService.searchOrderByTime(begin_time,end_time,update_table);
+    }
+
+
     render_manage_area=()=>{
         return(
             <div className={"block"}>
@@ -114,124 +163,48 @@ export default class AdminManageView extends React.Component{
                     on_user_manage={this.on_user_manage}
                     on_display_mod={this.on_display_mod}
                     on_book_manage={this.on_book_manage}
+                    on_order_manage={this.on_order_manage}
+                    search_items={this.on_search_items}
+                    search_order_by_book_name={this.on_search_order_by_book_name}
+                    search_by_time={this.on_search_by_time}
                 />
             </div>
         );
     }
 
-    render_chart_area=(title)=>{
-        return(
-            <section className={"section"}>
-                <h1 className="title">{title}</h1>
-                <div className={"columns"}>
-                    <div className={"column"}>
-                        <div className={"card"}>
-                            <RankingChart chart={test}/>
-                        </div>
-                    </div>
-                    <div className={"column"}>
-                        <div className={"card"}>
-                            <TendencyChart/>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
-    render_table_area=(title,table)=>{
-        return(
-            <section className={"section"}>
-                <h1 className="title">{title}</h1>
-                <div className={"columns"}>
-                    <div className={"column"}>
-                        <div className={"card"}>
-                            <StatisticTable
-                                table={table}
-                            />
-                        </div>
-                    </div>
-                    {/*<div className={"column"}>*/}
-                    {/*    <div className={"card"}>*/}
-                    {/*        <StatisticTable*/}
-                    {/*            table={table}*/}
-                    {/*        />*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-                </div>
-            </section>
-        );
-    }
-
-    /*
-    * pull database book info to front end
-    * */
-    get_edit_table_info=(fetch_num,fetch_begin)=>{
+    //get book table data
+    get_table_data=()=>{
         const callback=(data)=>{
-            let converted=this.convert_book_to_table(data);
-
+            let converted=tableData.convert_book_to_table(data);
             console.log(converted);
-            this.setState({edit_table:{...this.state.edit_table,table:converted}});
+            this.setState({table:converted});
         }
-        const get_info={"fetch_num":fetch_num,"fetch_begin":fetch_begin};
+        const get_info={"fetch_num":50,"fetch_begin":0};
         bookService.getBooks(get_info,callback);
-        return true;
     }
 
-    convert_book_to_table=(data)=>{
 
-        let table={
-            tab_title:["书籍名称","ISBN","售价","作者"],
-            line:[]
-        };
-
-        let num=data.length;
-        for(let i=0;i<num;++i)
-        {
-            let line=[];
-            let cur_book=bookService.convert_book_info(data[i]);
-            line.push(cur_book.name,cur_book.IBSN,cur_book.price,cur_book.author);
-            table.line.push(line);
+    get_user_data=()=>{
+        const callback=(data)=>{
+            let converted=tableData.convert_user_to_table(data.userJsonList);
+            this.setState({user_table:converted});
         }
-
-        return table;
+        manageService.getUsers(50,0,callback);
     }
 
-    //TODO:when come to last page,keep click next page,ptr will still increase
-    get_edit_table_next=()=>{
-        console.log("call next");
-        let step=this.state.edit_table.step;
-        let cur_ptr=this.state.edit_table.ptr;
-
-        this.get_edit_table_info(step,cur_ptr);
-
-        let next_ptr=this.state.edit_table.ptr+step;
-        this.setState({edit_table:{...this.state.edit_table,ptr:next_ptr}});
-
-    }
-
-    get_edit_table_previous=()=>{
-        let step=this.state.edit_table.step;
-        let cur_ptr=this.state.edit_table.ptr
-        let next_ptr=this.state.edit_table.ptr-step;
-        if(next_ptr>=0)
-        {
-            this.get_edit_table_info(step,next_ptr);
-            this.setState({edit_table:{...this.state.edit_table,ptr:next_ptr}});
+    get_order_data=()=>{
+        const callback=(data)=>{
+            console.log(data);
+            let converted=tableData.convert_order_to_table(data);
+            this.setState({order_table:converted});
         }
+        orderService.getOrders(50,0,callback);
     }
 
-    render_edit_table_area=()=>{
-        return(
-            <section className={"section"}>
-                <EditTable table={this.state.edit_table.table}/>
-                <div className="buttons">
-                    <button className="button is-primary" onClick={this.get_edit_table_previous}>上一页</button>
-                    <button className="button is-primary" onClick={this.get_edit_table_next}>下一页</button>
-                </div>
-            </section>
-        );
-    }
+
+
+
+
 
     render()
     {
@@ -250,23 +223,32 @@ export default class AdminManageView extends React.Component{
                 </div>
 
                 {this.state.statistic_display&&this.state.display_mod ?
-                    (this.render_chart_area("书籍销售量统计")):null
+                   null:null
                 }
 
-                {this.state.user_display&&this.state.display_mod ?
-                    (this.render_chart_area("用户消费统计")):null
+                {this.state.user_display ?
+                    (
+                        <section>
+                            <UserEditTable table={this.state.user_table} change_table={this.get_user_data}/>
+                        </section>
+                    ):null
                 }
 
-                {this.state.statistic_display&&!this.state.display_mod ?
-                    (this.render_table_area("书籍销售量统计",table_test)):null
+                {this.state.order_display?
+                    (
+                        <section>
+                            <PlainTable table={this.state.order_table}/>
+                        </section>
+                    ):null
                 }
 
-                {this.state.user_display&&!this.state.display_mod ?
-                    (this.render_table_area("用户消费统计",table_test)):null
-                }
 
                 {this.state.book_display ?
-                    (this.render_edit_table_area()):null
+                    (
+                        <section>
+                            <EditTable table={this.state.table} change_table={this.get_user_data}/>
+                        </section>
+                    ):null
                 }
 
 

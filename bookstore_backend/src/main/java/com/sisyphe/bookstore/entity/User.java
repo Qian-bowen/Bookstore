@@ -31,4 +31,8 @@ public class User {
         this.address=address;
     }
     public int getUserId(){return this.userId;}
+    public String getNickname(){return this.nickname;}
+    public String getName(){return this.tel;}
+    public String getTel(){return this.tel;}
+    public String getAddress(){return this.address;}
 }

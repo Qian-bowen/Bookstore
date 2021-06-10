@@ -12,4 +12,5 @@ public interface UserAuthRepository extends JpaRepository<UserAuth,Integer> {
 
     @Query(value = "from UserAuth where username=:username")
     UserAuth checkUsernameExist(@Param("username") String username);
+    
 }

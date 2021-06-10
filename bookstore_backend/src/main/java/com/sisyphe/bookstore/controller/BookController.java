@@ -6,6 +6,7 @@ import com.sisyphe.bookstore.domain.BookSearch;
 import com.sisyphe.bookstore.utils.msgutils.Msg;
 import com.sisyphe.bookstore.utils.msgutils.MsgCode;
 import com.sisyphe.bookstore.utils.msgutils.MsgUtil;
+import com.sisyphe.bookstore.utils.sessionutils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,27 +64,43 @@ public class BookController {
 
     @RequestMapping(value="/manage/admin/book/add",method = RequestMethod.POST)
     public Msg addBook(@RequestBody BookJson bookJson){
+        if(SessionUtil.getUserType()!= Constant.ADMIN)
+        {
+            return MsgUtil.makeMsg(MsgCode.ERROR,MsgUtil.ADMIN_NO_AUTH);
+        }
+
         Book book=new Book(bookJson);
         boolean op=bookService.addBook(book);
-        if(op==true)
+        if(op)
             return MsgUtil.makeMsg(MsgCode.SUCCESS,"ADD BOOK SUCCESS!");
         return MsgUtil.makeMsg(MsgCode.ERROR,"ADD BOOK FAIL!");
     }
 
     @RequestMapping(value="/manage/admin/book/modify",method = RequestMethod.POST)
     public Msg modifyBook(@RequestBody BookJson bookJson){
+        if(SessionUtil.getUserType()!= Constant.ADMIN)
+        {
+            return MsgUtil.makeMsg(MsgCode.ERROR,MsgUtil.ADMIN_NO_AUTH);
+        }
+
         Book book=new Book(bookJson);
         boolean op=bookService.modifyBook(book);
-        if(op==true)
+        if(op)
             return MsgUtil.makeMsg(MsgCode.SUCCESS,"MODIFY BOOK SUCCESS!");
         return MsgUtil.makeMsg(MsgCode.ERROR,"MODIFY BOOK FAIL!");
     }
 
     @RequestMapping(value="/manage/admin/book/del",method = RequestMethod.POST)
-    public Msg delBook(@RequestBody BookJson bookJson){
-        Book book=new Book(bookJson);
-        boolean op=bookService.delBook(book.getBookId());
-        if(op==true)
+    public Msg delBook(@RequestBody Map<String,Integer> params){
+        if(SessionUtil.getUserType()!= Constant.ADMIN)
+        {
+            return MsgUtil.makeMsg(MsgCode.ERROR,MsgUtil.ADMIN_NO_AUTH);
+        }
+
+        Integer book_id=params.get(Constant.BOOK_ID);
+        System.out.println("del book id:"+book_id);
+        boolean op=bookService.delBook(book_id);
+        if(op)
             return MsgUtil.makeMsg(MsgCode.SUCCESS,"DEL BOOK SUCCESS!");
         return MsgUtil.makeMsg(MsgCode.ERROR,"DEL BOOK FAIL!");
     }

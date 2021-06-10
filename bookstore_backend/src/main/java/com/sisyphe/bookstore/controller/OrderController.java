@@ -3,6 +3,7 @@ package com.sisyphe.bookstore.controller;
 import com.google.gson.Gson;
 import com.sisyphe.bookstore.Json.OrderJsonRec;
 import com.sisyphe.bookstore.Json.OrderJsonSend;
+import com.sisyphe.bookstore.constant.Constant;
 import com.sisyphe.bookstore.constant.Operation;
 import com.sisyphe.bookstore.constant.SearchType;
 import com.sisyphe.bookstore.domain.OrderSearch;
@@ -17,6 +18,7 @@ import com.sisyphe.bookstore.entity.Order;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class OrderController {
@@ -52,8 +54,27 @@ public class OrderController {
         return gson.toJson(orderJsonSend);
     }
 
-    //TODO CHECK SESSION! CANNOT SEARCH OTHERS ORDERS
-    @RequestMapping(value="/order/search/private",method = RequestMethod.GET)
+    @RequestMapping(value="/order/get_orders")
+    public String getOrders(@RequestBody Map<String,Integer> param)
+    {
+        Integer fetch_num=param.get(Constant.FETCH_NUM);
+        Integer fetch_begin=param.get(Constant.FETCH_BEGIN);
+        List<Order> orderList=orderService.getOrders(fetch_num,fetch_begin);
+        System.out.println("orders:"+orderList.size());
+
+        List<OrderJsonSend> sendOrders=new ArrayList<>();
+        for(Order order : orderList)
+        {
+            OrderJsonSend orderJsonSend=new OrderJsonSend(order);
+            sendOrders.add(orderJsonSend);
+        }
+
+        Gson gson=new Gson();
+        return gson.toJson(sendOrders);
+    }
+
+    //TODO CHECK SESSION! EXCEPT ADMIN CANNOT SEARCH OTHERS ORDERS
+    @RequestMapping(value="/order/search")
     public String searchOrder(@RequestBody OrderSearch orderSearch)
     {
         List<Order> orders;
@@ -73,7 +94,6 @@ public class OrderController {
         {
             return null;
         }
-
 
         List<OrderJsonSend> sendOrders=new ArrayList<>();
         for(Order order : orders)

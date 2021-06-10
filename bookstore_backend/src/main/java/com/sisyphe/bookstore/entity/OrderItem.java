@@ -21,6 +21,7 @@ public class OrderItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int order_item_id;
     private int book_id;
+    private int piece;
     private BigDecimal price;
 
     @Basic(optional = false)
@@ -37,9 +38,10 @@ public class OrderItem implements Serializable {
 
     }
 
-    public OrderItem(int book_id,BigDecimal price,Order order)
+    public OrderItem(int book_id,int piece,BigDecimal price,Order order)
     {
         this.book_id=book_id;
+        this.piece=piece;
         this.price=price;
         this.order=order;
     }
@@ -49,4 +51,8 @@ public class OrderItem implements Serializable {
     public Order getOrder(){return order;}
     public BigDecimal get_price(){return price;}
     public Timestamp get_timestamp(){return timestamp;}
+
+    public int getPiece() {
+        return piece;
+    }
 }

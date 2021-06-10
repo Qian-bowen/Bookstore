@@ -29,7 +29,7 @@ public class LoginController {
         String password=params.get(Constant.PASSWORD);
         System.out.println(username+password);
         UserAuth auth =userService.checkUser(username,password);
-        if(auth!=null)
+        if(auth!=null && auth.getUserType()!=Constant.BANNED_USER)
         {
             JSONObject obj=new JSONObject();
             obj.put(Constant.USER_ID,auth.getUserID());
@@ -42,6 +42,10 @@ public class LoginController {
             Msg msg= MsgUtil.makeMsg(MsgCode.SUCCESS, MsgUtil.LOGIN_SUCCESS_MSG, data);
             System.out.println("login status:"+msg.getStatus()+" "+msg.getMsg());
             return msg;
+        }
+        else if(auth.getUserType()==Constant.BANNED_USER)
+        {
+            return MsgUtil.makeMsg(MsgCode.LOGIN_USER_ERROR,MsgUtil.LOGIN_USER_PROHIBIT_MSG);
         }
         else
         {
