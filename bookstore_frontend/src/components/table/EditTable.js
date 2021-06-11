@@ -14,7 +14,6 @@ class TableRow extends React.Component{
             line:this.props.line,
             line_idx:this.props.line_idx,
             cell_mode:new Array(this.props.col_num).fill(false),
-            is_delete:false,
         }
     }
 
@@ -34,7 +33,6 @@ class TableRow extends React.Component{
 
     delete_record=()=>{
         this.props.delete_record(this.state.line);
-        this.setState({is_delete:true});
     }
 
     handle_change_to_input=(col_idx)=>{
@@ -52,7 +50,6 @@ class TableRow extends React.Component{
     render()
     {
         return(
-            (!this.state.is_delete)?(
             <tr>
                 {this.props.line.map((col,col_idx)=>{
                     return (
@@ -72,7 +69,6 @@ class TableRow extends React.Component{
                     <div className={"button is-small is-danger"} onClick={this.delete_record}>删除</div>
                 </th>
             </tr>
-            ):null
         );
     }
 }

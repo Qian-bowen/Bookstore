@@ -2,6 +2,8 @@ import React from 'react';
 import {Selector} from "./tool/Choose";
 import {RankingChart,TendencyChart} from './tool/Chart';
 import * as manageService from '../services/manageService';
+import * as searchEnum from '../components/constant/searchEnum';
+
 
 class AddBook extends React.Component{
     constructor(props) {
@@ -47,6 +49,7 @@ class AddBook extends React.Component{
 
     alert_backend_msg=(msg)=>{
         alert(msg.msg);
+        this.props.add_refresh();
     }
 
     submit_book=()=>{
@@ -96,7 +99,10 @@ class ManagePanel extends React.Component{
             search_text:null,
             search_text_second:null,
 
-            is_advance_search:false,
+            book_manage:false,
+            user_manage:false,
+            order_manage:false,
+            statistic_manage:false,
         }
     }
 
@@ -112,50 +118,62 @@ class ManagePanel extends React.Component{
         this.props.search_items(this.state.search_text);
     }
 
-    submit_search_book_name=()=>{
+    submit_order_search_by_book_name=()=>{
         this.props.search_order_by_book_name(this.state.search_text);
     }
 
-    submit_search_by_time=()=>{
-        this.props.search_by_time(this.state.search_text,this.state.search_text_second);
+    submit_order_search_by_time=()=>{
+        this.props.search_by_time(this.state.search_text,this.state.search_text_second,searchEnum.searchType.order_search);
     }
 
-
-
-    change_search_mode=()=>{
-        let mode=this.state.is_advance_search;
-        this.setState({is_advance_search:!mode});
+    submit_book_stat=()=>{
+        this.props.search_by_time(this.state.search_text,this.state.search_text_second,searchEnum.searchType.book_stat);
     }
 
-
-    handle_display_mod=()=>{
-        let cur_mod=this.state.display_mod;
-        this.setState({display_mod:!cur_mod},()=>
-        {
-            this.props.on_display_mod();
-        });
+    submit_user_stat=()=>{
+        this.props.search_by_time(this.state.search_text,this.state.search_text_second,searchEnum.searchType.user_stat);
     }
 
     handle_statistic=()=>{
-        this.setState({is_edit_mode:false},()=>{
+        this.setState({
+            book_manage:false,
+            user_manage:false,
+            order_manage:false,
+            statistic_manage:true,
+        },()=>{
             this.props.on_statistic();
         });
     }
 
     handle_user_manage=()=>{
-        this.setState({is_edit_mode:false},()=>{
+        this.setState({
+            book_manage:false,
+            user_manage:true,
+            order_manage:false,
+            statistic_manage:false,
+        },()=>{
             this.props.on_user_manage();
         });
     }
 
     handle_book_manage=()=>{
-        this.setState({is_edit_mode:true},()=>{
+        this.setState({
+            book_manage:true,
+            user_manage:false,
+            order_manage:false,
+            statistic_manage:false,
+        },()=>{
             this.props.on_book_manage();
         });
     }
 
     handle_order_manage=()=>{
-        this.setState({is_edit_mode:true},()=>{
+        this.setState({
+            book_manage:false,
+            user_manage:false,
+            order_manage:true,
+            statistic_manage:false,
+        },()=>{
             this.props.on_order_manage();
         });
     }
@@ -165,14 +183,14 @@ class ManagePanel extends React.Component{
         this.setState({display_edit_area:!cur_state});
     }
 
-    render_advance_search=()=>{
+    render_order_search=()=>{
         return(
             <div>
                 <div className="panel-block">
                     <input className="input is-success" type="text" placeholder="请输入书名" onChange={this.handle_search}/>
                 </div>
                 <div className="panel-block">
-                    <button className="button is-primary is-inverted is-rounded" onClick={this.submit_search_book_name}>通过书名搜索</button>
+                    <button className="button is-primary is-inverted is-rounded" onClick={this.submit_order_search_by_book_name}>通过书名搜索</button>
                 </div>
                 <div className="panel-block">
                     <input className="input is-success" type="text" placeholder="请输入起始时间，如：2021-05-25 15:30:55" onChange={this.handle_search}/>
@@ -181,7 +199,7 @@ class ManagePanel extends React.Component{
                     <input className="input is-success" type="text" placeholder="请输入终止时间，如：2021-05-28 16:37:55" onChange={this.handle_search_second}/>
                 </div>
                 <div className="panel-block">
-                    <button className="button is-primary is-inverted is-rounded" onClick={this.submit_search_by_time}>通过时间搜索</button>
+                    <button className="button is-primary is-inverted is-rounded" onClick={this.submit_order_search_by_time}>通过时间搜索</button>
                 </div>
             </div>
 
@@ -189,38 +207,47 @@ class ManagePanel extends React.Component{
     }
 
 
-    render_panel_button=()=>{
+    render_book_button=()=>{
         return(
             <div>
-                {
-                    !this.state.is_edit_mode?
-                        (
-                            <div className={"button is-rounded is-danger"}
-                                 onClick={this.handle_display_mod}>
-                                {
-                                    this.state.display_mod?
-                                        (<span>以表显示</span>):
-                                        (<span>以图显示</span>)
-                                }
-                            </div>
-                        ):null
-                }
-
-                {
-                    this.state.is_edit_mode?
-                        (
-                            <div className={"buttons has-addons"}>
-                                <div className={"button is-rounded is-primary"}
-                                    onClick={this.handle_edit_area}
-                                >增加</div>
-                                <div className={"button is-rounded is-link"} onClick={this.submit_search}>查找</div>
-                                <div className={"button is-rounded is-warning"} onClick={this.change_search_mode}>搜索模式</div>
-                            </div>
-                        ):null
-                }
+                <div className="panel-block">
+                    <input className="input is-success" type="text" placeholder="开始查找" onChange={this.handle_search}/>
+                </div>
+                <div className="panel-block">
+                    <div className={"buttons has-addons"}>
+                        <div className={"button is-rounded is-primary"}
+                             onClick={this.handle_edit_area}
+                        >增加</div>
+                        <div className={"button is-rounded is-link"} onClick={this.submit_search}>查找</div>
+                    </div>
+                </div>
+                <div className="panel-block">
+                    {
+                        this.state.display_edit_area?
+                            (<AddBook add_refresh={this.props.add_refresh}/>):null
+                    }
+                </div>
             </div>
         );
     }
+
+    render_statistic_button=()=>{
+        return (
+            <div>
+                <div className="panel-block">
+                    <input className="input is-success" type="text" placeholder="请输入起始时间，如：2021-05-25 15:30:55" onChange={this.handle_search}/>
+                </div>
+                <div className="panel-block">
+                    <input className="input is-success" type="text" placeholder="请输入终止时间，如：2021-05-28 16:37:55" onChange={this.handle_search_second}/>
+                </div>
+                <div className="panel-block">
+                    <button className="button is-primary is-rounded" onClick={this.submit_book_stat}>书籍销量统计</button>
+                    <button className="button is-warning is-rounded" onClick={this.submit_user_stat}>用户消费统计</button>
+                </div>
+            </div>
+        );
+    }
+
 
 
     render()
@@ -245,31 +272,28 @@ class ManagePanel extends React.Component{
                             onClick={this.handle_statistic}
                         >数据统计</a>
                         <a className="is-active"
-                           onClick={this.handle_activity}
                         >活动发布</a>
                     </p>
 
                     {
-                        (this.state.is_advance_search)?
-                            this.render_advance_search()
-                            :(
-                                <div className="panel-block">
-                                    <input className="input is-success" type="text" placeholder="开始查找" onChange={this.handle_search}/>
-                                </div>
-                            )
+                        (this.state.order_manage)?
+                            this.render_order_search()
+                            :null
                     }
 
+                    {
+                        (this.state.book_manage)?
+                            (
+                                this.render_book_button()
+                            ):null
+                    }
 
-                    <div className="panel-block">
-                        {this.render_panel_button()}
-                    </div>
-
-                    <div className="panel-block">
-                        {
-                            this.state.display_edit_area?
-                                (<AddBook/>):null
-                        }
-                    </div>
+                    {
+                        (this.state.statistic_manage)?
+                            (
+                                this.render_statistic_button()
+                            ):null
+                    }
 
                 </article>
             </div>

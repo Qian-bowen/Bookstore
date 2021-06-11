@@ -11,6 +11,7 @@ import * as manageService from '../services/manageService';
 import * as orderService from '../services/orderService';
 import one from "../asserts/lufei.jpg";
 import * as tableData from '../utils/tableData';
+import * as searchEnum from '../components/constant/searchEnum';
 
 const avatar_info={
     username:"guagua",
@@ -67,9 +68,11 @@ export default class AdminManageView extends React.Component{
             order_display:false,
             display_mod:true,//true means show in graph,false in list
 
-            table:null,
+            book_table:null,
             user_table:null,
             order_table:null,
+
+            stat_table:null,
         }
     }
 
@@ -126,14 +129,14 @@ export default class AdminManageView extends React.Component{
     }
 
     //search items and update the table
-    on_search_items=(search_text)=>{
+    on_search_book_items=(search_text)=>{
         let book_search={
             "type":0,//by name
             "name":search_text
         };
         const update_table=(data)=>{
             let converted=tableData.convert_book_to_table(data);
-            this.setState({table:converted});
+            this.setState({book_table:converted});
         }
         manageService.searchBook(book_search,update_table);
     }
@@ -146,12 +149,32 @@ export default class AdminManageView extends React.Component{
         orderService.searchOrderByName(name,update_table);
     }
 
-    on_search_by_time=(begin_time,end_time)=>{
-        const update_table=(data)=>{
-            let converted=tableData.convert_order_to_table(data);
-            this.setState({order_table:converted});
+    on_search_by_time=(begin_time,end_time,type)=>{
+        if(searchEnum.searchType.order_search===type)
+        {
+            const update_table=(data)=>{
+                let converted=tableData.convert_order_to_table(data);
+                this.setState({order_table:converted});
+            }
+            orderService.searchOrderByTime(begin_time,end_time,update_table);
         }
-        orderService.searchOrderByTime(begin_time,end_time,update_table);
+        else if(searchEnum.searchType.user_stat===type)
+        {
+            const update_stat_table=(data)=>{
+                console.log(data);
+                let converted=tableData.convert_user_consume_to_table(data);
+                this.setState({stat_table:converted});
+            }
+            manageService.statUserByTime(begin_time,end_time,50,update_stat_table);
+        }
+        else if(searchEnum.searchType.book_stat===type)
+        {
+            const update_stat_table=(data)=>{
+                let converted=tableData.convert_book_sell_to_table(data);
+                this.setState({stat_table:converted});
+            }
+            manageService.statBookByTime(begin_time,end_time,50,update_stat_table);
+        }
     }
 
 
@@ -164,9 +187,10 @@ export default class AdminManageView extends React.Component{
                     on_display_mod={this.on_display_mod}
                     on_book_manage={this.on_book_manage}
                     on_order_manage={this.on_order_manage}
-                    search_items={this.on_search_items}
+                    search_items={this.on_search_book_items}
                     search_order_by_book_name={this.on_search_order_by_book_name}
                     search_by_time={this.on_search_by_time}
+                    add_refresh={this.get_table_data}
                 />
             </div>
         );
@@ -177,7 +201,7 @@ export default class AdminManageView extends React.Component{
         const callback=(data)=>{
             let converted=tableData.convert_book_to_table(data);
             console.log(converted);
-            this.setState({table:converted});
+            this.setState({book_table:converted});
         }
         const get_info={"fetch_num":50,"fetch_begin":0};
         bookService.getBooks(get_info,callback);
@@ -201,11 +225,6 @@ export default class AdminManageView extends React.Component{
         orderService.getOrders(50,0,callback);
     }
 
-
-
-
-
-
     render()
     {
         return(
@@ -221,10 +240,6 @@ export default class AdminManageView extends React.Component{
                         ( this.render_manage_area()) :null
                     }
                 </div>
-
-                {this.state.statistic_display&&this.state.display_mod ?
-                   null:null
-                }
 
                 {this.state.user_display ?
                     (
@@ -246,7 +261,15 @@ export default class AdminManageView extends React.Component{
                 {this.state.book_display ?
                     (
                         <section>
-                            <EditTable table={this.state.table} change_table={this.get_user_data}/>
+                            <EditTable table={this.state.book_table} change_table={this.get_table_data}/>
+                        </section>
+                    ):null
+                }
+
+                {this.state.statistic_display ?
+                    (
+                        <section>
+                            <PlainTable table={this.state.stat_table}/>
                         </section>
                     ):null
                 }

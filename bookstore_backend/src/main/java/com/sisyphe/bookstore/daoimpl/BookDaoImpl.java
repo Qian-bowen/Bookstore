@@ -38,13 +38,13 @@ public class BookDaoImpl implements BookDao {
     public List<Book> getBooksByExactName(String name){return bookRepository.getBooksByExactName(name);}
 
     @Override
-    public Book addBook(Book book){ return bookRepository.save(book);}
+    public Book addBook(Book book){ return bookRepository.saveAndFlush(book);}
 
     @Override
     public Book modifyBook(Book book)
     {
 
-        return bookRepository.save(book);
+        return bookRepository.saveAndFlush(book);
     }
 
     @Override

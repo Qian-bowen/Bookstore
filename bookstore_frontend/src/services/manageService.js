@@ -1,4 +1,5 @@
 import {postRequest} from "../utils/ajax";
+import {statisticType} from "../components/constant/searchEnum";
 
 export const modifyBook = (data,callback) => {
     const url = 'http://localhost:8080/manage/admin/book/modify';
@@ -7,6 +8,7 @@ export const modifyBook = (data,callback) => {
 
 export const delBook = (book_id,callback) => {
     let data={'book_id':book_id};
+    console.log("del:"+book_id);
     const url = 'http://localhost:8080/manage/admin/book/del';
     postRequest(url, data, callback);
 };
@@ -47,6 +49,28 @@ export const getUsers=(fetch_num,fetch_begin,callback)=>{
     };
     const url="http://localhost:8080/admin/manage/get_user";
     postRequest(url, fetch_data, callback);
+}
+
+export const statUserByTime=(begin_time,end_time,stat_num,callback)=>{
+    let stat_data={
+        "type":statisticType.stat_up,
+        "statNum":stat_num,
+        "lower_time":begin_time,
+        "upper_time":end_time,
+    };
+    const url="http://localhost:8080/statistic/admin/user-consume";
+    postRequest(url, stat_data, callback);
+}
+
+export const statBookByTime=(begin_time,end_time,stat_num,callback)=>{
+    let stat_data={
+        "type":statisticType.stat_up,
+        "statNum":stat_num,
+        "lower_time":begin_time,
+        "upper_time":end_time,
+    };
+    const url="http://localhost:8080/statistic/books";
+    postRequest(url, stat_data, callback);
 }
 
 //line: id name isbn price author

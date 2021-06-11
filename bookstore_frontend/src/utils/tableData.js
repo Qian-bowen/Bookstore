@@ -1,6 +1,6 @@
 import * as bookService from "../services/bookService";
 
-const convert_book_to_table=(data)=>{
+export const convert_book_to_table=(data)=>{
     let table={
         headers:["ID","书籍名称","ISBN","售价","作者"],
         line:[]
@@ -17,7 +17,7 @@ const convert_book_to_table=(data)=>{
     return table;
 }
 
-const convert_user_to_table=(data)=>{
+export const convert_user_to_table=(data)=>{
     let table={
         headers:["ID","类型","昵称","名字","电话","地址"],
         line:[]
@@ -41,7 +41,7 @@ const convert_user_to_table=(data)=>{
     return table;
 }
 
-const convert_order_to_table=(data)=>{
+export const convert_order_to_table=(data)=>{
     let table={
         headers:["ID","用户ID","总价","创建时间","商品ID"],
         line:[]
@@ -71,4 +71,55 @@ const convert_order_to_table=(data)=>{
     return table;
 }
 
-export{convert_book_to_table,convert_user_to_table,convert_order_to_table}
+export const convert_user_consume_to_table=(data)=>{
+    let table={
+        headers:["ID","昵称","消费总额"],
+        line:[]
+    };
+
+    let num=data.length;
+    for(let i=0;i<num;++i)
+    {
+        let line=[];
+        let cur_user=data[i];
+
+        let user=cur_user.userJson;
+        let user_id=user.userId;
+        let nickname=user.nickname;
+        let total_consume=cur_user.total_consume;
+
+        line.push(user_id,nickname,total_consume);
+        table.line.push(line);
+    }
+    console.log(table);
+    return table;
+}
+
+export const convert_book_sell_to_table=(data)=>{
+    let table={
+        headers:["ID","销量","isbn","书名","类型","作者","价格","库存"],
+        line:[]
+    };
+
+    let num=data.length;
+    for(let i=0;i<num;++i)
+    {
+        let line=[];
+        let book_sell=data[i];
+
+        let book=book_sell.book;
+        let book_id=book.bookId;
+        let isbn=book.isbn;
+        let name=book.name;
+        let type=book.type;
+        let author=book.author;
+        let price=book.price;
+        let inventory=book.inventory;
+        let sell_num=book_sell.sell_num;
+
+        line.push(book_id,sell_num,isbn,name,type,author,price,inventory);
+        table.line.push(line);
+    }
+    console.log(table);
+    return table;
+}
