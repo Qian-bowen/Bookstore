@@ -26,8 +26,11 @@ class Login extends React.Component {
 
     login_info=()=>{
         const {username,password}=this.state;
-        console.log(username);
-        console.log(password);
+        if(username===""||password==="")
+        {
+            alert("请输入用户名和密码");
+            return;
+        }
         const obj={username:username,password:password};
         userService.login(obj);
     }

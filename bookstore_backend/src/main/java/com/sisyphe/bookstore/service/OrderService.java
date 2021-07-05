@@ -11,6 +11,8 @@ public interface OrderService {
     Order storeOrder(OrderJsonRec orderJsonRec);
     List<Order> getOrders(Integer fetch_num,Integer fetch_begin);
     List<Order> searchOrderByUser(OrderSearch orderSearch);
+    List<Order> searchOrderByUserBook(OrderSearch orderSearch);
+    List<Order> searchOrderByUserTime(OrderSearch orderSearch);
     List<Order> searchOrderByTime(OrderSearch orderSearch);
     List<Order> searchOrderByBookName(OrderSearch orderSearch);
 }

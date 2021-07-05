@@ -61,14 +61,15 @@ CREATE TABLE `user` (
                         `name` varchar(255) DEFAULT NULL,
                         `tel` varchar(255) DEFAULT NULL,
                         `address` varchar(255) DEFAULT NULL,
+                        `email` varchar(255) DEFAULT NULL,
                         PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', '奔雷少年', '奔少', null, null);
-INSERT INTO `user` VALUES ('2', 'guagua', 'ggg', null,null);
+INSERT INTO `user` VALUES ('1', '奔雷少年', '奔少', null, null,null);
+INSERT INTO `user` VALUES ('2', 'guagua', 'ggg', null,null,null);
 
 -- ----------------------------
 -- Table structure for user_auth
@@ -111,6 +112,7 @@ CREATE TABLE `orderItem` (
                         `order_item_id` int(11) NOT NULL AUTO_INCREMENT,
                         `book_id` int(11) NOT NULL,
                         `order_id` int(11) NOT NULL,
+                        `piece` int(11) NOT NULL,
                         `price` decimal(10,2) DEFAULT NULL,
 						`created_time` datetime DEFAULT CURRENT_TIMESTAMP,
                         

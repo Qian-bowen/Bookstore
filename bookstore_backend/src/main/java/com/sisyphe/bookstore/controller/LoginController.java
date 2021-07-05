@@ -53,6 +53,19 @@ public class LoginController {
         }
     }
 
+    @RequestMapping("/logout")
+    public Msg logout()
+    {
+        if(SessionUtil.removeSession())
+        {
+            return MsgUtil.makeMsg(MsgCode.SUCCESS);
+        }
+        else
+        {
+            return MsgUtil.makeMsg(MsgCode.ERROR);
+        }
+    }
+
     @RequestMapping("/checkSession")
     public Msg checkSession(){
         JSONObject auth = SessionUtil.getAuth();

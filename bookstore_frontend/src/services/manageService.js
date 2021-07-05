@@ -1,5 +1,5 @@
 import {postRequest} from "../utils/ajax";
-import {statisticType} from "../components/constant/searchEnum";
+import {statisticType} from "../components/constant/Type";
 
 export const modifyBook = (data,callback) => {
     const url = 'http://localhost:8080/manage/admin/book/modify';
@@ -70,6 +70,17 @@ export const statBookByTime=(begin_time,end_time,stat_num,callback)=>{
         "upper_time":end_time,
     };
     const url="http://localhost:8080/statistic/books";
+    postRequest(url, stat_data, callback);
+}
+
+export const statPersonalOrder=(begin_time,end_time,stat_num,callback)=>{
+    let stat_data={
+        "type":statisticType.stat_up,
+        "statNum":stat_num,
+        "lower_time":begin_time,
+        "upper_time":end_time,
+    };
+    const url="http://localhost:8080/statistic/personal/purchase";
     postRequest(url, stat_data, callback);
 }
 

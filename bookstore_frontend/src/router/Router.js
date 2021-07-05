@@ -11,6 +11,8 @@ import CartView from "../view/CartView";
 import AdminManageView from "../view/AdminManageView";
 import Register from "../components/Register";
 import HotGdsView from "../view/HotGdsView";
+import ManageRoute from "./ManageRoute";
+import UserManageView from "../view/UserManageView";
 
 class BasicRoute extends React.Component{
     constructor(props) {
@@ -29,7 +31,9 @@ class BasicRoute extends React.Component{
                     <PrivateRoute exact path="/recmd" component={RecmdView} />
                     <LoginRoute exact path="/login" component={Login}/>
                     <PrivateRoute exact path="/cart" component={CartView} />
-                    <PrivateRoute exact path="/manage" component={AdminManageView} />
+                    <ManageRoute exact path="/manage"/>
+                    <PrivateRoute exact path="/manage/user" component={UserManageView} />
+                    <PrivateRoute exact path="/manage/admin" component={AdminManageView} />
                     <Route exact path="/register" component={Register} />
                     <PrivateRoute exact path="/hotgds" component={HotGdsView} />
                     <Redirect from="/*" to="/" />

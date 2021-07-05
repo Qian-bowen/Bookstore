@@ -116,7 +116,7 @@ class Counter extends React.Component{
                                 全选
                             </label>
                         </p>
-                        <p class="level-item"><a>合计：￥{this.props.sum}</a></p>
+                        <p class="level-item"><a>合计：￥{this.props.sum.toFixed(2)}</a></p>
                         <p class="level-item">
                             <a class="button is-success"
                                 onClick={this.handle_checkout}

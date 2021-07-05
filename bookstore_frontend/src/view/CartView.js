@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import * as orderService from '../services/orderService';
 import * as cartService from '../services/cartService';
 
-import SimpleNav from "../components/head/SimpleNav";
+import {SimpleNav} from "../components/head/SimpleNav";
 import {BookPurchase,Counter,OrderForm} from "../components/CheckOut";
 import {history} from "../utils/history";
 import {convert_book_info} from "../services/bookService";
@@ -65,7 +65,6 @@ import {modifyCarts} from "../services/cartService";
 const ADD=0;
 const SUB=1;
 const DEL=2;
-let cart_pool=[];
 
 export default class CartView extends React.Component{
     constructor(props) {
@@ -88,6 +87,7 @@ export default class CartView extends React.Component{
 
     get_cart_content=(data)=>{
         console.log(data);
+        let cart_pool=[];
         let user_id=data['user_id'];
         let books=data['books'];
         let cart_piece=data['cart_piece'];
@@ -112,7 +112,7 @@ export default class CartView extends React.Component{
     * */
     check_out=()=>{
         let tmp_sum=0;
-        //let tmp_cart=this.state.cart_pool;
+        let cart_pool=this.state.cart_show;
         cart_pool.map((it,key)=>{
             if(it.chosen===true)
             {
@@ -133,6 +133,7 @@ export default class CartView extends React.Component{
     * */
     on_choose_reverse=(props)=>{
         let reset_chosen=!this.state.choose_all;
+        let cart_pool=this.state.cart_show;
         this.setState((state)=>({
             choose_all:reset_chosen
         }));
@@ -148,6 +149,7 @@ export default class CartView extends React.Component{
     * reverse the choose state of single item
     * */
     on_choose_reverse_item=(cart_id)=>{
+        let cart_pool=this.state.cart_show;
         cart_pool.map((it,key)=>{
             if(cart_id===it.cart_id)
             {
@@ -173,6 +175,7 @@ export default class CartView extends React.Component{
     * remove item according to cart_id
     * */
     on_remove_item=(cart_id)=>{
+        let cart_pool=this.state.cart_show;
         let del_book_id;
         del_book_id=cart_pool.find(item=>item.cart_id===cart_id).book_id;
         console.log("del book id:"+del_book_id);
@@ -190,7 +193,7 @@ export default class CartView extends React.Component{
     * */
     on_step_change_item=(choice,cart_id)=>{
         let op;
-
+        let cart_pool=this.state.cart_show;
         for(let it=0;it<cart_pool.length;++it) {
             if (cart_id === cart_pool[it].cart_id) {
                 if (choice === 0) {
@@ -201,7 +204,8 @@ export default class CartView extends React.Component{
                     cart_pool[it].piece -= 1;
                     op=SUB;
                     if (cart_pool[it].piece === 0) {
-                        cart_pool.splice(it, 1);
+                       this.on_remove_item(cart_id);
+                       return;
                     }
                 }
                 //send data to backend
@@ -219,6 +223,7 @@ export default class CartView extends React.Component{
     * TODO:handle english string(convert to lowercase)
     * */
     on_search_item=(substr)=>{
+        let cart_pool=this.state.cart_show;
         //substr is empty ,means not in search mod
         if(substr==="")
         {
@@ -243,6 +248,7 @@ export default class CartView extends React.Component{
     on_checkout=()=>{
         let tmp_sum=this.state.sum;
         let tmp_items_array=[];
+        let cart_pool=this.state.cart_show;
 
         for(let item=0;item<cart_pool.length;++item)
         {

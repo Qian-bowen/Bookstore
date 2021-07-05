@@ -75,6 +75,36 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> searchOrderByUserBook(OrderSearch orderSearch)
+    {
+        String bookName=orderSearch.getBookName();
+        List<Book> books=bookDao.getBooksByName(bookName);
+        if(books==null) return null;
+        List<Order> orders=new ArrayList<>();
+        for(Book book : books)
+        {
+            List<Order> tmp_orders=orderDao.searchOrderByUserBook(orderSearch.getUser_id(),book.getBookId());
+            orders.addAll(tmp_orders);
+        }
+        return orders;
+    }
+
+    @Override
+    public List<Order> searchOrderByUserTime(OrderSearch orderSearch)
+    {
+        TimeConvert timeConvert=new TimeConvert("yyyy-MM-dd hh:mm:ss","UTC");
+        try{
+            Timestamp lower_timestamp=timeConvert.StringToTimestamp(orderSearch.getLower_time());
+            Timestamp upper_timestamp=timeConvert.StringToTimestamp(orderSearch.getUpper_time());
+            return orderDao.searchOrderByUserTime(orderSearch.getUser_id(),lower_timestamp,upper_timestamp);
+        }catch(Exception e)
+        {
+
+        }
+        return null;
+    }
+
+    @Override
     public List<Order> searchOrderByTime(OrderSearch orderSearch)
     {
         System.out.println("by time");

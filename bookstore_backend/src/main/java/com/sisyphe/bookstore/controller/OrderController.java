@@ -90,6 +90,14 @@ public class OrderController {
         {
             orders=orderService.searchOrderByBookName(orderSearch);
         }
+        else if(orderSearch.getType()==SearchType.BY_USER_BOOK)
+        {
+            orders=orderService.searchOrderByUserBook(orderSearch);
+        }
+        else if(orderSearch.getType()==SearchType.BY_USER_TIME)
+        {
+            orders=orderService.searchOrderByUserTime(orderSearch);
+        }
         else
         {
             return null;
@@ -102,6 +110,7 @@ public class OrderController {
             sendOrders.add(orderJsonSend);
         }
         Gson gson=new Gson();
+        System.out.println("order:"+gson.toJson(sendOrders));
         return gson.toJson(sendOrders);
     }
 }

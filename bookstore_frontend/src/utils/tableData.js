@@ -95,6 +95,31 @@ export const convert_user_consume_to_table=(data)=>{
     return table;
 }
 
+export const convert_personal_order_to_table=(data)=>{
+    let table={
+        headers:["书籍ID","书名","数目","总价"],
+        line:[]
+    };
+
+    let num=data.length;
+    for(let i=0;i<num;++i)
+    {
+        let line=[];
+        let cur_stat=data[i];
+
+        let book=cur_stat.book;
+        let total_num=cur_stat.total_num;
+        let total_price=cur_stat.total_price;
+        let book_id=book.bookId;
+        let book_name=book.name;
+
+        line.push(book_id,book_name,total_num,total_price);
+        table.line.push(line);
+    }
+    console.log(table);
+    return table;
+}
+
 export const convert_book_sell_to_table=(data)=>{
     let table={
         headers:["ID","销量","isbn","书名","类型","作者","价格","库存"],

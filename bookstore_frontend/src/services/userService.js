@@ -3,7 +3,6 @@ import React from "react";
 import {history} from "../utils/history";
 
 export const login = (data) => {
-    console.log("post in login:"+data);
     const url = 'http://localhost:8080/login';
     const callback = (data) => {
         console.log("back:"+data.username);
@@ -21,6 +20,23 @@ export const login = (data) => {
     };
     postRequest(url, data, callback);
 };
+
+export const logout=()=>{
+    const url = 'http://localhost:8080/logout';
+    const callback = (data) => {
+        if(data.status>=0)
+        {
+            localStorage.removeItem('user');
+            history.push("/");
+            alert("LOGOUT SUCCESS");
+        }
+        else
+        {
+            alert("LOGOUT FAIL");
+        }
+    };
+    postRequest(url, {}, callback);
+}
 
 export const register = (data) => {
     console.log("post in login:"+data);

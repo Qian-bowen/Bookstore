@@ -5,7 +5,6 @@ import App from './App'
 import './index.css';
 import 'bulma/css/bulma.css';
 import 'animate.css/animate.css';
-import './css/NavHead.css';
 import './css/Cart.css';
 import './css/BookFrame.css';
 import './css/login.css';

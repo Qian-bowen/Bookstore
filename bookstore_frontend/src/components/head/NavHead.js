@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {Selector} from "../tool/Choose";
+import * as userService from "../../services/userService";
 
 const option_item=["书名","作者","IBSN"];
 
@@ -32,6 +33,33 @@ class SearchBar extends React.Component{
 
 
 export default class NavHead extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state={
+            isAuthed:false,
+        }
+    }
+
+    checkAuth = (data) => {
+        console.log(data);
+        if (data.status >= 0) {
+            this.setState({isAuthed: true});
+        } else {
+            this.setState({isAuthed: false});
+        }
+    };
+
+
+    componentDidMount() {
+        userService.checkSession(this.checkAuth);
+    }
+
+    logout=()=>{
+        userService.logout();
+        this.setState({isAuthed: false});
+    }
+
+
 
     render()
     {
@@ -46,7 +74,7 @@ export default class NavHead extends React.Component{
                                     <div className="navbar-end">
                                         <a className="navbar-item">
                                             <Link to={"/manage"}>
-                                                <span>管理测试</span>
+                                                <span>管理</span>
                                             </Link>
                                         </a>
                                         <a className="navbar-item">
@@ -65,11 +93,20 @@ export default class NavHead extends React.Component{
                                             </Link>
                                         </a>
                                         <span className="navbar-item">
-                                            <Link to={"/login"}>
-                                                <a className="button is-primary is-inverted">
-                                                    <span>登录账户</span>
-                                                </a>
-                                            </Link>
+                                            {
+                                                (!this.state.isAuthed)?
+                                                    (
+                                                        <Link to={"/login"}>
+                                                            <a className="button is-primary is-inverted">
+                                                                <span>登录账户</span>
+                                                            </a>
+                                                        </Link>
+                                                    ): (
+                                                        <a className="button is-primary is-inverted" onClick={()=>{this.logout()}}>
+                                                            <span>登出账户</span>
+                                                        </a>
+                                                    )
+                                            }
                                         </span>
 
                                     </div>

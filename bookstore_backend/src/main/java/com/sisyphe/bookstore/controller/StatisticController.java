@@ -46,7 +46,7 @@ public class StatisticController {
         return gson.toJson(userConsumeStatList);
     }
 
-    @RequestMapping(value = "/statistic/personal/orders")
+    @RequestMapping(value = "/statistic/personal/purchase")
     public String statisticPersonalOrder(@RequestBody StatisticSet statisticSet)
     {
         Integer userId= SessionUtil.getUserId();

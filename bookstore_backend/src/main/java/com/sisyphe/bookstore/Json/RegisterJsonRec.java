@@ -5,6 +5,7 @@ public class RegisterJsonRec {
     public String name;
     public String tel;
     public String address;
+    public String email;
 
     public String username;
     public String password;

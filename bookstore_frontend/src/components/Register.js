@@ -7,6 +7,8 @@ export default class Register extends React.Component {
         this.state={
             username:"",
             password:"",
+            password_again:"",
+            email:"",
             nickname:"",
             name:"",
             tel:"",
@@ -37,6 +39,14 @@ export default class Register extends React.Component {
         {
             this.setState({password:value});
         }
+        if(type==="password_again")
+        {
+            this.setState({password_again:value});
+        }
+        if(type==="email")
+        {
+            this.setState({email:value});
+        }
         if(type==="nickname")
         {
             this.setState({nickname:value});
@@ -63,6 +73,8 @@ export default class Register extends React.Component {
     submit_register=()=>{
         let username=document.getElementById('username').value;
         let password=document.getElementById('password').value;
+        let password_again=document.getElementById('password_again').value;
+        let email=document.getElementById('email').value;
         let nickname=document.getElementById('nickname').value;
         let name=document.getElementById('name').value;
         let tel=document.getElementById('tel').value;
@@ -80,13 +92,25 @@ export default class Register extends React.Component {
             type=0;
         }
 
-        if(username===null||password==null||nickname===null||name===null||tel===null||address===null||(admin_type===true&&admin_valid_pwd===null))
+        if(username===""||password===""||password_again===""||nickname===""||name===""||tel===""||address===""||(admin_type===true&&admin_valid_pwd===""))
         {
-            alert("INPUT MISSING");
+            alert("信息缺失");
             return;
         }
 
-        let obj={nickname:nickname,name:name,tel:tel,address:address,username:username,password:password,user_type:type,admin_valid_pwd:admin_valid_pwd};
+        if(document.getElementById("email").validity.valid===false)
+        {
+            alert("邮箱格式不合法");
+            return;
+        }
+
+        else if(password!==password_again)
+        {
+            alert("两次输入密码不一致");
+            return;
+        }
+
+        let obj={nickname:nickname,name:name,tel:tel,address:address,email:email,username:username,password:password,user_type:type,admin_valid_pwd:admin_valid_pwd};
         userService.register(obj);
     }
 
@@ -100,8 +124,6 @@ export default class Register extends React.Component {
                         <div className="control">
                             <input
                                 className="input" type="" placeholder="e.g Hello World" id={"username"}
-                                //value={this.state.username}
-                                //onChange={this.handle_input(this,"username")}
                             />
                         </div>
                     </div>
@@ -111,8 +133,25 @@ export default class Register extends React.Component {
                         <div className="control">
                             <input
                                 className="input" type="password" placeholder="请输入密码" id={"password"}
-                                // value={this.state.password}
-                                // onChange={this.handle_input("password")}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="field">
+                        <label className="label">重复密码</label>
+                        <div className="control">
+                            <input
+                                className="input" type="password" placeholder="请再次输入密码" id={"password_again"}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="field">
+                        <label className="label">邮箱</label>
+                        <div className="control">
+                            <input
+                                className="input" type="email" placeholder="" id={"email"}
+                                required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                             />
                         </div>
                     </div>
@@ -122,8 +161,6 @@ export default class Register extends React.Component {
                         <div className="control">
                             <input
                                 className="input" type="" placeholder="" id={"nickname"}
-                                // value={this.state.nickname}
-                                // onChange={this.handle_type_choice("nickname")}
                             />
                         </div>
                     </div>
@@ -133,8 +170,6 @@ export default class Register extends React.Component {
                         <div className="control">
                             <input
                                 className="input" type="" placeholder="" id={"name"}
-                                // value={this.state.name}
-                                // onChange={this.handle_type_choice("name")}
                             />
                         </div>
                     </div>
@@ -144,8 +179,6 @@ export default class Register extends React.Component {
                         <div className="control">
                             <input
                                 className="input" type="" placeholder="" id={"tel"}
-                                // value={this.state.tel}
-                                // onChange={this.handle_type_choice("tel")}
                             />
                         </div>
                     </div>
@@ -155,8 +188,6 @@ export default class Register extends React.Component {
                         <div className="control">
                             <input
                                 className="input" type="" placeholder="" id={"address"}
-                                // value={this.state.address}
-                                // onChange={this.handle_type_choice("address")}
                             />
                         </div>
                     </div>
@@ -165,13 +196,11 @@ export default class Register extends React.Component {
                         <div className="control">
                             <label className="radio">
                                 <input type="radio" name="user_type" id={"ordinary_user_type"}
-                                    //onClick={this.handle_type_choice("user")}
                                 />
                                     普通用户
                             </label>
                             <label className="radio">
                                 <input type="radio" name="user_type" id={"admin_type"}
-                                       //onClick={this.handle_type_choice("admin")}
                                 />
                                     管理员
                             </label>
@@ -183,16 +212,13 @@ export default class Register extends React.Component {
                         <div className="control">
                             <input
                                 className="input" type="password" placeholder="若注册为管理员，请填写验证码" id={"admin_valid_pwd"}
-                                // value={this.state.admin_valid_pwd}
-                                // onChange={this.handle_type_choice("admin_valid_pwd")}
                             />
                         </div>
                     </div>
 
 
-                    <div className="buttons">
-                        <a className="button is-link" onClick={this.submit_register}>注册</a>
-                    </div>
+                    <a type="submit" className="button is-link" onClick={this.submit_register}>注册</a>
+
 
                 </form>
             </div>

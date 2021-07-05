@@ -11,7 +11,7 @@ import * as manageService from '../services/manageService';
 import * as orderService from '../services/orderService';
 import one from "../asserts/lufei.jpg";
 import * as tableData from '../utils/tableData';
-import * as searchEnum from '../components/constant/searchEnum';
+import * as searchEnum from '../components/constant/Type';
 
 const avatar_info={
     username:"guagua",
@@ -230,7 +230,7 @@ export default class AdminManageView extends React.Component{
         return(
             <div>
                 <div className={"block"}>
-                    <ManageHead avatar={<Avatar user={avatar_info} />}
+                    <ManageHead avatar={<Avatar/>}
                         reset_panel={this.reset_panel}
                     />
                 </div>

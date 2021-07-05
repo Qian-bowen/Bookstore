@@ -52,7 +52,20 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<Order> searchOrderByUser(int user_id)
     {
-        return orderRepository.searchOrderByUser(user_id);
+        List<Order> orders = orderRepository.searchOrderByUser(user_id);
+        return orders;
+    }
+
+    @Override
+    public List<Order> searchOrderByUserBook(int user_id, int bookId)
+    {
+        return orderRepository.searchOrderByUserBook(user_id,bookId);
+    }
+
+    @Override
+    public List<Order> searchOrderByUserTime(int user_id,Timestamp lt, Timestamp ut)
+    {
+        return orderRepository.searchOrderByUserTime(user_id,lt,ut);
     }
 
     @Override

@@ -2,7 +2,7 @@ import React from 'react';
 import {Selector} from "./tool/Choose";
 import {RankingChart,TendencyChart} from './tool/Chart';
 import * as manageService from '../services/manageService';
-import * as searchEnum from '../components/constant/searchEnum';
+import * as searchEnum from './constant/Type';
 
 
 class AddBook extends React.Component{
@@ -301,67 +301,187 @@ class ManagePanel extends React.Component{
     }
 }
 
-class ManageAdmin extends React.Component{
+
+class UserManagePanel extends React.Component{
     constructor(props) {
         super(props);
+        this.state={
+            display_mod:true,
+            display_edit_area:false,
+
+            search_text:null,
+            search_text_second:null,
+
+            book_manage:false,
+            order_manage:false,
+            statistic_manage:false,
+        }
     }
 
-    render()
-    {
-        const book_manage=["浏览书目","查找书籍","增减书籍","编辑书籍"];
-        return(
-          <div>
-            <RankingChart />
-            <TendencyChart/>
-          </div>
-        );
-    }
-}
-
-class ManageUser extends React.Component{
-    constructor(props) {
-        super(props);
+    handle_search=(e)=>{
+        this.setState({search_text:e.target.value});
     }
 
-    render()
-    {
-        const book_manage=["浏览书目","查找书籍","增减书籍","编辑书籍"];
+    handle_search_second=(e)=>{
+        this.setState({search_text_second:e.target.value});
+    }
+
+    submit_search=()=>{
+        this.props.search_items(this.state.search_text);
+    }
+
+    submit_order_search_by_book_name=()=>{
+        this.props.search_order_by_book_name(this.state.search_text);
+    }
+
+    submit_order_search_by_time=()=>{
+        this.props.search_by_time(this.state.search_text,this.state.search_text_second,searchEnum.searchType.order_search);
+    }
+
+    submit_user_stat=()=>{
+        this.props.search_by_time(this.state.search_text,this.state.search_text_second,searchEnum.searchType.user_stat);
+    }
+
+    handle_statistic=()=>{
+        this.setState({
+            book_manage:false,
+            user_manage:false,
+            order_manage:false,
+            statistic_manage:true,
+        },()=>{
+            this.props.on_statistic();
+        });
+    }
+
+    handle_book_manage=()=>{
+        this.setState({
+            book_manage:true,
+            user_manage:false,
+            order_manage:false,
+            statistic_manage:false,
+        },()=>{
+            this.props.on_book_manage();
+        });
+    }
+
+    handle_order_manage=()=>{
+        this.setState({
+            book_manage:false,
+            user_manage:false,
+            order_manage:true,
+            statistic_manage:false,
+        },()=>{
+            this.props.on_order_manage();
+        });
+    }
+
+    render_order_search=()=>{
         return(
             <div>
+                <div className="panel-block">
+                    <input className="input is-success" type="text" placeholder="请输入书名" onChange={this.handle_search}/>
+                </div>
+                <div className="panel-block">
+                    <button className="button is-primary is-inverted is-rounded" onClick={this.submit_order_search_by_book_name}>通过书名搜索</button>
+                </div>
+                <div className="panel-block">
+                    <input className="input is-success" type="text" placeholder="请输入起始时间，如：2021-05-25 15:30:55" onChange={this.handle_search}/>
+                </div>
+                <div className="panel-block">
+                    <input className="input is-success" type="text" placeholder="请输入终止时间，如：2021-05-28 16:37:55" onChange={this.handle_search_second}/>
+                </div>
+                <div className="panel-block">
+                    <button className="button is-primary is-inverted is-rounded" onClick={this.submit_order_search_by_time}>通过时间搜索</button>
+                </div>
+            </div>
 
+        );
+    }
+
+
+    render_book_button=()=>{
+        return(
+            <div>
+                <div className="panel-block">
+                    <input className="input is-success" type="text" placeholder="开始查找" onChange={this.handle_search}/>
+                </div>
+                <div className="panel-block">
+                    <div className={"buttons has-addons"}>
+                        <div className={"button is-rounded is-link"} onClick={this.submit_search}>查找</div>
+                    </div>
+                </div>
+                <div className="panel-block">
+                    {
+                        this.state.display_edit_area?
+                            (<AddBook add_refresh={this.props.add_refresh}/>):null
+                    }
+                </div>
+            </div>
+        );
+    }
+
+    render_statistic_button=()=>{
+        return (
+            <div>
+                <div className="panel-block">
+                    <input className="input is-success" type="text" placeholder="请输入起始时间，如：2021-05-25 15:30:55" onChange={this.handle_search}/>
+                </div>
+                <div className="panel-block">
+                    <input className="input is-success" type="text" placeholder="请输入终止时间，如：2021-05-28 16:37:55" onChange={this.handle_search_second}/>
+                </div>
+                <div className="panel-block">
+                    <button className="button is-warning is-rounded" onClick={this.submit_user_stat}>用户消费统计</button>
+                </div>
+            </div>
+        );
+    }
+
+
+
+    render()
+    {
+        return(
+            <div>
+                <article className="panel is-success">
+                    <p className="panel-heading">
+                        管理面板
+                    </p>
+                    <p className="panel-tabs">
+                        <a className="is-active"
+                           onClick={this.handle_book_manage}
+                        >书籍管理</a>
+                        <a className="is-active"
+                           onClick={this.handle_order_manage}
+                        >订单管理</a>
+                        <a className="is-active"
+                           onClick={this.handle_statistic}
+                        >消费统计</a>
+                    </p>
+
+                    {
+                        (this.state.order_manage)?
+                            this.render_order_search()
+                            :null
+                    }
+
+                    {
+                        (this.state.book_manage)?
+                            (
+                                this.render_book_button()
+                            ):null
+                    }
+
+                    {
+                        (this.state.statistic_manage)?
+                            (
+                                this.render_statistic_button()
+                            ):null
+                    }
+
+                </article>
             </div>
         );
     }
 }
 
-class StatisticAdmin extends React.Component{
-    constructor(props) {
-        super(props);
-    }
-
-    render()
-    {
-        return(
-            <div>
-
-            </div>
-        );
-    }
-}
-
-class StatisticUser extends React.Component{
-    constructor(props) {
-        super(props);
-    }
-
-    render()
-    {
-        return(
-            <div>
-
-            </div>
-        );
-    }
-}
-
-export {ManagePanel,ManageAdmin,ManageUser,StatisticAdmin,StatisticUser}
+export {ManagePanel,UserManagePanel}

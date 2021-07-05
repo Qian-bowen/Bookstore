@@ -22,25 +22,10 @@ import img1 from '../asserts/300.jfif'
 // }
 
 export default class BookFrame extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state={books:[]};
-    }
-
-    componentDidMount()
-    {
-        const callback=(data)=>{
-            this.setState({books:data});
-        }
-        const get_info={"fetch_num":20,"fetch_begin":0};
-        bookService.getBooks(get_info,callback);
-    }
-
 
 
 
     create_book_single(book_info) {
-
         return (
             <div className={"block"}>
                 <Book book={book_info}
@@ -52,7 +37,7 @@ export default class BookFrame extends React.Component {
 
     create_store(col_idx,col_num) {
         let box=[];
-        let books=this.state.books;
+        let books=this.props.books;
         let books_num=books.length;
         for(let i=0;i<books_num;++i)
         {
@@ -66,21 +51,34 @@ export default class BookFrame extends React.Component {
         );
     }
 
+    render_columns=()=>{
+        return(
+            <div>
+                <div className={"columns"}>
+                    <div className={"column"}>
+                        {this.create_store(0,4)}
+                    </div>
+                    <div className={"column"}>
+                        {this.create_store(1,4)}
+                    </div>
+                    <div className={"column"}>
+                        {this.create_store(2,4)}
+                    </div>
+                    <div className={"column"}>
+                        {this.create_store(3,4)}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+
     render() {
         return (
-            <div className={"columns"}>
-                <div className={"column"}>
-                    {this.create_store(0,4)}
-                </div>
-                <div className={"column"}>
-                    {this.create_store(1,4)}
-                </div>
-                <div className={"column"}>
-                    {this.create_store(2,4)}
-                </div>
-                <div className={"column"}>
-                    {this.create_store(3,4)}
-                </div>
+            <div>
+                {
+                    this.render_columns()
+                }
             </div>
         );
     }

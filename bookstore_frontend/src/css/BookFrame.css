@@ -5,10 +5,13 @@
     margin:0 auto;
 }
 
+.frameBody{
+    margin:0;
+}
+
 .commonBook{
     float: left;
     height: 400px;
     width: 400px;
     margin: 15px 15px 15px 15px;
-
 }

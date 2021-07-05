@@ -26,7 +26,7 @@ public class RegisterController {
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     public Msg register(@RequestBody RegisterJsonRec registerJsonRec){
-        User user=new User(registerJsonRec.nickname,registerJsonRec.name,registerJsonRec.tel,registerJsonRec.address);
+        User user=new User(registerJsonRec.nickname,registerJsonRec.name,registerJsonRec.tel,registerJsonRec.address,registerJsonRec.email);
         UserAuth userAuth=new UserAuth(registerJsonRec.username,registerJsonRec.password,registerJsonRec.user_type);
 
         //if register as admin, check the password
