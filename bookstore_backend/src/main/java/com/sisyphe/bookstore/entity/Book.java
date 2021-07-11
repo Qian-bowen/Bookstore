@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sisyphe.bookstore.Json.BookJson;
+import net.sf.json.JSONObject;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.sql.Blob;
 
 
 @Entity
@@ -43,12 +46,13 @@ public class Book {
     @Column(name="inventory")
     private Integer inventory;
 
-    @Column(name="image")
-    private String image;
+    @Lob
+    @Column(name="image",columnDefinition="bytea")
+    private byte[] image;
 
     public Book() { }
 
-    public Book(int p_bid,String p_isbn,String p_name,String p_type,String p_author,BigDecimal p_price,String p_dsp,Integer p_ivt,String p_img)
+    public Book(int p_bid,String p_isbn,String p_name,String p_type,String p_author,BigDecimal p_price,String p_dsp,Integer p_ivt,byte[] p_img)
     {
         bookId=p_bid;
         isbn=p_isbn;
@@ -61,8 +65,21 @@ public class Book {
         image=p_img;
     }
 
+    public Book(String p_isbn,String p_name,String p_type,String p_author,BigDecimal p_price,String p_dsp,Integer p_ivt,byte[] p_img)
+    {
+        isbn=p_isbn;
+        name=p_name;
+        type=p_type;
+        author=p_author;
+        price=p_price;
+        description=p_dsp;
+        inventory=p_ivt;
+        image=p_img;
+    }
+
     public Book(BookJson bookJson)
     {
+        System.out.println(bookJson.image);
         bookId=bookJson.bookId;
         isbn= bookJson.isbn;
         name= bookJson.name;
@@ -71,7 +88,7 @@ public class Book {
         price= bookJson.price;
         description= bookJson.description;
         inventory= bookJson.inventory;
-        image= bookJson.image;
+        image= Base64.decodeBase64(bookJson.image);
     }
 
     public String get_name()
@@ -85,12 +102,43 @@ public class Book {
     public BigDecimal getPrice(){return price;}
     public Integer getInventory(){return inventory;}
 
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
     public boolean reduceInventory(Integer reduceNum)
     {
         if(reduceNum>inventory)
             return false;
         inventory-=reduceNum;
         return true;
+    }
+
+    public JSONObject getBookJson()
+    {
+        JSONObject obj=new JSONObject();
+        obj.put("bookId",this.bookId);
+        obj.put("isbn",this.isbn);
+        obj.put("name",this.name);
+        obj.put("type",this.type);
+        obj.put("author",this.author);
+        obj.put("price",this.price);
+        obj.put("description",this.description);
+        obj.put("inventory",this.inventory);
+        obj.put("image",new String(Base64.encodeBase64(this.image)));
+        return obj;
     }
 
 }

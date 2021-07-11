@@ -7,6 +7,8 @@ import com.sisyphe.bookstore.utils.msgutils.Msg;
 import com.sisyphe.bookstore.utils.msgutils.MsgCode;
 import com.sisyphe.bookstore.utils.msgutils.MsgUtil;
 import com.sisyphe.bookstore.utils.sessionutils.SessionUtil;
+import net.sf.json.JSONObject;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +16,11 @@ import com.sisyphe.bookstore.entity.Book;
 import com.sisyphe.bookstore.service.BookService;
 
 import com.google.gson.Gson;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,18 +42,28 @@ public class BookController {
         Integer fetch_begin=params.get(Constant.FETCH_BEGIN);
         System.out.println("fetch in outer:"+fetch_num+" "+fetch_begin);
         List<Book> books=bookService.getBooks(fetch_num,fetch_begin);
+        //encode books
+        List<JSONObject> booksJson=new ArrayList<>();
+        for(Book book : books)
+        {
+            booksJson.add(book.getBookJson());
+        }
         Gson gson = new Gson();
         // convert list to json
-        String book_json = gson.toJson(books);
-        System.out.println(book_json);
+        String book_json = gson.toJson(booksJson);
         return book_json;
     }
 
     @RequestMapping("/book/search")
     public String searchBooks(@RequestBody BookSearch bookSearch) {
         List<Book> books=bookService.searchBooks(bookSearch);
+        List<JSONObject> booksJson=new ArrayList<>();
+        for(Book book : books)
+        {
+            booksJson.add(book.getBookJson());
+        }
         Gson gson = new Gson();
-        String book_json = gson.toJson(books);
+        String book_json = gson.toJson(booksJson);
         return book_json;
     }
 
@@ -57,19 +73,29 @@ public class BookController {
         System.out.println("query for book"+id);
         Book book=bookService.findBookById(id);
         Gson gson = new Gson();
-        String book_json = gson.toJson(book);
+        String book_json = gson.toJson(book.getBookJson());
         System.out.println(book_json);
         return book_json;
     }
 
     @RequestMapping(value="/manage/admin/book/add",method = RequestMethod.POST)
-    public Msg addBook(@RequestBody BookJson bookJson){
+    public Msg addBook(@RequestParam("isbn") String isbn,
+                       @RequestParam("name") String name,
+                       @RequestParam("type") String type,
+                       @RequestParam("author") String author,
+                       @RequestParam("price") BigDecimal price,
+                       @RequestParam("description") String description,
+                       @RequestParam("inventory") Integer inventory,
+                       @RequestParam("image") MultipartFile image) throws IOException {
         if(SessionUtil.getUserType()!= Constant.ADMIN)
         {
             return MsgUtil.makeMsg(MsgCode.ERROR,MsgUtil.ADMIN_NO_AUTH);
         }
 
-        Book book=new Book(bookJson);
+        System.out.println("add book");
+
+        Book book=new Book(isbn,name,type,author,price
+                ,description,inventory,image.getBytes());
         boolean op=bookService.addBook(book);
         if(op)
             return MsgUtil.makeMsg(MsgCode.SUCCESS,"ADD BOOK SUCCESS!");

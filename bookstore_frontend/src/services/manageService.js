@@ -1,4 +1,4 @@
-import {postRequest} from "../utils/ajax";
+import {postFormDataRequest, postRequest} from "../utils/ajax";
 import {statisticType} from "../components/constant/Type";
 
 export const modifyBook = (data,callback) => {
@@ -15,7 +15,7 @@ export const delBook = (book_id,callback) => {
 
 export const addBook = (book,callback) => {
     const url = 'http://localhost:8080/manage/admin/book/add';
-    postRequest(url, book, callback);
+    postFormDataRequest(url, book, callback);
 };
 
 export const searchBook = (book_search,callback) => {

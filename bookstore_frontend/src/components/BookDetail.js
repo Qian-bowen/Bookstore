@@ -20,7 +20,7 @@ class BookCard extends React.Component{
             <div class="card">
                 <div class="card-image">
                     <figure className={"image is-4by3"}>
-                        <img src={this.props.book.img} alt="image missing" />
+                        <img className={"book_img"} src={`data:image/jpeg;base64,${this.props.book.img}`} alt="image missing" />
                     </figure>
                 </div>
 

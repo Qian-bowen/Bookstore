@@ -15,7 +15,8 @@ class AddBook extends React.Component{
             price:null,
             inventory:null,
             author:null,
-            description:null
+            description:null,
+            image:null,
         }
     }
 
@@ -47,24 +48,47 @@ class AddBook extends React.Component{
         this.setState({description:e.target.value});
     }
 
+    handle_image=(e)=>{
+        let img=e.target.files[0];
+        if(img.size>1048576)
+        {
+            alert("图片需小于1MB");
+            return;
+        }
+        this.setState({image:e.target.files[0]});
+    }
+
     alert_backend_msg=(msg)=>{
         alert(msg.msg);
         this.props.add_refresh();
     }
 
+
     submit_book=()=>{
-        let book_json={
-            "bookId":null,
-            "isbn":this.state.isbn,
-            "name":this.state.name,
-            "type":this.state.type,
-            "author":this.state.author,
-            "price":this.state.price,
-            "description":this.state.description,
-            "inventory":this.state.inventory,
-            "image":null
-        };
-        manageService.addBook(book_json,this.alert_backend_msg);
+        if(this.state.isbn===null||this.state.name===null||this.state.type===null||
+            this.state.author===null||this.state.price===null||this.state.description===null
+            ||this.state.inventory===null||this.state.image===null)
+        {
+            alert("书籍信息不完整");
+            return;
+        }
+
+        if(isNaN(this.state.price)||isNaN(this.state.inventory))
+        {
+            alert("数据类型有误");
+            return;
+        }
+        const formdata = new FormData();
+        formdata.append("bookId",null);
+        formdata.append( "isbn", this.state.isbn);
+        formdata.append("name",this.state.name);
+        formdata.append("type",this.state.type);
+        formdata.append("author",this.state.author);
+        formdata.append("price",this.state.price);
+        formdata.append("description",this.state.description);
+        formdata.append("inventory",this.state.inventory);
+        formdata.append("image", this.state.image);
+        manageService.addBook(formdata,this.alert_backend_msg);
     }
 
     render()
@@ -79,6 +103,8 @@ class AddBook extends React.Component{
                     <input className="input is-rounded" name="inventory" type="text" placeholder="库存" onChange={this.handle_inventory}/>
                     <input className="input is-rounded" name="author" type="text" placeholder="作者" onChange={this.handle_author}/>
                     <input className="input is-rounded" name="description" type="text" placeholder="简介" onChange={this.handle_description}/>
+                    <div>选择书籍封面</div>
+                    <input name="cover" type="file"  accept={'image/*'} onChange={this.handle_image} />
                 </div>
                 <div className={"block"}>
                     <div className={"button is-danger"} onClick={this.submit_book}>提交</div>

@@ -40,7 +40,7 @@ class BookPurchase extends React.Component{
                                 <div className="center_item column is-half">
                                     <div className="center_item card-image">
                                         <figure className="image is-4by3">
-                                            <img src={this.props.item.img}
+                                            <img src={`data:image/jpeg;base64,${this.props.item.img}`}
                                                  alt="image missing" />
                                         </figure>
                                     </div>
@@ -166,7 +166,7 @@ class OrderForm extends React.Component{
                     </tr>
                     <tr>
                         <th>价格：</th>
-                        <th>￥{this.props.order.sum}</th>
+                        <th>￥{this.props.order.sum.toFixed(2)}</th>
                     </tr>
                     </tbody>
                 </div>

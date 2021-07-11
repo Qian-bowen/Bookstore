@@ -23,4 +23,24 @@ let postRequest=(url,json,callback)=>
         });
 }
 
-export {postRequest};
+let postFormDataRequest=(url,data,callback)=>
+{
+    let opts={
+        method:"POST",
+        body:data,
+        credentials: "include"
+    };
+
+    fetch(url,opts)
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            callback(data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+
+export {postRequest,postFormDataRequest};

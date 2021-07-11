@@ -1,8 +1,6 @@
 package com.sisyphe.bookstore.controller;
 
-import com.google.gson.Gson;
 import com.sisyphe.bookstore.Json.CartJsonRec;
-import com.sisyphe.bookstore.Json.CartJsonSend;
 import com.sisyphe.bookstore.constant.Constant;
 import com.sisyphe.bookstore.constant.Operation;
 import com.sisyphe.bookstore.entity.Book;
@@ -12,11 +10,13 @@ import com.sisyphe.bookstore.service.BookService;
 import com.sisyphe.bookstore.utils.msgutils.Msg;
 import com.sisyphe.bookstore.utils.msgutils.MsgCode;
 import com.sisyphe.bookstore.utils.msgutils.MsgUtil;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.sisyphe.bookstore.service.CartService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -51,30 +51,31 @@ public class CartController {
     }
 
     @RequestMapping(value="/cart")
-    public String getCart(@RequestBody Map<String,Integer> params)
+    public JSONObject getCart(@RequestBody Map<String,Integer> params)
     {
         System.out.println("call push cart");
         Integer user_id=params.get(Constant.USER_ID);
         System.out.println("controller user_id:"+user_id);
         List<Cart> carts=cartService.getCart(user_id);
 
-        CartJsonSend cartJsonSend=new CartJsonSend();
-        cartJsonSend.user_id=user_id;
+        JSONObject cartJsonSend=new JSONObject();
+        List<Integer> cart_piece=new ArrayList<>();
+        List<JSONObject> books=new ArrayList<>();
 
         for(Cart cart : carts)
         {
             int book_id=cart.get_cart_id().get_book_id();
             int piece=cart.get_piece();
             Book book= bookService.findBookById(book_id);
-            cartJsonSend.books.add(book);
-            cartJsonSend.cart_piece.add(piece);
-            System.out.println("book_id:"+book_id);
+            books.add(book.getBookJson());
+            cart_piece.add(piece);
         }
 
-        Gson gson = new Gson();
-        // convert list to json
-        String cart_json = gson.toJson(cartJsonSend);
-        return cart_json;
+        cartJsonSend.put("user_id",user_id);
+        cartJsonSend.put("cart_piece",cart_piece);
+        cartJsonSend.put("books",books);
+
+        return cartJsonSend;
     }
 
     @RequestMapping(value="/cart/modify")

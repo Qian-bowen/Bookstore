@@ -18,7 +18,7 @@ export default class Book extends React.Component{
                 <div className="card">
                     <div className="card-image">
                         <figure className="image">
-                            <img className={"book_img"} src={this.props.book.img} alt="image missing" />
+                            <img className={"book_img"} src={`data:image/jpeg;base64,${this.props.book.img}`} alt="image missing" />
                         </figure>
                     </div>
 
