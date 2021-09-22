@@ -1,5 +1,6 @@
 package com.sisyphe.bookstore.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sisyphe.bookstore.constant.Constant;
 import com.sisyphe.bookstore.entity.UserAuth;
 import com.sisyphe.bookstore.service.UserService;
@@ -8,9 +9,12 @@ import com.sisyphe.bookstore.utils.msgutils.MsgCode;
 import com.sisyphe.bookstore.utils.msgutils.MsgUtil;
 import com.sisyphe.bookstore.utils.sessionutils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import net.sf.json.JSONObject;
-
+import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 
 @RestController
@@ -21,6 +25,26 @@ public class LoginController {
     public LoginController(UserService userService)
     {
         this.userService=userService;
+    }
+
+    @RequestMapping("/test")
+    public String getFromUrl() {
+        System.out.println("hello world");
+        final String url = "http://localhost:6800/schedule.json";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<String, String>();
+        requestBody.add("project", "fund");
+        requestBody.add("spider", "company");
+
+        HttpEntity formEntity = new HttpEntity<MultiValueMap<String, String>>(requestBody, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response =
+                restTemplate.exchange(url, HttpMethod.POST, formEntity, String.class);
+        return "";
     }
     
     @RequestMapping(value = "/login")

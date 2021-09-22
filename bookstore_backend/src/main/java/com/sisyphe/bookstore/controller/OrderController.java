@@ -11,7 +11,11 @@ import com.sisyphe.bookstore.entity.OrderItem;
 import com.sisyphe.bookstore.entity.entityComp.CartId;
 import com.sisyphe.bookstore.service.CartService;
 import com.sisyphe.bookstore.service.OrderService;
+import com.sisyphe.bookstore.utils.msgutils.Msg;
+import com.sisyphe.bookstore.utils.msgutils.MsgUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import com.sisyphe.bookstore.entity.Order;
@@ -27,6 +31,9 @@ public class OrderController {
     private CartService cartService;
 
     @Autowired
+    private KafkaTemplate<String, OrderJsonRec> kafkaTemplate;
+
+    @Autowired
     public OrderController(OrderService orderService,CartService cartService)
     {
         this.orderService=orderService;
@@ -34,14 +41,27 @@ public class OrderController {
     }
 
     @RequestMapping(value="/cart/order",method = RequestMethod.POST)
-    public String storeOrder(@RequestBody String order_str)
+    public Msg storeOrder(@RequestBody String order_str)
     {
         System.out.println("order str:"+order_str);
 
         Gson gson=new Gson();
         OrderJsonRec orderJsonRec=gson.fromJson(order_str, OrderJsonRec.class);
+
+        kafkaTemplate.send("order",orderJsonRec);
+
+        return new Msg(MsgUtil.SUCCESS,"订单已接收");
+    }
+
+    /**
+     * TODO:find a proper place for listener
+     * @param orderJsonRec
+     */
+    @KafkaListener(topics = "order",containerFactory = "kafkaOrderListenerContainerFactory")
+    private void handleOrder(OrderJsonRec orderJsonRec)
+    {
+        System.out.println("receive:"+orderJsonRec.user_id);
         Order stored_order=orderService.storeOrder(orderJsonRec);
-        OrderJsonSend orderJsonSend=new OrderJsonSend(stored_order);
         //remove from cart after make order
         List<OrderItem> items=stored_order.get_items();
         int user_id=stored_order.get_user_id();
@@ -50,8 +70,6 @@ public class OrderController {
             CartId cartId=new CartId(user_id,item.get_book_id());
             cartService.modifyCartItem(cartId, Operation.DEL);
         }
-
-        return gson.toJson(orderJsonSend);
     }
 
     @RequestMapping(value="/order/get_orders")

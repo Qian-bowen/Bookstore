@@ -10,6 +10,7 @@ import com.sisyphe.bookstore.service.BookService;
 import com.sisyphe.bookstore.utils.msgutils.Msg;
 import com.sisyphe.bookstore.utils.msgutils.MsgCode;
 import com.sisyphe.bookstore.utils.msgutils.MsgUtil;
+import com.sisyphe.bookstore.utils.sessionutils.SessionUtil;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class CartController {
     @RequestMapping(value="/bookdetail/add_cart",method = RequestMethod.POST)
     public Msg storeCart(@RequestBody Map<String,Integer> params)
     {
-        Integer user_id=params.get(Constant.USER_ID);
+        Integer user_id=SessionUtil.getUserId();
         Integer book_id=params.get(Constant.BOOK_ID);
         Integer piece=params.get(Constant.PIECE);
         System.out.println("cart get:"+user_id+" book_id:"+book_id);
@@ -51,10 +52,10 @@ public class CartController {
     }
 
     @RequestMapping(value="/cart")
-    public JSONObject getCart(@RequestBody Map<String,Integer> params)
+    public JSONObject getCart()
     {
         System.out.println("call push cart");
-        Integer user_id=params.get(Constant.USER_ID);
+        Integer user_id= SessionUtil.getUserId();
         System.out.println("controller user_id:"+user_id);
         List<Cart> carts=cartService.getCart(user_id);
 

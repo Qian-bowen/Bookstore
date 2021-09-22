@@ -273,30 +273,31 @@ export default class CartView extends React.Component{
 
     show_order=(data)=>{
         console.log(data);
-        let order_id=data['order_id'];
-        let timestamp=data['timestamp'];
-        let price=data['total_price'];
-        let items=data['orderItems'];
-        let purchase_items=[];
-
-        //name piece money
-        for(let item=0;item<items.length;++item)
-        {
-            let cur_item=items[item];
-            let purchase={name:cur_item['book_id'],money:cur_item['price']};
-            purchase_items.push(purchase);
-        }
-
-
-        let tmp_order={
-            number:order_id,
-            time:timestamp,
-            purchase:purchase_items,
-            sum:price
-        };
-        this.setState({
-            checkout:true,order:tmp_order
-        });
+        alert(data.msg);
+        // let order_id=data['order_id'];
+        // let timestamp=data['timestamp'];
+        // let price=data['total_price'];
+        // let items=data['orderItems'];
+        // let purchase_items=[];
+        //
+        // //name piece money
+        // for(let item=0;item<items.length;++item)
+        // {
+        //     let cur_item=items[item];
+        //     let purchase={name:cur_item['book_id'],money:cur_item['price']};
+        //     purchase_items.push(purchase);
+        // }
+        //
+        //
+        // let tmp_order={
+        //     number:order_id,
+        //     time:timestamp,
+        //     purchase:purchase_items,
+        //     sum:price
+        // };
+        // this.setState({
+        //     checkout:true,order:tmp_order
+        // });
     }
 
 
