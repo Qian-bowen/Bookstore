@@ -46,6 +46,14 @@ public class Order implements Serializable {
 
     }
 
+    public Order(int user_id,BigDecimal total_price,Timestamp timestamp,List<OrderItem> orderItems)
+    {
+        this.user_id=user_id;
+        this.total_price=total_price;
+        this.timestamp=timestamp;
+        this.orderItems=orderItems;
+    }
+
     public Order(int user_id,BigDecimal total_price)
     {
         this.user_id=user_id;

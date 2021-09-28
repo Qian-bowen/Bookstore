@@ -6,6 +6,7 @@ import com.sisyphe.bookstore.utils.msgutils.MsgCode;
 import com.sisyphe.bookstore.utils.msgutils.MsgUtil;
 import com.sisyphe.bookstore.utils.sessionutils.SessionUtil;
 import net.sf.json.JSONObject;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class SessionValidateInterceptor extends HandlerInterceptorAdapter {
+public class SessionValidateInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception{

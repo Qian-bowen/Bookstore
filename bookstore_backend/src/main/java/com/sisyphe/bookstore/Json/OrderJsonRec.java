@@ -1,11 +1,17 @@
 package com.sisyphe.bookstore.Json;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class OrderJsonRec {
-    public int user_id;
-    public double total_price;
     public List<OrderItemJson> orderItems;
 
     public OrderJsonRec(){}
+
+    public OrderJsonRec(List<OrderItemJson> orderItems)
+    {
+        this.orderItems=orderItems;
+    }
 }

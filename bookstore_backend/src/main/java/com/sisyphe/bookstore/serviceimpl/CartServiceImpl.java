@@ -6,6 +6,8 @@ import com.sisyphe.bookstore.service.CartService;
 import com.sisyphe.bookstore.entity.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void modifyCartItem(CartId cartId, Operation op)
     {
         cartDao.modifyCartItem(cartId,op);

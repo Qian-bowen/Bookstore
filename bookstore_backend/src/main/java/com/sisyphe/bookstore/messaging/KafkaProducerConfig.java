@@ -1,6 +1,7 @@
 package com.sisyphe.bookstore.messaging;
 
 import com.sisyphe.bookstore.Json.OrderJsonRec;
+import com.sisyphe.bookstore.Json.OrderMsgWrapper;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String,OrderJsonRec> producerOrderFactory(){
+    public ProducerFactory<String,OrderMsgWrapper> producerOrderFactory(){
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -39,7 +40,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, OrderJsonRec> kafkaOrderTemplate() {
+    public KafkaTemplate<String, OrderMsgWrapper> kafkaOrderTemplate() {
         return new KafkaTemplate<>(producerOrderFactory());
     }
 }

@@ -54,6 +54,9 @@ public class CartController {
     @RequestMapping(value="/cart")
     public JSONObject getCart()
     {
+        if(!SessionUtil.checkAuth())
+            return null;
+
         System.out.println("call push cart");
         Integer user_id= SessionUtil.getUserId();
         System.out.println("controller user_id:"+user_id);
@@ -82,9 +85,12 @@ public class CartController {
     @RequestMapping(value="/cart/modify")
     public void modifyCartItem(@RequestBody CartJsonRec cartJsonRec)
     {
-        System.out.println("cart modify controller:"+cartJsonRec.user_id+" "+cartJsonRec.book_id+" "+cartJsonRec.cart_op);
+        if(!SessionUtil.checkAuth())
+            return;
+        int user_id=SessionUtil.getUserId();
+        System.out.println("cart modify controller:"+user_id+" "+cartJsonRec.book_id+" "+cartJsonRec.cart_op);
         Operation cart_op=cartJsonRec.cart_op;
-        CartId cartId=new CartId(cartJsonRec.user_id,cartJsonRec.book_id);
+        CartId cartId=new CartId(user_id,cartJsonRec.book_id);
         cartService.modifyCartItem(cartId,cart_op);
     }
 }

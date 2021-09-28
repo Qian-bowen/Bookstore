@@ -32,7 +32,7 @@ public class OrderJsonSend  implements Serializable  {
         List<OrderItem> orderItem=order.get_items();
         for(OrderItem item:orderItem)
         {
-            OrderItemJson orderItemJson=new OrderItemJson(item.get_book_id(),item.getPiece(),item.get_price());
+            OrderItemJson orderItemJson=new OrderItemJson(item.get_book_id(),item.getPiece());
             this.orderItems.add(orderItemJson);
         }
     }

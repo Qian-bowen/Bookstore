@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,7 +14,8 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
     @Query("select b from Book b")
     List<Book> getBooks(Pageable pageable);
 
-    @Query(value = "from Book where bookId = :id")
+    @Transactional(propagation = Propagation.SUPPORTS,readOnly = true)
+    @Query(value = "select b from Book b where b.bookId = :id")
     Book getOne(@Param("id") Integer id);
 
     @Query("select b from Book b where b.name like concat('%',:name,'%')")

@@ -1,6 +1,7 @@
 package com.sisyphe.bookstore.messaging;
 
 import com.sisyphe.bookstore.Json.OrderJsonRec;
+import com.sisyphe.bookstore.Json.OrderMsgWrapper;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -28,11 +29,11 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, OrderJsonRec> consumerOrderFactory() {
+    public ConsumerFactory<String, OrderMsgWrapper> consumerOrderFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "group-order");
-        return new DefaultKafkaConsumerFactory<>(props,new StringDeserializer(),new JsonDeserializer<>(OrderJsonRec.class));
+        return new DefaultKafkaConsumerFactory<>(props,new StringDeserializer(),new JsonDeserializer<>(OrderMsgWrapper.class));
     }
 
     @Bean
@@ -44,8 +45,8 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, OrderJsonRec> kafkaOrderListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, OrderJsonRec>
+    public ConcurrentKafkaListenerContainerFactory<String, OrderMsgWrapper> kafkaOrderListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, OrderMsgWrapper>
                 factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerOrderFactory());
         return factory;

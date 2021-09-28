@@ -7,6 +7,8 @@ import com.sisyphe.bookstore.entity.entityComp.CartId;
 import com.sisyphe.bookstore.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +41,7 @@ public class CartDaoImpl implements CartDao {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void modifyCartItem(CartId cartId, Operation op)
     {
         switch(op)

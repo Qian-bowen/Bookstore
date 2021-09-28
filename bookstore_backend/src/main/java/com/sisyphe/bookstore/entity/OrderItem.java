@@ -38,12 +38,11 @@ public class OrderItem implements Serializable {
 
     }
 
-    public OrderItem(int book_id,int piece,BigDecimal price,Order order)
+    public OrderItem(int book_id,int piece,BigDecimal price)
     {
         this.book_id=book_id;
         this.piece=piece;
         this.price=price;
-        this.order=order;
     }
 
     public int get_book_id(){return book_id;}

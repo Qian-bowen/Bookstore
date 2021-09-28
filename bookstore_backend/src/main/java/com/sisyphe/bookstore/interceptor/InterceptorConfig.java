@@ -28,6 +28,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         corsConfiguration.addAllowedOrigin("http://localhost:3000");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
+//        corsConfiguration.addAllowedOriginPattern("*");
         corsConfiguration.setAllowCredentials(true);
         return corsConfiguration;
     }

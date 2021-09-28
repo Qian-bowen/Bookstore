@@ -8,6 +8,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.sisyphe.bookstore.entity.Book;
 import com.sisyphe.bookstore.dao.BookDao;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +67,7 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public boolean reduceInventory(Integer id,Integer reduceNum)
     {
         Book book=bookRepository.getOne(id);

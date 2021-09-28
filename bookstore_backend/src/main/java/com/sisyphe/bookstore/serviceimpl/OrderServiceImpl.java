@@ -14,14 +14,14 @@ import com.sisyphe.bookstore.utils.convert.TimeConvert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -37,22 +37,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order storeOrder(OrderJsonRec orderJsonRec)
-    {
-        int user_id=orderJsonRec.user_id;
-        BigDecimal total_price=new BigDecimal(orderJsonRec.total_price);
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Order storeOrder(OrderJsonRec orderJsonRec,int user_id){
+
         List<OrderItemJson> orderItems=orderJsonRec.orderItems;
 
-        Order order=new Order(user_id,total_price);
+        BigDecimal total_price=BigDecimal.valueOf(0);
         List<OrderItem> items=new ArrayList<>();
 
         for(OrderItemJson itemJson:orderItems)
         {
             int book_id=itemJson.book_id;
-            Integer piece=itemJson.piece;
-            BigDecimal price=itemJson.price;
+            int piece=itemJson.piece;
+            Book book=bookDao.findOne(book_id);
+            if(book==null) continue;
+            BigDecimal price=book.getPrice();
             BigDecimal item_total_price=price.multiply(new BigDecimal(piece));
-            OrderItem orderItem=new OrderItem(book_id,piece,item_total_price,order);
+            total_price=total_price.add(item_total_price);
+            OrderItem orderItem=new OrderItem(book_id,piece,item_total_price);
             items.add(orderItem);
 
             //reduce inventory book
@@ -60,6 +62,7 @@ public class OrderServiceImpl implements OrderService {
                 return null;
         }
 
+        Order order=new Order(user_id,total_price);
         return orderDao.storeOrder(order,items);
     }
 

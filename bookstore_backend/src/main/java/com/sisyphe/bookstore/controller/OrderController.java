@@ -1,8 +1,12 @@
 package com.sisyphe.bookstore.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
+import com.sisyphe.bookstore.Json.OrderItemJson;
 import com.sisyphe.bookstore.Json.OrderJsonRec;
 import com.sisyphe.bookstore.Json.OrderJsonSend;
+import com.sisyphe.bookstore.Json.OrderMsgWrapper;
 import com.sisyphe.bookstore.constant.Constant;
 import com.sisyphe.bookstore.constant.Operation;
 import com.sisyphe.bookstore.constant.SearchType;
@@ -13,13 +17,17 @@ import com.sisyphe.bookstore.service.CartService;
 import com.sisyphe.bookstore.service.OrderService;
 import com.sisyphe.bookstore.utils.msgutils.Msg;
 import com.sisyphe.bookstore.utils.msgutils.MsgUtil;
+import com.sisyphe.bookstore.utils.sessionutils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import com.sisyphe.bookstore.entity.Order;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,41 +35,43 @@ import java.util.Map;
 @RestController
 public class OrderController {
 
+    @Autowired
     private OrderService orderService;
+
+    @Autowired
     private CartService cartService;
 
     @Autowired
-    private KafkaTemplate<String, OrderJsonRec> kafkaTemplate;
+    private KafkaTemplate<String, OrderMsgWrapper> kafkaTemplate;
 
-    @Autowired
-    public OrderController(OrderService orderService,CartService cartService)
-    {
-        this.orderService=orderService;
-        this.cartService=cartService;
-    }
-
+    /**
+     * TODO:price should be get from database
+     * @param
+     * @return
+     */
     @RequestMapping(value="/cart/order",method = RequestMethod.POST)
-    public Msg storeOrder(@RequestBody String order_str)
+    public Msg storeOrder(@RequestBody String body)
     {
-        System.out.println("order str:"+order_str);
+        if(!SessionUtil.checkAuth())
+            return new Msg(MsgUtil.ERROR,"please login first");
+        int userId=SessionUtil.getUserId();
 
         Gson gson=new Gson();
-        OrderJsonRec orderJsonRec=gson.fromJson(order_str, OrderJsonRec.class);
-
-        kafkaTemplate.send("order",orderJsonRec);
+        OrderJsonRec orderJsonRec=gson.fromJson(body,OrderJsonRec.class);
+        OrderMsgWrapper orderMsgWrapper=new OrderMsgWrapper(userId,orderJsonRec);
+        kafkaTemplate.send("order",orderMsgWrapper);
 
         return new Msg(MsgUtil.SUCCESS,"订单已接收");
     }
 
     /**
      * TODO:find a proper place for listener
-     * @param orderJsonRec
+     * @param
      */
     @KafkaListener(topics = "order",containerFactory = "kafkaOrderListenerContainerFactory")
-    private void handleOrder(OrderJsonRec orderJsonRec)
-    {
-        System.out.println("receive:"+orderJsonRec.user_id);
-        Order stored_order=orderService.storeOrder(orderJsonRec);
+    public void handleOrder(OrderMsgWrapper orderMsgWrapper) {
+        Order stored_order=orderService.storeOrder(orderMsgWrapper.getOrderJsonRec(),orderMsgWrapper.getUser_id());
+
         //remove from cart after make order
         List<OrderItem> items=stored_order.get_items();
         int user_id=stored_order.get_user_id();
