@@ -13,6 +13,7 @@ import Register from "../components/Register";
 import HotGdsView from "../view/HotGdsView";
 import ManageRoute from "./ManageRoute";
 import UserManageView from "../view/UserManageView";
+import ChatRoomView from "../view/ChatRoomView";
 
 class BasicRoute extends React.Component{
     constructor(props) {
@@ -36,7 +37,9 @@ class BasicRoute extends React.Component{
                     <PrivateRoute exact path="/manage/admin" component={AdminManageView} />
                     <Route exact path="/register" component={Register} />
                     <PrivateRoute exact path="/hotgds" component={HotGdsView} />
+                    <PrivateRoute exact path="/chat" component={ChatRoomView} />
                     <Redirect from="/*" to="/" />
+
                 </Switch>
             </Router>
         )

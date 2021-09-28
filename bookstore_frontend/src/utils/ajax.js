@@ -8,7 +8,7 @@ let postRequest=(url,json,callback)=>
         headers:{
             'Content-Type': 'application/json'
         },
-        credentials: "include"
+        credentials: "include",
     };
 
     fetch(url,opts)
@@ -28,7 +28,7 @@ let postFormDataRequest=(url,data,callback)=>
     let opts={
         method:"POST",
         body:data,
-        credentials: "include"
+        credentials: "include",
     };
 
     fetch(url,opts)

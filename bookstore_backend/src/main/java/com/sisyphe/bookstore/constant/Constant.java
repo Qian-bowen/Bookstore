@@ -30,5 +30,11 @@ public class Constant {
     public static final int CART_SUB=1;
     public static final int CART_DEL=2;
 
+    //ws type
+    public static final Integer WS_ERROR=-1;
+    public static final Integer WS_PRIVATE_CHAT=0;
+    public static final Integer WS_BROADCAST_CHAT=1;
+
+    public static final String CHROME_TOKEN="AkYANxT0RBERWDPOEGzPayi+k1MLHr/6f7p9bd6gz8kBuK3/V1uW2mNbdGTgplol3eti0/4Ie9y1+d1kZfOHxwMAAABveyJvcmlnaW4iOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJmZWF0dXJlIjoiUHJpdmF0ZU5ldHdvcmtBY2Nlc3NOb25TZWN1cmVDb250ZXh0c0FsbG93ZWQiLCJleHBpcnkiOjE2NTI3NzQ0MDB9";
 }
 

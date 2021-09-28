@@ -92,6 +92,11 @@ export default class NavHead extends React.Component{
                                                 <span>购物车</span>
                                             </Link>
                                         </a>
+                                        <a className="navbar-item">
+                                            <Link to={"/chat"}>
+                                                <span>聊天室</span>
+                                            </Link>
+                                        </a>
                                         <span className="navbar-item">
                                             {
                                                 (!this.state.isAuthed)?

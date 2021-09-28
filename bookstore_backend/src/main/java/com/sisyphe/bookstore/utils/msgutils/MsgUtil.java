@@ -1,6 +1,8 @@
 package com.sisyphe.bookstore.utils.msgutils;
 
-import net.sf.json.JSONObject;
+
+import com.alibaba.fastjson.JSONObject;
+import com.sisyphe.bookstore.constant.Constant;
 
 public class MsgUtil {
 
@@ -49,4 +51,8 @@ public class MsgUtil {
     public static Msg makeMsg(int status, String msg){
         return new Msg(status, msg);
     }
+
+
+
+
 }

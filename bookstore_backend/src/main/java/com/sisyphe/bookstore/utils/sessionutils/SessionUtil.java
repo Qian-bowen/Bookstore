@@ -1,7 +1,7 @@
 package com.sisyphe.bookstore.utils.sessionutils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sisyphe.bookstore.constant.Constant;
-import net.sf.json.JSONObject;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
