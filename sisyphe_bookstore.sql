@@ -138,3 +138,12 @@ CREATE TABLE `cartItem` (
                         FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
                         FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `visit_data`;
+CREATE TABLE `visit_data` (
+						`id` int(11) NOT NULL AUTO_INCREMENT,
+                        `visit_num` int(11) NOT NULL,
+						`record_time` timestamp  NOT NULL,
+                        
+                        PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

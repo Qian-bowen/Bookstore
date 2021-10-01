@@ -23,6 +23,28 @@ let postRequest=(url,json,callback)=>
         });
 }
 
+let getRequest=(url,callback)=>
+{
+    let opts={
+        method:"GET",
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        credentials: "include",
+    };
+
+    fetch(url,opts)
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            callback(data);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+
 let postFormDataRequest=(url,data,callback)=>
 {
     let opts={
@@ -43,4 +65,4 @@ let postFormDataRequest=(url,data,callback)=>
         });
 }
 
-export {postRequest,postFormDataRequest};
+export {postRequest,postFormDataRequest,getRequest};

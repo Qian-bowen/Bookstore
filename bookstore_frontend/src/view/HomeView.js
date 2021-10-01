@@ -2,6 +2,7 @@ import React from 'react';
 import NavHead from "../components/head/NavHead";
 import HomeBanner from "../components/HomeBanner";
 import {withRouter} from "react-router-dom";
+import {get_visitor_num} from "../services/visitService";
 
 /*
 * activity format
@@ -32,14 +33,22 @@ let activity_test=[activity1,activity2,activity3];
 class Home extends React.Component{
     constructor(props) {
         super(props);
+        this.state={
+            visitor_num:null
+        }
 
     }
 
     componentDidMount(){
         let user = localStorage.getItem("user");
         this.setState({user:user});
+        get_visitor_num(this.set_visitor_num);
     }
 
+    set_visitor_num=(data)=>{
+        if(data.status<0) return;
+        this.setState({visitor_num:data.data.visit})
+    }
 
 
     render()
@@ -47,6 +56,11 @@ class Home extends React.Component{
         return(
             <div>
                 <NavHead/>
+                {
+                    (this.state.visitor_num==null)?null:(
+                        <h5>访问人数：{this.state.visitor_num}</h5>
+                    )
+                }
                 <HomeBanner activity={activity_test}/>
             </div>
         );
