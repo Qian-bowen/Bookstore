@@ -74,7 +74,6 @@ public class BookController {
         Book book=bookService.findBookById(id);
         Gson gson = new Gson();
         String book_json = gson.toJson(book.getBookJson());
-        System.out.println(book_json);
         return book_json;
     }
 
@@ -93,6 +92,8 @@ public class BookController {
         }
 
         System.out.println("add book");
+
+
 
         Book book=new Book(isbn,name,type,author,price
                 ,description,inventory,image.getBytes());

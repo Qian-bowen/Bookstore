@@ -1,6 +1,10 @@
 package com.sisyphe.bookstore.daoimpl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.sisyphe.bookstore.Json.BookJson;
 import com.sisyphe.bookstore.repository.BookRepository;
+import com.sisyphe.bookstore.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +25,9 @@ public class BookDaoImpl implements BookDao {
     private BookRepository bookRepository;
 
     @Autowired
+    RedisUtil redisUtil;
+
+    @Autowired
     public BookDaoImpl(BookRepository bookRepository)
     {
         this.bookRepository=bookRepository;
@@ -28,7 +35,22 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public Book findOne(Integer id){
-        return bookRepository.getOne(id);
+        Book book=null;
+        String key="bookid"+id;
+        Object bookGet=redisUtil.get(key);
+        if(bookGet==null)
+        {
+            System.out.println("from database");
+            book=bookRepository.getOne(id);
+            redisUtil.set(key,JSONObject.toJSONString(book.getBookJson()));
+        }
+        else
+        {
+            System.out.println("from redis");
+            BookJson bookJson= JSONObject.parseObject(bookGet.toString(), BookJson.class);
+            book=new Book(bookJson);
+        }
+        return book;
     }
 
     @Override
@@ -36,7 +58,26 @@ public class BookDaoImpl implements BookDao {
         System.out.println("fetch begin:"+fetch_begin);
         Integer pageIdx=fetch_begin/fetch_num;
         Pageable pageRequest= PageRequest.of(pageIdx, fetch_num);
-        return bookRepository.getBooks(pageRequest);
+
+//        List<Book> bookList=null;
+//        String key="book"+pageIdx+","+fetch_num;
+//        Object list=redisUtil.get(key);
+//        if(list==null)
+//        {
+//            System.out.println("from database");
+//            bookList=bookRepository.getBooks(pageRequest);
+//            JSONArray jsonArray=Book.book2json(bookList);
+//            redisUtil.set(key,jsonArray.toString());
+//        }
+//        else
+//        {
+//            System.out.println("from redis");
+//            List<BookJson> bookJsonList= JSONArray.parseArray(list.toString(), BookJson.class);
+//            bookList=Book.bookJson2book(bookJsonList);
+//        }
+        List<Book> bookList=bookRepository.getBooks(pageRequest);
+
+        return bookList;
     }
 
     @Override
@@ -50,20 +91,49 @@ public class BookDaoImpl implements BookDao {
     {
         List<Book> books = bookRepository.getBooksByExactName(book.get_name());
         if(!books.isEmpty()) return null;
-        return bookRepository.saveAndFlush(book);
+
+        bookRepository.saveAndFlush(book);
+
+        //add book to redis
+        String key="bookid"+book.getBookId();
+        Object bookGet=redisUtil.get(key);
+        if(bookGet!=null)
+        {
+            redisUtil.del(key);
+        }
+        redisUtil.set(key,JSONObject.toJSONString(book.getBookJson()));
+        return book;
     }
 
     @Override
     public Book modifyBook(Book book)
     {
+        bookRepository.saveAndFlush(book);
 
-        return bookRepository.saveAndFlush(book);
+        //modify book to redis
+        String key="bookid"+book.getBookId();
+        Object bookGet=redisUtil.get(key);
+        if(bookGet!=null)
+        {
+            redisUtil.del(key);
+        }
+        redisUtil.set(key,JSONObject.toJSONString(book.getBookJson()));
+
+        return book;
     }
 
     @Override
     public void delBook(Integer id)
     {
         bookRepository.deleteById(id);
+
+        //add book to redis
+        String key="bookid"+id;
+        Object bookGet=redisUtil.get(key);
+        if(bookGet!=null)
+        {
+            redisUtil.del(key);
+        }
     }
 
     @Override
@@ -74,6 +144,8 @@ public class BookDaoImpl implements BookDao {
         if(!book.reduceInventory(reduceNum))
             return false;
         bookRepository.save(book);
+        String key="bookid"+id;
+        redisUtil.decr(key,reduceNum);
         return true;
     }
 

@@ -1,15 +1,19 @@
 package com.sisyphe.bookstore.entity;
 
+import com.alibaba.fastjson.JSONArray;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sisyphe.bookstore.Json.BookJson;
+import com.sisyphe.bookstore.utils.RedisUtil;
 import net.sf.json.JSONObject;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -139,6 +143,37 @@ public class Book {
         obj.put("inventory",this.inventory);
         obj.put("image",new String(Base64.encodeBase64(this.image)));
         return obj;
+    }
+
+    public static JSONArray book2json(List<Book> bookList)
+    {
+        JSONArray jsonArray=new JSONArray();
+        for(Book book:bookList)
+        {
+            JSONObject obj=new JSONObject();
+            obj.put("bookId",book.bookId);
+            obj.put("isbn",book.isbn);
+            obj.put("name",book.name);
+            obj.put("type",book.type);
+            obj.put("author",book.author);
+            obj.put("price",book.price);
+            obj.put("description",book.description);
+            obj.put("inventory",book.inventory);
+            obj.put("image",new String(Base64.encodeBase64(book.image)));
+            jsonArray.add(obj);
+        }
+        return jsonArray;
+    }
+
+    public static List<Book> bookJson2book(List<BookJson> bookList)
+    {
+        List<Book> ret=new ArrayList<>();
+        for(BookJson bookJson:bookList)
+        {
+            Book book=new Book(bookJson);
+            ret.add(book);
+        }
+        return ret;
     }
 
 }
