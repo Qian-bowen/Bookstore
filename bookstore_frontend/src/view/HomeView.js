@@ -34,7 +34,9 @@ class Home extends React.Component{
     constructor(props) {
         super(props);
         this.state={
-            visitor_num:null
+            visitor_num:null,
+            result:null,
+            showSearch:false
         }
 
     }
@@ -50,18 +52,59 @@ class Home extends React.Component{
         this.setState({visitor_num:data.data.visit})
     }
 
+    showSearchResultCallback=(msg)=>{
+        if(msg.status<0)
+        {
+            alert("查询结果不存在");
+            return;
+        }
+        console.log(msg.data.result)
+        this.setState({result:msg.data.result});
+
+    }
+
+
+
+    renderResult=(result)=>{
+        if(result==null) return;
+        console.log("render result")
+        let len=result.length;
+        let array=[];
+        for(let i=0;i<len;++i)
+        {
+            array.push(
+                <div>
+                    <h1>{result[i].name}</h1>
+                    <p>{result[i].description}</p>
+                </div>
+            )
+        }
+        console.log(array)
+        return(
+            <div className="content">
+                {
+                    array
+                }
+            </div>
+        );
+
+    }
+
 
     render()
     {
         return(
             <div>
-                <NavHead/>
+                <NavHead showSearchResult={this.showSearchResultCallback}/>
                 {
                     (this.state.visitor_num==null)?null:(
                         <h5>访问人数：{this.state.visitor_num}</h5>
                     )
                 }
-                <HomeBanner activity={activity_test}/>
+                {
+                    this.renderResult(this.state.result)
+                }
+                {/*<HomeBanner activity={activity_test}/>*/}
             </div>
         );
     }

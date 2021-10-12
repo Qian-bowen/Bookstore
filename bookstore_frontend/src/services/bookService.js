@@ -1,4 +1,4 @@
-import {postRequest} from "../utils/ajax";
+import {getRequest, postRequest} from "../utils/ajax";
 
 export const getBooks = (data,callback) => {
     console.log("post in book service");
@@ -11,6 +11,12 @@ export const getBook = (id, callback) => {
     console.log("id:"+id);
     const url = 'http://localhost:8080/bookdetail';
     postRequest(url, data, callback);
+
+};
+
+export const searchBookIntro = (searchStr, callback) => {
+    const url = 'http://localhost:8080/search/book/intro?searchStr='+searchStr;
+    getRequest(url, callback);
 
 };
 

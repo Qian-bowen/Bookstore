@@ -87,6 +87,7 @@ public class BookDaoImpl implements BookDao {
     public List<Book> getBooksByExactName(String name){return bookRepository.getBooksByExactName(name);}
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Book addBook(Book book)
     {
         List<Book> books = bookRepository.getBooksByExactName(book.get_name());
@@ -106,6 +107,7 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Book modifyBook(Book book)
     {
         bookRepository.saveAndFlush(book);
@@ -123,6 +125,7 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void delBook(Integer id)
     {
         bookRepository.deleteById(id);

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import {Selector} from "../tool/Choose";
 import * as userService from "../../services/userService";
+import {searchBookIntro} from "../../services/bookService";
 
 const option_item=["书名","作者","IBSN"];
 
@@ -9,7 +10,28 @@ const option_item=["书名","作者","IBSN"];
 class SearchBar extends React.Component{
     constructor(props) {
         super(props);
+        this.state={
+            searchStr:null
+        }
     }
+
+    changeSearch=(e)=>{
+        this.setState({searchStr:e.target.value});
+    }
+
+    searchCallback=(msg)=>{
+        console.log(msg);
+        this.props.showSearchResult(msg);
+    }
+
+    submitSearch=()=>{
+        if(this.state.searchStr==null||this.state.searchStr==="")
+        {
+            return;
+        }
+        searchBookIntro(this.state.searchStr,this.searchCallback);
+    }
+
 
     render()
     {
@@ -19,9 +41,8 @@ class SearchBar extends React.Component{
                 </div>
                 <div className="column is-two-thirds">
                     <div className={"field is-grouped"}>
-                        <input className="input is-link is-inverted" type="text" placeholder="输入名称进行搜索"/>
-                        <Selector option={option_item}/>
-                        <button className="button is-primary is-inverted is-rounded">搜索</button>
+                        <input className="input is-link is-inverted" type="text" placeholder="输入名称进行搜索" onChange={this.changeSearch}/>
+                        <button className="button is-primary is-inverted is-rounded" onClick={this.submitSearch}>搜索</button>
                     </div>
                 </div>
                 <div className="column">
@@ -38,6 +59,7 @@ export default class NavHead extends React.Component{
         this.state={
             isAuthed:false,
         }
+
     }
 
     checkAuth = (data) => {
@@ -57,6 +79,10 @@ export default class NavHead extends React.Component{
     logout=()=>{
         userService.logout();
         this.setState({isAuthed: false});
+    }
+
+    showSearchResultCallback=(msg)=>{
+        this.props.showSearchResult(msg);
     }
 
 
@@ -130,7 +156,7 @@ export default class NavHead extends React.Component{
                             </p>
                         </div>
                         <div className={"block"}>
-                            <SearchBar/>
+                            <SearchBar showSearchResult={this.showSearchResultCallback}/>
                         </div>
                     </div>
                 </section>
