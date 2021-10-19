@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/sisyphe_bookstore?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: qbwJZ65827
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: book-service
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8090
