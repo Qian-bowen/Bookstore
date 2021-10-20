@@ -22,46 +22,39 @@ import java.util.Map;
 public class AdminController {
     private UserService userService;
 
-    public AdminController(UserService userService)
-    {
-        this.userService=userService;
+    public AdminController(UserService userService) {
+        this.userService = userService;
     }
 
     @RequestMapping("/admin/manage/user")
-    public Msg manageUser(@RequestBody UserManage userManage)
-    {
+    public Msg manageUser(@RequestBody UserManage userManage) {
         //check is admin
-        if(SessionUtil.getUserType()!= Constant.ADMIN)
-        {
-            return MsgUtil.makeMsg(MsgCode.ERROR,MsgUtil.ADMIN_NO_AUTH);
+        if (SessionUtil.getUserType() != Constant.ADMIN) {
+            return MsgUtil.makeMsg(MsgCode.ERROR, MsgUtil.ADMIN_NO_AUTH);
         }
 
-        boolean successManage=userService.manageUser(userManage);
-        if(successManage)
-            return MsgUtil.makeMsg(MsgCode.SUCCESS,MsgUtil.ADMIN_OPERATION_SUCCESS);
-        return MsgUtil.makeMsg(MsgCode.ERROR,MsgUtil.ADMIN_OPERATION_FAIL);
+        boolean successManage = userService.manageUser(userManage);
+        if (successManage)
+            return MsgUtil.makeMsg(MsgCode.SUCCESS, MsgUtil.ADMIN_OPERATION_SUCCESS);
+        return MsgUtil.makeMsg(MsgCode.ERROR, MsgUtil.ADMIN_OPERATION_FAIL);
     }
 
     @RequestMapping("/admin/manage/get_user")
-    public String getUsers(@RequestBody Map<String,Integer> param)
-    {
+    public String getUsers(@RequestBody Map<String, Integer> param) {
         //check is admin
         Msg msg;
-        if(SessionUtil.getUserType() != Constant.ADMIN)
-        {
-            msg = MsgUtil.makeMsg(MsgCode.ERROR,MsgUtil.ADMIN_NO_AUTH);
-        }
-        else
-        {
-            msg= MsgUtil.makeMsg(MsgCode.SUCCESS);
+        if (SessionUtil.getUserType() != Constant.ADMIN) {
+            msg = MsgUtil.makeMsg(MsgCode.ERROR, MsgUtil.ADMIN_NO_AUTH);
+        } else {
+            msg = MsgUtil.makeMsg(MsgCode.SUCCESS);
         }
 
-        Integer fetch_num=param.get(Constant.FETCH_NUM);
-        Integer fetch_begin=param.get(Constant.FETCH_BEGIN);
+        Integer fetch_num = param.get(Constant.FETCH_NUM);
+        Integer fetch_begin = param.get(Constant.FETCH_BEGIN);
 
-        List<UserJson> userList=userService.getPackUserInfo(fetch_num,fetch_begin);
-        UserListJsonSend userListJsonSend=new UserListJsonSend(msg,userList);
-        Gson gson=new Gson();
+        List<UserJson> userList = userService.getPackUserInfo(fetch_num, fetch_begin);
+        UserListJsonSend userListJsonSend = new UserListJsonSend(msg, userList);
+        Gson gson = new Gson();
         return gson.toJson(userListJsonSend);
     }
 }

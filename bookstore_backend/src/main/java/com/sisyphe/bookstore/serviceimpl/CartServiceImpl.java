@@ -1,4 +1,5 @@
 package com.sisyphe.bookstore.serviceimpl;
+
 import com.sisyphe.bookstore.constant.Operation;
 import com.sisyphe.bookstore.dao.CartDao;
 import com.sisyphe.bookstore.entity.entityComp.CartId;
@@ -19,21 +20,18 @@ public class CartServiceImpl implements CartService {
     private CartDao cartDao;
 
     @Override
-    public boolean storeCart(Cart cart)
-    {
+    public boolean storeCart(Cart cart) {
         return cartDao.storeCart(cart);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public void modifyCartItem(CartId cartId, Operation op)
-    {
-        cartDao.modifyCartItem(cartId,op);
+    public void modifyCartItem(CartId cartId, Operation op) {
+        cartDao.modifyCartItem(cartId, op);
     }
 
     @Override
-    public List<Cart> getCart(int user_id)
-    {
+    public List<Cart> getCart(int user_id) {
         return cartDao.getCart(user_id);
     }
 

@@ -6,5 +6,7 @@ public class CartJsonRec {
     public int user_id;
     public int book_id;
     public Operation cart_op;//add sub delete
-    public CartJsonRec(){}
+
+    public CartJsonRec() {
+    }
 }

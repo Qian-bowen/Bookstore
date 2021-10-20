@@ -1,15 +1,15 @@
-.container{
+.container {
 }
 
-.card{
-    margin:0 auto;
+.card {
+    margin: 0 auto;
 }
 
-.frameBody{
-    margin:0;
+.frameBody {
+    margin: 0;
 }
 
-.commonBook{
+.commonBook {
     float: left;
     height: 400px;
     width: 400px;

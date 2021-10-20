@@ -15,6 +15,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
 import java.util.Map;
 
 @RestController
@@ -22,61 +23,50 @@ public class LoginController {
 
     private UserService userService;
 
-    public LoginController(UserService userService)
-    {
-        this.userService=userService;
+    public LoginController(UserService userService) {
+        this.userService = userService;
     }
 
-    
+
     @RequestMapping(value = "/login")
-    public Msg login(@RequestBody Map<String,String> params){
-        String username=params.get(Constant.USERNAME);
-        String password=params.get(Constant.PASSWORD);
-        System.out.println(username+password);
-        UserAuth auth =userService.checkUser(username,password);
-        if(auth!=null && auth.getUserType()!=Constant.BANNED_USER)
-        {
-            JSONObject obj=new JSONObject();
-            obj.put(Constant.USER_ID,auth.getUserID());
-            obj.put(Constant.USERNAME,auth.getUsername());
-            obj.put(Constant.USER_TYPE,auth.getUserType());
+    public Msg login(@RequestBody Map<String, String> params) {
+        String username = params.get(Constant.USERNAME);
+        String password = params.get(Constant.PASSWORD);
+        System.out.println(username + password);
+        UserAuth auth = userService.checkUser(username, password);
+        if (auth != null && auth.getUserType() != Constant.BANNED_USER) {
+            JSONObject obj = new JSONObject();
+            obj.put(Constant.USER_ID, auth.getUserID());
+            obj.put(Constant.USERNAME, auth.getUsername());
+            obj.put(Constant.USER_TYPE, auth.getUserType());
             SessionUtil.setSession(obj);
 
-            Msg msg= MsgUtil.makeMsg(MsgCode.SUCCESS, MsgUtil.LOGIN_SUCCESS_MSG, obj);
-            System.out.println("login status:"+msg.getStatus()+" "+msg.getMsg());
+            Msg msg = MsgUtil.makeMsg(MsgCode.SUCCESS, MsgUtil.LOGIN_SUCCESS_MSG, obj);
+            System.out.println("login status:" + msg.getStatus() + " " + msg.getMsg());
             return msg;
-        }
-        else if(auth.getUserType()==Constant.BANNED_USER)
-        {
-            return MsgUtil.makeMsg(MsgCode.LOGIN_USER_ERROR,MsgUtil.LOGIN_USER_PROHIBIT_MSG);
-        }
-        else
-        {
+        } else if (auth.getUserType() == Constant.BANNED_USER) {
+            return MsgUtil.makeMsg(MsgCode.LOGIN_USER_ERROR, MsgUtil.LOGIN_USER_PROHIBIT_MSG);
+        } else {
             return MsgUtil.makeMsg(MsgCode.LOGIN_USER_ERROR);
         }
     }
 
     @RequestMapping("/logout")
-    public Msg logout()
-    {
-        if(SessionUtil.removeSession())
-        {
+    public Msg logout() {
+        if (SessionUtil.removeSession()) {
             return MsgUtil.makeMsg(MsgCode.SUCCESS);
-        }
-        else
-        {
+        } else {
             return MsgUtil.makeMsg(MsgCode.ERROR);
         }
     }
 
     @RequestMapping("/checkSession")
-    public Msg checkSession(){
+    public Msg checkSession() {
         JSONObject auth = SessionUtil.getAuth();
 
-        if(auth == null){
+        if (auth == null) {
             return MsgUtil.makeMsg(MsgCode.NOT_LOGGED_IN_ERROR);
-        }
-        else{
+        } else {
             return MsgUtil.makeMsg(MsgCode.SUCCESS, MsgUtil.LOGIN_SUCCESS_MSG, auth);
         }
     }

@@ -13,48 +13,42 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class UserDaoImpl implements UserDao{
+public class UserDaoImpl implements UserDao {
 
     UserAuthRepository userAuthRepository;
     UserRepository userRepository;
 
     @Autowired
-    public UserDaoImpl(UserAuthRepository userAuthRepository,UserRepository userRepository)
-    {
-        this.userAuthRepository=userAuthRepository;
-        this.userRepository=userRepository;
+    public UserDaoImpl(UserAuthRepository userAuthRepository, UserRepository userRepository) {
+        this.userAuthRepository = userAuthRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public UserAuth checkUser(String name, String pwd)
-    {
-        return userAuthRepository.checkUser(name,pwd);
+    public UserAuth checkUser(String name, String pwd) {
+        return userAuthRepository.checkUser(name, pwd);
     }
 
     @Override
-    public boolean registerUser(UserAuth userAuth, User user)
-    {
+    public boolean registerUser(UserAuth userAuth, User user) {
         //check whether there is already exist same username
-        UserAuth dup=userAuthRepository.checkUsernameExist(userAuth.getUsername());
-        if(dup!=null)
-        {
+        UserAuth dup = userAuthRepository.checkUsernameExist(userAuth.getUsername());
+        if (dup != null) {
             return false;
         }
-        User user_saved=userRepository.saveAndFlush(user);
-        int user_id=user_saved.getUserId();
-        System.out.println("user_id:"+user_id);
+        User user_saved = userRepository.saveAndFlush(user);
+        int user_id = user_saved.getUserId();
+        System.out.println("user_id:" + user_id);
         userAuth.setUserId(user_id);
         userAuthRepository.save(userAuth);
         return true;
     }
 
     @Override
-    public boolean prohibitUser(int user_id)
-    {
-        boolean user_exist=userAuthRepository.existsById(user_id);
-        if(user_exist)
-        {
-            UserAuth userAuth=userAuthRepository.getOne(user_id);
+    public boolean prohibitUser(int user_id) {
+        boolean user_exist = userAuthRepository.existsById(user_id);
+        if (user_exist) {
+            UserAuth userAuth = userAuthRepository.getOne(user_id);
             userAuth.setUserType(Constant.BANNED_USER);
             userAuthRepository.save(userAuth);
             return true;
@@ -63,12 +57,10 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public boolean permitUser(int user_id)
-    {
-        boolean user_exist=userAuthRepository.existsById(user_id);
-        if(user_exist)
-        {
-            UserAuth userAuth=userAuthRepository.getOne(user_id);
+    public boolean permitUser(int user_id) {
+        boolean user_exist = userAuthRepository.existsById(user_id);
+        if (user_exist) {
+            UserAuth userAuth = userAuthRepository.getOne(user_id);
             userAuth.setUserType(Constant.USER);
             userAuthRepository.save(userAuth);
             return true;
@@ -77,20 +69,17 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public User findUserById(int userId)
-    {
+    public User findUserById(int userId) {
         return userRepository.getOne(userId);
     }
 
     @Override
-    public List<User> getUsers(Integer fetch_num, Integer fetch_begin)
-    {
+    public List<User> getUsers(Integer fetch_num, Integer fetch_begin) {
         return userRepository.findAll();
     }
 
     @Override
-    public Integer getUserType(Integer user_id)
-    {
+    public Integer getUserType(Integer user_id) {
         UserAuth userAuth = userAuthRepository.getOne(user_id);
         return userAuth.getUserType();
     }

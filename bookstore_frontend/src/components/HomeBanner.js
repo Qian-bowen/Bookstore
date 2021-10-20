@@ -1,22 +1,20 @@
 import React from 'react';
 
-class Activity extends React.Component{
+class Activity extends React.Component {
     constructor(props) {
         super(props);
     }
 }
 
-class SingleBanner extends React.Component{
+class SingleBanner extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-
-        }
+        this.state = {}
     }
-    render()
-    {
-        return(
-            <section className={"hero is-medium "+ this.props.activity.color}>
+
+    render() {
+        return (
+            <section className={"hero is-medium " + this.props.activity.color}>
 
                 <div className="columns">
 
@@ -49,22 +47,18 @@ class SingleBanner extends React.Component{
 }
 
 
-
-export default class HomeBanner extends React.Component{
+export default class HomeBanner extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-
-        }
+        this.state = {}
     }
 
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <div>
                 {
-                    this.props.activity.map((it,index)=> {
+                    this.props.activity.map((it, index) => {
 
                         return (
                             <div className="block">

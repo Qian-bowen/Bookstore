@@ -11,10 +11,12 @@ import java.util.Map;
 public class UserListJsonSend {
     Msg msg;
     List<UserJson> userJsonList;
-    public UserListJsonSend(){}
-    public UserListJsonSend(Msg msg, List<UserJson> userJsonList)
-    {
-        this.userJsonList=userJsonList;
-        this.msg=msg;
+
+    public UserListJsonSend() {
+    }
+
+    public UserListJsonSend(Msg msg, List<UserJson> userJsonList) {
+        this.userJsonList = userJsonList;
+        this.msg = msg;
     }
 }

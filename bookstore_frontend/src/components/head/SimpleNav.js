@@ -1,22 +1,22 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 
-export class SimpleNav extends React.Component{
+export class SimpleNav extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    handle_manage=(e)=>{
+    handle_manage = (e) => {
 
         this.props.on_reverse_delete_button();
     }
 
-    handle_search=(e)=>{
+    handle_search = (e) => {
         this.props.on_search_item(e.target.value);
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div class="block">
                 <section class="hero is-primary is-small">
                     <div class="hero-head">
@@ -35,7 +35,7 @@ export class SimpleNav extends React.Component{
                                         </a>
                                         <span class="navbar-item">
                                     <a className={"button is-primary is-inverted"}
-                                        onClick={this.handle_manage}
+                                       onClick={this.handle_manage}
                                     >
                                             <span>管理</span>
                                     </a>
@@ -56,7 +56,7 @@ export class SimpleNav extends React.Component{
                             <div class="column is-half">
                         <span class="navbar-item">
                             <input class="input is-link is-inverted" type="text" placeholder="搜索"
-                                onChange={this.handle_search}
+                                   onChange={this.handle_search}
                             />
                         </span>
                             </div>
@@ -71,25 +71,25 @@ export class SimpleNav extends React.Component{
     }
 }
 
-export class CommNav extends React.Component{
+export class CommNav extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            search:"",
+        this.state = {
+            search: "",
         }
     }
 
-    set_search_value=(e)=>{
-        this.setState({search:e.target.value});
+    set_search_value = (e) => {
+        this.setState({search: e.target.value});
     }
 
-    handle_search=()=>{
+    handle_search = () => {
         this.props.on_search_item(this.state.search);
-        document.getElementById("search_input").value="";
+        document.getElementById("search_input").value = "";
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div class="block">
                 <section class="hero is-primary is-small">
                     <div class="hero-head">

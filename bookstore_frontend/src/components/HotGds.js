@@ -1,10 +1,9 @@
 import React from 'react';
 
 
-class HotGds extends React.Component{
-    render()
-    {
-        return(
+class HotGds extends React.Component {
+    render() {
+        return (
             <div className="block">
 
                 <div className="card">
@@ -30,7 +29,8 @@ class HotGds extends React.Component{
                                 <p className="title is-3">{this.props.book.name}</p>
                                 <div className="columns">
                                     <div className="column is-two-thirds">
-                                        <progress className="progress is-primary" value={this.props.book.fin_score} max="10"></progress>
+                                        <progress className="progress is-primary" value={this.props.book.fin_score}
+                                                  max="10"></progress>
                                     </div>
                                     <div className="column">
                                         <p className="title is-6">{this.props.book.fin_score}</p>

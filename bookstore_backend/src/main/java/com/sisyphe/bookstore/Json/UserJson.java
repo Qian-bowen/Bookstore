@@ -10,13 +10,12 @@ public class UserJson {
     public String address;
     public Integer type; //if type is unnecessary type=-1
 
-    public UserJson(User user,Integer type)
-    {
-        this.userId=user.getUserId();
-        this.nickname=user.getNickname();
-        this.name=user.getName();
-        this.tel= user.getTel();
-        this.address=user.getAddress();
-        this.type=type;
+    public UserJson(User user, Integer type) {
+        this.userId = user.getUserId();
+        this.nickname = user.getNickname();
+        this.name = user.getName();
+        this.tel = user.getTel();
+        this.address = user.getAddress();
+        this.type = type;
     }
 }

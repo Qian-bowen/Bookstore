@@ -8,37 +8,37 @@ public class Msg {
     private String msg;
     private JSONObject data;
 
-    public Msg(MsgCode msg, JSONObject data){
+    public Msg(MsgCode msg, JSONObject data) {
         this.status = msg.getStatus();
         this.msg = msg.getMsg();
         this.data = data;
     }
 
-    public Msg(MsgCode msg, String extra, JSONObject data){
+    public Msg(MsgCode msg, String extra, JSONObject data) {
         this.status = msg.getStatus();
         this.msg = extra;
         this.data = data;
     }
 
-    public Msg(MsgCode msg){
+    public Msg(MsgCode msg) {
         this.status = msg.getStatus();
         this.msg = msg.getMsg();
         this.data = null;
     }
 
-    public Msg(MsgCode msg, String extra){
+    public Msg(MsgCode msg, String extra) {
         this.status = msg.getStatus();
         this.msg = extra;
         this.data = null;
     }
 
-    public Msg(int status, String extra, JSONObject data){
+    public Msg(int status, String extra, JSONObject data) {
         this.status = status;
         this.msg = extra;
         this.data = data;
     }
 
-    public Msg(int status, String extra){
+    public Msg(int status, String extra) {
         this.status = status;
         this.msg = extra;
         this.data = null;

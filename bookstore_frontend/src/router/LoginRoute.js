@@ -3,25 +3,22 @@ import {Route, Redirect} from 'react-router-dom'
 import * as userService from "../services/userService"
 import * as Type from "../components/constant/Type";
 
-export class LoginRoute extends React.Component{
+export class LoginRoute extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            isAuthed:false,
-            hasAuthed:false,
+        this.state = {
+            isAuthed: false,
+            hasAuthed: false,
         };
     }
 
-    checkAuth=(data)=>{
+    checkAuth = (data) => {
         console.log(data);
-        if(data.status>=0)
-        {
-            this.setState({isAuthed:true,hasAuthed:true});
-        }
-        else
-        {
+        if (data.status >= 0) {
+            this.setState({isAuthed: true, hasAuthed: true});
+        } else {
             localStorage.removeItem('user');
-            this.setState({isAuthed:false,hasAuthed:true});
+            this.setState({isAuthed: false, hasAuthed: true});
         }
     }
 

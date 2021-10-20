@@ -24,7 +24,6 @@ import img1 from '../asserts/300.jfif'
 export default class BookFrame extends React.Component {
 
 
-
     create_book_single(book_info) {
         return (
             <div className={"block"}>
@@ -35,37 +34,36 @@ export default class BookFrame extends React.Component {
         );
     }
 
-    create_store(col_idx,col_num) {
-        let box=[];
-        let books=this.props.books;
-        let books_num=books.length;
-        for(let i=0;i<books_num;++i)
-        {
-            if((i%col_num)===col_idx) {
+    create_store(col_idx, col_num) {
+        let box = [];
+        let books = this.props.books;
+        let books_num = books.length;
+        for (let i = 0; i < books_num; ++i) {
+            if ((i % col_num) === col_idx) {
                 let front_book = bookService.convert_book_info(books[i]);
                 box.push(this.create_book_single(front_book));
             }
         }
-        return(
+        return (
             box
         );
     }
 
-    render_columns=()=>{
-        return(
+    render_columns = () => {
+        return (
             <div>
                 <div className={"columns"}>
                     <div className={"column"}>
-                        {this.create_store(0,4)}
+                        {this.create_store(0, 4)}
                     </div>
                     <div className={"column"}>
-                        {this.create_store(1,4)}
+                        {this.create_store(1, 4)}
                     </div>
                     <div className={"column"}>
-                        {this.create_store(2,4)}
+                        {this.create_store(2, 4)}
                     </div>
                     <div className={"column"}>
-                        {this.create_store(3,4)}
+                        {this.create_store(3, 4)}
                     </div>
                 </div>
             </div>

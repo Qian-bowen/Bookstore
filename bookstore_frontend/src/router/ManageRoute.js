@@ -3,13 +3,13 @@ import {Route, Redirect} from 'react-router-dom'
 import * as userService from "../services/userService";
 import * as Type from "../components/constant/Type";
 
-export default class ManageRoute extends React.Component{
+export default class ManageRoute extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isAuthed: false,
             hasAuthed: false,
-            userType:Type.userType.user,
+            userType: Type.userType.user,
         };
     }
 
@@ -17,7 +17,7 @@ export default class ManageRoute extends React.Component{
         //let data_json=JSON.parse(data.data);
         //console.log("data:"+data_json);
         if (data.status >= 0) {
-            this.setState({isAuthed: true, hasAuthed: true,userType:data.data.userType});
+            this.setState({isAuthed: true, hasAuthed: true, userType: data.data.userType});
 
         } else {
             localStorage.removeItem('user');
@@ -30,37 +30,32 @@ export default class ManageRoute extends React.Component{
         userService.checkSession(this.checkAuth);
     }
 
-    redirect_path=(props)=>{
-        if(!this.state.isAuthed)
-        {
+    redirect_path = (props) => {
+        if (!this.state.isAuthed) {
             console.log("not auth");
-            return(
+            return (
                 <Redirect to={{
                     pathname: "/login",
                     state: {from: props.location}
                 }}/>
             );
-        }
-        else if (this.state.userType===Type.userType.user) {
-            return(
+        } else if (this.state.userType === Type.userType.user) {
+            return (
                 <Redirect to={{
                     pathname: "/manage/user",
                     state: {from: props.location}
                 }}/>
             );
 
-        }
-        else if (this.state.userType===Type.userType.admin){
-            return(
+        } else if (this.state.userType === Type.userType.admin) {
+            return (
                 <Redirect to={{
                     pathname: "/manage/admin",
                     state: {from: props.location}
                 }}/>
             );
-        }
-        else
-        {
-            return(
+        } else {
+            return (
                 <Redirect to={{
                     pathname: "/",
                     state: {from: props.location}
@@ -72,7 +67,7 @@ export default class ManageRoute extends React.Component{
 
     render() {
 
-        const {component: Component, path="/",exact=false,strict=false} = this.props;
+        const {component: Component, path = "/", exact = false, strict = false} = this.props;
 
         if (!this.state.hasAuthed) {
             return null;

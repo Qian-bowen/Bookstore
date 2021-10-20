@@ -11,7 +11,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "user_Auth")
-@JsonIgnoreProperties(value={"handler","hibernateLazyInitializer","fieldHandler"})
+@JsonIgnoreProperties(value = {"handler", "hibernateLazyInitializer", "fieldHandler"})
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "userId")
@@ -25,24 +25,33 @@ public class UserAuth {
 
     private Integer userType;
 
-    public UserAuth(String name,String pwd,Integer type)
-    {
-        username=name;
-        password=pwd;
-        userType=type;
+    public UserAuth(String name, String pwd, Integer type) {
+        username = name;
+        password = pwd;
+        userType = type;
     }
 
-    public UserAuth()
-    {
-        userId=-1;
+    public UserAuth() {
+        userId = -1;
     }
 
-    public String getUsername()
-    {
+    public String getUsername() {
         return username;
     }
-    public Integer getUserType(){return userType;}
-    public Integer getUserID(){return userId;}
-    public void setUserId(Integer userId){this.userId=userId;}
-    public void setUserType(Integer userType){this.userType=userType;}
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public Integer getUserID() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
+    }
 }

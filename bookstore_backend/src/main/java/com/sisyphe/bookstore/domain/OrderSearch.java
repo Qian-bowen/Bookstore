@@ -9,24 +9,23 @@ public class OrderSearch {
     String lower_time;
     String upper_time;
 
-    public OrderSearch(){}
-    public OrderSearch(SearchType searchType,int uid)
-    {
-        type=searchType;
-        user_id=uid;
+    public OrderSearch() {
     }
 
-    public OrderSearch(SearchType searchType,String name)
-    {
-        type=searchType;
-        bookName=name;
+    public OrderSearch(SearchType searchType, int uid) {
+        type = searchType;
+        user_id = uid;
     }
 
-    public OrderSearch(SearchType searchType,String lt,String upt)
-    {
-        type=searchType;
-        lower_time=lt;
-        upper_time=upt;
+    public OrderSearch(SearchType searchType, String name) {
+        type = searchType;
+        bookName = name;
+    }
+
+    public OrderSearch(SearchType searchType, String lt, String upt) {
+        type = searchType;
+        lower_time = lt;
+        upper_time = upt;
     }
 
     public int getUser_id() {
@@ -37,9 +36,15 @@ public class OrderSearch {
         return type;
     }
 
-    public String getLower_time(){return lower_time;}
+    public String getLower_time() {
+        return lower_time;
+    }
 
-    public String getUpper_time(){return upper_time;}
+    public String getUpper_time() {
+        return upper_time;
+    }
 
-    public String getBookName(){return bookName;}
+    public String getBookName() {
+        return bookName;
+    }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import {Route, Redirect} from 'react-router-dom'
 import * as userService from "../services/userService"
 
-export default class PrivateRoute extends React.Component{
+export default class PrivateRoute extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -29,9 +29,9 @@ export default class PrivateRoute extends React.Component{
 
     render() {
 
-        const {component: Component, path="/",exact=false,strict=false} = this.props;
+        const {component: Component, path = "/", exact = false, strict = false} = this.props;
 
-        console.log("isAuth:"+this.state.isAuthed);
+        console.log("isAuth:" + this.state.isAuthed);
 
         if (!this.state.hasAuthed) {
             return null;

@@ -17,10 +17,10 @@ import java.io.PrintWriter;
 public class SessionValidateInterceptor implements HandlerInterceptor {
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception{
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
 
         boolean status = SessionUtil.checkAuth();
-        if(!status){
+        if (!status) {
             System.out.println("Failed");
             Msg msg = MsgUtil.makeMsg(MsgCode.NOT_LOGGED_IN_ERROR);
             sendJsonBack(response, msg);
@@ -30,7 +30,7 @@ public class SessionValidateInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private void sendJsonBack(HttpServletResponse response, Msg msg){
+    private void sendJsonBack(HttpServletResponse response, Msg msg) {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         try (PrintWriter writer = response.getWriter()) {

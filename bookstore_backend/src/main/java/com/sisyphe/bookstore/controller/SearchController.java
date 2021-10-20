@@ -21,26 +21,23 @@ public class SearchController {
     private SearchService searchService;
 
     /**
-     * RESTful Webservice
      * @param searchStr
      * @return
      */
+    //webservice to other program in package webservice
     @GetMapping("/search/book/intro")
-    public Msg searchBookIntro(@RequestParam(name = "searchStr") String searchStr)
-    {
-        HighlightPage<BookIntro> bookIntros = searchService.getByDescriptionHighlight(searchStr,10);
-        if(bookIntros.isEmpty())
-        {
+    public Msg searchBookIntro(@RequestParam(name = "searchStr") String searchStr) {
+        HighlightPage<BookIntro> bookIntros = searchService.getByDescriptionHighlight(searchStr, 10);
+        if (bookIntros.isEmpty()) {
             return new Msg(MsgCode.ERROR);
         }
-        JSONArray jsonArray=new JSONArray();
-        for(BookIntro bookIntro:bookIntros)
-        {
+        JSONArray jsonArray = new JSONArray();
+        for (BookIntro bookIntro : bookIntros) {
             jsonArray.add(BookIntro.getJsonObject(bookIntro));
         }
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("result",jsonArray);
-        return new Msg(MsgCode.SUCCESS,jsonObject);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("result", jsonArray);
+        return new Msg(MsgCode.SUCCESS, jsonObject);
     }
 
 

@@ -8,10 +8,10 @@ import java.util.List;
 public class OrderJsonRec {
     public List<OrderItemJson> orderItems;
 
-    public OrderJsonRec(){}
+    public OrderJsonRec() {
+    }
 
-    public OrderJsonRec(List<OrderItemJson> orderItems)
-    {
-        this.orderItems=orderItems;
+    public OrderJsonRec(List<OrderItemJson> orderItems) {
+        this.orderItems = orderItems;
     }
 }

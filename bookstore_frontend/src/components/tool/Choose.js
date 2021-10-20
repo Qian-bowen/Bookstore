@@ -5,9 +5,9 @@ class Selector extends React.Component {
         super(props);
     }
 
-    make_option=()=>{
-        let option_box=[];
-        let tmp=this.props.option.map((item,index)=>
+    make_option = () => {
+        let option_box = [];
+        let tmp = this.props.option.map((item, index) =>
             (
                 <option key={index}>{item}</option>
             ));
@@ -15,9 +15,8 @@ class Selector extends React.Component {
         return option_box;
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <div className="select is-rounded">
                 <select>
                     {this.make_option()}

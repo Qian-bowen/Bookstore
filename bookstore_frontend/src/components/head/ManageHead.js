@@ -1,17 +1,16 @@
 import React from 'react';
 
-class ManageHead extends React.Component{
+class ManageHead extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    handle_panel=(e)=> {
+    handle_panel = (e) => {
         this.props.reset_panel(e.target.click);
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <section className="hero is-primary is-medium">
                 <div className="hero-head">
                     <nav className="navbar">

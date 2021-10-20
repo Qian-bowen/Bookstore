@@ -13,7 +13,7 @@ import javax.persistence.Index;
 @SolrDocument(collection = "bookstore_core")
 public class BookIntro {
     @Id
-    @Indexed(name = "id",type = "int")
+    @Indexed(name = "id", type = "int")
     @Field
     private Integer id;
 
@@ -25,12 +25,11 @@ public class BookIntro {
     @Field
     private String description;
 
-    public static JSONObject getJsonObject(BookIntro bookIntro)
-    {
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("id",bookIntro.getId());
-        jsonObject.put("name",bookIntro.getName());
-        jsonObject.put("description",bookIntro.getDescription());
+    public static JSONObject getJsonObject(BookIntro bookIntro) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", bookIntro.getId());
+        jsonObject.put("name", bookIntro.getName());
+        jsonObject.put("description", bookIntro.getDescription());
         return jsonObject;
     }
 

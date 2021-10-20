@@ -28,36 +28,32 @@ public class BookDaoImpl implements BookDao {
     RedisUtil redisUtil;
 
     @Autowired
-    public BookDaoImpl(BookRepository bookRepository)
-    {
-        this.bookRepository=bookRepository;
+    public BookDaoImpl(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
     @Override
-    public Book findOne(Integer id){
-        Book book=null;
-        String key="bookid"+id;
-        Object bookGet=redisUtil.get(key);
-        if(bookGet==null)
-        {
+    public Book findOne(Integer id) {
+        Book book = null;
+        String key = "bookid" + id;
+        Object bookGet = redisUtil.get(key);
+        if (bookGet == null) {
             System.out.println("from database");
-            book=bookRepository.getOne(id);
-            redisUtil.set(key,JSONObject.toJSONString(book.getBookJson()));
-        }
-        else
-        {
+            book = bookRepository.getOne(id);
+            redisUtil.set(key, JSONObject.toJSONString(book.getBookJson()));
+        } else {
             System.out.println("from redis");
-            BookJson bookJson= JSONObject.parseObject(bookGet.toString(), BookJson.class);
-            book=new Book(bookJson);
+            BookJson bookJson = JSONObject.parseObject(bookGet.toString(), BookJson.class);
+            book = new Book(bookJson);
         }
         return book;
     }
 
     @Override
-    public List<Book> getBooks(Integer fetch_num,Integer fetch_begin) {
-        System.out.println("fetch begin:"+fetch_begin);
-        Integer pageIdx=fetch_begin/fetch_num;
-        Pageable pageRequest= PageRequest.of(pageIdx, fetch_num);
+    public List<Book> getBooks(Integer fetch_num, Integer fetch_begin) {
+        System.out.println("fetch begin:" + fetch_begin);
+        Integer pageIdx = fetch_begin / fetch_num;
+        Pageable pageRequest = PageRequest.of(pageIdx, fetch_num);
 
 //        List<Book> bookList=null;
 //        String key="book"+pageIdx+","+fetch_num;
@@ -75,80 +71,77 @@ public class BookDaoImpl implements BookDao {
 //            List<BookJson> bookJsonList= JSONArray.parseArray(list.toString(), BookJson.class);
 //            bookList=Book.bookJson2book(bookJsonList);
 //        }
-        List<Book> bookList=bookRepository.getBooks(pageRequest);
+        List<Book> bookList = bookRepository.getBooks(pageRequest);
 
         return bookList;
     }
 
     @Override
-    public List<Book> getBooksByName(String name){return bookRepository.getBooksByName(name);}
+    public List<Book> getBooksByName(String name) {
+        return bookRepository.getBooksByName(name);
+    }
 
     @Override
-    public List<Book> getBooksByExactName(String name){return bookRepository.getBooksByExactName(name);}
+    public List<Book> getBooksByExactName(String name) {
+        return bookRepository.getBooksByExactName(name);
+    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Book addBook(Book book)
-    {
+    public Book addBook(Book book) {
         List<Book> books = bookRepository.getBooksByExactName(book.get_name());
-        if(!books.isEmpty()) return null;
+        if (!books.isEmpty()) return null;
 
         bookRepository.saveAndFlush(book);
 
         //add book to redis
-        String key="bookid"+book.getBookId();
-        Object bookGet=redisUtil.get(key);
-        if(bookGet!=null)
-        {
+        String key = "bookid" + book.getBookId();
+        Object bookGet = redisUtil.get(key);
+        if (bookGet != null) {
             redisUtil.del(key);
         }
-        redisUtil.set(key,JSONObject.toJSONString(book.getBookJson()));
+        redisUtil.set(key, JSONObject.toJSONString(book.getBookJson()));
         return book;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Book modifyBook(Book book)
-    {
+    public Book modifyBook(Book book) {
         bookRepository.saveAndFlush(book);
 
         //modify book to redis
-        String key="bookid"+book.getBookId();
-        Object bookGet=redisUtil.get(key);
-        if(bookGet!=null)
-        {
+        String key = "bookid" + book.getBookId();
+        Object bookGet = redisUtil.get(key);
+        if (bookGet != null) {
             redisUtil.del(key);
         }
-        redisUtil.set(key,JSONObject.toJSONString(book.getBookJson()));
+        redisUtil.set(key, JSONObject.toJSONString(book.getBookJson()));
 
         return book;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void delBook(Integer id)
-    {
+    public void delBook(Integer id) {
         bookRepository.deleteById(id);
 
         //add book to redis
-        String key="bookid"+id;
-        Object bookGet=redisUtil.get(key);
-        if(bookGet!=null)
-        {
+        String key = "bookid" + id;
+        Object bookGet = redisUtil.get(key);
+        if (bookGet != null) {
             redisUtil.del(key);
         }
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public boolean reduceInventory(Integer id,Integer reduceNum)
-    {
-        Book book=bookRepository.getOne(id);
-        if(!book.reduceInventory(reduceNum))
+    public boolean reduceInventory(Integer id, Integer reduceNum) {
+        Book book = bookRepository.getOne(id);
+        if (!book.reduceInventory(reduceNum))
             return false;
         bookRepository.save(book);
-        String key="bookid"+id;
-        redisUtil.decr(key,reduceNum);
+        String key = "bookid" + id;
+        redisUtil.decr(key, reduceNum);
         return true;
     }
 

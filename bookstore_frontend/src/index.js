@@ -11,4 +11,4 @@ import './css/login.css';
 import './css/Frame.css';
 
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App/>, document.getElementById('app'));

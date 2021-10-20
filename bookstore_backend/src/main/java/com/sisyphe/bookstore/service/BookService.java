@@ -7,10 +7,16 @@ import java.util.List;
 
 public interface BookService {
     Book findBookById(Integer id);
-    List<Book> getBooks(Integer fetch_num,Integer fetch_begin);
+
+    List<Book> getBooks(Integer fetch_num, Integer fetch_begin);
+
     List<Book> searchBooks(BookSearch bookSearch);
+
     boolean addBook(Book book);
+
     boolean modifyBook(Book book);
+
     boolean delBook(Integer id);
-    boolean reduceInventory(Integer id,Integer reduceNum);
+
+    boolean reduceInventory(Integer id, Integer reduceNum);
 }

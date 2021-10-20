@@ -14,12 +14,11 @@ public class VisitorController {
     @Autowired
     private Visit visit;
 
-    @RequestMapping(value = "/visitor/num",method = RequestMethod.GET)
-    public Msg visitorNumber()
-    {
-        int val=visit.getCountValue();
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("visit",val);
-        return new Msg(MsgCode.SUCCESS,jsonObject);
+    @RequestMapping(value = "/visitor/num", method = RequestMethod.GET)
+    public Msg visitorNumber() {
+        int val = visit.getCountValue();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("visit", val);
+        return new Msg(MsgCode.SUCCESS, jsonObject);
     }
 }

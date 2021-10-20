@@ -8,7 +8,7 @@ import HighchartsReact from 'highcharts-react-official'
 * */
 
 
-class RankingChart extends React.Component{
+class RankingChart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -17,9 +17,8 @@ class RankingChart extends React.Component{
         };
     }
 
-    render()
-    {
-        const { chartOptions } = this.state;
+    render() {
+        const {chartOptions} = this.state;
 
         return (
             <div>
@@ -39,8 +38,8 @@ class RankingChart extends React.Component{
 class TendencyChart extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            chartOptions:{
+        this.state = {
+            chartOptions: {
                 title: {
                     text: ''
                 },
@@ -60,13 +59,12 @@ class TendencyChart extends React.Component {
     }
 
     setHoverData = (e) => {
-        this.setState({ hoverData: e.target.category })
+        this.setState({hoverData: e.target.category})
     }
 
-    render()
-    {
-        const { chartOptions } = this.state;
-        return(
+    render() {
+        const {chartOptions} = this.state;
+        return (
             <div>
                 <HighchartsReact
                     highcharts={Highcharts}
@@ -81,59 +79,57 @@ class TableCell extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            is_input:this.props.input,
-            cell_text:this.props.text
+            is_input: this.props.input,
+            cell_text: this.props.text
         }
     }
 
-    handle_input=(e)=>{
-        this.setState({cell_text:e.target.value});
+    handle_input = (e) => {
+        this.setState({cell_text: e.target.value});
     }
 
 
-    render()
-    {
-        if(this.state.is_input){
-            return(
-                <th><input className="input is-primary" type="text" placeholder={this.props.text} onChange={this.handle_input}/></th>
+    render() {
+        if (this.state.is_input) {
+            return (
+                <th><input className="input is-primary" type="text" placeholder={this.props.text}
+                           onChange={this.handle_input}/></th>
             );
-        }
-        else
-        {
-            return(
+        } else {
+            return (
                 <th onClick={this.props.change_to_input}>{this.state.cell_text}</th>
             );
         }
     }
 }
 
-class TableRow extends React.Component{
+class TableRow extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            line:this.props.line,
-            cell_mode:new Array(this.props.col_num).fill(false),
+            line: this.props.line,
+            cell_mode: new Array(this.props.col_num).fill(false),
         }
     }
 
 
-    submit_change=()=>{
-        this.setState({cell_mode:new Array(this.props.col_num).fill(false)});
+    submit_change = () => {
+        this.setState({cell_mode: new Array(this.props.col_num).fill(false)});
     }
 
-    handle_change_to_input=(idx)=>{
-        let tmp=this.state.cell_mode;
-        tmp[idx]=true;
+    handle_change_to_input = (idx) => {
+        let tmp = this.state.cell_mode;
+        tmp[idx] = true;
         //this.setState({cell_mode:tmp});
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <tr>
-                {this.state.line.map((col,col_idx)=>{
+                {this.state.line.map((col, col_idx) => {
                     return (
-                        <TableCell input={this.state.cell_mode[col_idx]} text={col} change_to_input={this.handle_change_to_input(col_idx)}/>
+                        <TableCell input={this.state.cell_mode[col_idx]} text={col}
+                                   change_to_input={this.handle_change_to_input(col_idx)}/>
                     );
                 })}
                 <th>
@@ -148,40 +144,37 @@ class TableRow extends React.Component{
 /*
 * ordinary table
 * */
-class StatisticTable extends React.Component{
+class StatisticTable extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-
-        }
+        this.state = {}
     }
 
-    input_table_text=()=>{
+    input_table_text = () => {
 
     }
 
 
-    render()
-    {
-        const {table}=this.props;
-        if(table.line==null) return null;
+    render() {
+        const {table} = this.props;
+        if (table.line == null) return null;
 
-        return(
+        return (
             <table className={"table is-striped is-bordered is-fullwidth"}>
                 <thead>
-                    <tr>
-                        {this.props.table.headers.map((it)=>{
-                            return (<th>{it}</th>);
-                        })}
-                        <th></th>
-                    </tr>
+                <tr>
+                    {this.props.table.headers.map((it) => {
+                        return (<th>{it}</th>);
+                    })}
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody>
-                    {this.props.table.line.map((li,li_idx)=>{
-                        return(
-                            <TableRow line={li} col_num={li.length}/>
-                        );
-                    })}
+                {this.props.table.line.map((li, li_idx) => {
+                    return (
+                        <TableRow line={li} col_num={li.length}/>
+                    );
+                })}
                 </tbody>
             </table>
         );
@@ -191,17 +184,16 @@ class StatisticTable extends React.Component{
 /*
 * Edit table with edit button
 * */
-class EditTable extends React.Component{
+class EditTable extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    render()
-    {
-        const {table}=this.props;
-        if(table.line==null) return null;
+    render() {
+        const {table} = this.props;
+        if (table.line == null) return null;
 
-        return(
+        return (
             <div>
                 <StatisticTable
                     table={table}
@@ -212,5 +204,4 @@ class EditTable extends React.Component{
 }
 
 
-
-export {RankingChart,TendencyChart,StatisticTable};
+export {RankingChart, TendencyChart, StatisticTable};

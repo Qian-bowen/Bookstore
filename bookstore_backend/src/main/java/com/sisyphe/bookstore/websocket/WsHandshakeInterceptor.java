@@ -16,15 +16,13 @@ import java.util.Map;
 public class WsHandshakeInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-                                   Map<String, Object> attributes) throws Exception
-    {
+                                   Map<String, Object> attributes) throws Exception {
         ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
         HttpSession session = servletRequest.getServletRequest().getSession();
-        if(session!=null&&session.getAttribute(Constant.USER_ID)!=null)
-        {
-            attributes.put(Constant.USER_ID,session.getAttribute(Constant.USER_ID));
-            attributes.put(Constant.USERNAME,session.getAttribute(Constant.USERNAME));
-            attributes.put(Constant.USER_TYPE,session.getAttribute(Constant.USER_TYPE));
+        if (session != null && session.getAttribute(Constant.USER_ID) != null) {
+            attributes.put(Constant.USER_ID, session.getAttribute(Constant.USER_ID));
+            attributes.put(Constant.USERNAME, session.getAttribute(Constant.USERNAME));
+            attributes.put(Constant.USER_TYPE, session.getAttribute(Constant.USER_TYPE));
             return true;
         }
         return false;

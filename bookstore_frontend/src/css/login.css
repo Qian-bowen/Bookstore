@@ -1,11 +1,11 @@
-.login_div{
+.login_div {
     margin: 150px auto;
-    width:350px;
+    width: 350px;
     border-style: solid;
     border-color: #61dafb;
     border-width: 5px;
 }
 
-.button_div{
-    margin-top:10px;
+.button_div {
+    margin-top: 10px;
 }

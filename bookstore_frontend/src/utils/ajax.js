@@ -1,17 +1,15 @@
-
-let postRequest=(url,json,callback)=>
-{
-    console.log("post:"+json);
-    let opts={
-        method:"POST",
-        body:JSON.stringify(json),
-        headers:{
+let postRequest = (url, json, callback) => {
+    console.log("post:" + json);
+    let opts = {
+        method: "POST",
+        body: JSON.stringify(json),
+        headers: {
             'Content-Type': 'application/json'
         },
         credentials: "include",
     };
 
-    fetch(url,opts)
+    fetch(url, opts)
         .then((response) => {
             return response.json()
         })
@@ -23,17 +21,16 @@ let postRequest=(url,json,callback)=>
         });
 }
 
-let getRequest=(url,callback)=>
-{
-    let opts={
-        method:"GET",
-        headers:{
+let getRequest = (url, callback) => {
+    let opts = {
+        method: "GET",
+        headers: {
             'Content-Type': 'application/json'
         },
         credentials: "include",
     };
 
-    fetch(url,opts)
+    fetch(url, opts)
         .then((response) => {
             return response.json()
         })
@@ -45,15 +42,14 @@ let getRequest=(url,callback)=>
         });
 }
 
-let postFormDataRequest=(url,data,callback)=>
-{
-    let opts={
-        method:"POST",
-        body:data,
+let postFormDataRequest = (url, data, callback) => {
+    let opts = {
+        method: "POST",
+        body: data,
         credentials: "include",
     };
 
-    fetch(url,opts)
+    fetch(url, opts)
         .then((response) => {
             return response.json()
         })
@@ -65,4 +61,4 @@ let postFormDataRequest=(url,data,callback)=>
         });
 }
 
-export {postRequest,postFormDataRequest,getRequest};
+export {postRequest, postFormDataRequest, getRequest};

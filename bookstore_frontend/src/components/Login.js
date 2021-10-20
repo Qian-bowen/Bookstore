@@ -6,39 +6,37 @@ import * as userService from "../services/userService";
 class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            username:"",
-            password:""
+        this.state = {
+            username: "",
+            password: ""
         }
     }
 
-    handle_input_username=(event)=>{
+    handle_input_username = (event) => {
         this.setState({
-            username:event.target.value
+            username: event.target.value
         });
     }
 
-    handle_input_pwd=(event)=>{
+    handle_input_pwd = (event) => {
         this.setState({
-            password:event.target.value
+            password: event.target.value
         });
     }
 
-    login_info=()=>{
-        const {username,password}=this.state;
-        if(username===""||password==="")
-        {
+    login_info = () => {
+        const {username, password} = this.state;
+        if (username === "" || password === "") {
             alert("请输入用户名和密码");
             return;
         }
-        const obj={username:username,password:password};
+        const obj = {username: username, password: password};
         userService.login(obj);
     }
 
 
-
-    render(){
-        return(
+    render() {
+        return (
             <div className="center_main_area">
                 <form className="box">
                     <div className="field">
@@ -47,7 +45,7 @@ class Login extends React.Component {
                             <input
                                 value={this.state.username}
                                 onChange={this.handle_input_username}
-                                className="input" type="" placeholder="请输入用户名" />
+                                className="input" type="" placeholder="请输入用户名"/>
                         </div>
                     </div>
 
@@ -57,7 +55,7 @@ class Login extends React.Component {
                             <input
                                 value={this.state.password}
                                 onChange={this.handle_input_pwd}
-                                className="input" type="password" placeholder="请输入密码" />
+                                className="input" type="password" placeholder="请输入密码"/>
                         </div>
                     </div>
 

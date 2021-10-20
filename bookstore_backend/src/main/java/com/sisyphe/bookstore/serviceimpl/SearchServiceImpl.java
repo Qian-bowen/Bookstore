@@ -15,9 +15,8 @@ public class SearchServiceImpl implements SearchService {
     private BookIntroRepository bookIntroRepository;
 
     @Override
-    public HighlightPage<BookIntro> getByDescriptionHighlight(String searchTerm, Integer maxResult)
-    {
-        PageRequest pageRequest= PageRequest.of(0,maxResult);
-        return bookIntroRepository.getByDescriptionHighlight(searchTerm,pageRequest);
+    public HighlightPage<BookIntro> getByDescriptionHighlight(String searchTerm, Integer maxResult) {
+        PageRequest pageRequest = PageRequest.of(0, maxResult);
+        return bookIntroRepository.getByDescriptionHighlight(searchTerm, pageRequest);
     }
 }

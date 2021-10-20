@@ -5,33 +5,27 @@ import {history} from "../utils/history";
 export const login = (data) => {
     const url = 'http://localhost:8080/login';
     const callback = (data) => {
-        console.log("back:"+data.username);
-        console.log("back:"+data.status);
-        if(data.status>=0)
-        {
-            localStorage.setItem('user',JSON.stringify(data.data));
+        console.log("back:" + data.username);
+        console.log("back:" + data.status);
+        if (data.status >= 0) {
+            localStorage.setItem('user', JSON.stringify(data.data));
             history.push("/");
             alert("LOGIN SUCCESS");
-        }
-        else
-        {
+        } else {
             alert("LOGIN FAIL");
         }
     };
     postRequest(url, data, callback);
 };
 
-export const logout=()=>{
+export const logout = () => {
     const url = 'http://localhost:8080/logout';
     const callback = (data) => {
-        if(data.status>=0)
-        {
+        if (data.status >= 0) {
             localStorage.removeItem('user');
             history.push("/");
             alert("LOGOUT SUCCESS");
-        }
-        else
-        {
+        } else {
             alert("LOGOUT FAIL");
         }
     };
@@ -39,23 +33,20 @@ export const logout=()=>{
 }
 
 export const register = (data) => {
-    console.log("post in login:"+data);
+    console.log("post in login:" + data);
     const url = 'http://localhost:8080/register';
     const callback = (data) => {
-        if(data.status>=0)
-        {
+        if (data.status >= 0) {
             history.push("/login");
             alert(data.msg);
-        }
-        else
-        {
+        } else {
             alert(data.msg);
         }
     };
     postRequest(url, data, callback);
 };
 
-export const checkSession=(callback)=>{
+export const checkSession = (callback) => {
     const url = 'http://localhost:8080/checkSession';
     postRequest(url, {}, callback);
 };

@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface StatisticService {
     List<BookSellStat> statBookSell(StatisticSet statisticSet);
+
     List<UserConsumeStat> statUserConsume(StatisticSet statisticSet);
-    List<BookBuyStat> statPersonalMostConsume(StatisticSet statisticSet,int user_id);
+
+    List<BookBuyStat> statPersonalMostConsume(StatisticSet statisticSet, int user_id);
 }

@@ -19,14 +19,14 @@ public class VisitData {
     @Column(name = "visit_num")
     private int visitNum;
 
-    @Column(name="record_time")
+    @Column(name = "record_time")
     private LocalDateTime recordTime;
 
-    public VisitData(){}
+    public VisitData() {
+    }
 
-    public VisitData(int visitNum,LocalDateTime recordTime)
-    {
-        this.recordTime=recordTime;
-        this.visitNum=visitNum;
+    public VisitData(int visitNum, LocalDateTime recordTime) {
+        this.recordTime = recordTime;
+        this.visitNum = visitNum;
     }
 }

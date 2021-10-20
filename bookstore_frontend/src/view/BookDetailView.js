@@ -20,29 +20,28 @@ import * as bookService from '../services/bookService';
 //         "该书以中国70年代中期到80年代中期十年间为背景，通过复杂的矛盾纠葛，以孙少安和孙少平两兄弟为中心。"
 // }
 
-export default class BookDetailView extends React.Component{
+export default class BookDetailView extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {book_info:null};
+        this.state = {book_info: null};
     }
 
     componentDidMount() {
         console.log("bookid call");
         const query = this.props.location.search;
-        const arr=query.split('&');
-        const bookId=arr[0].substr(4);
-        console.log("bookid:"+bookId);
-        const callback=(data)=>{
-            let convert_book=bookService.convert_book_info(data);
+        const arr = query.split('&');
+        const bookId = arr[0].substr(4);
+        console.log("bookid:" + bookId);
+        const callback = (data) => {
+            let convert_book = bookService.convert_book_info(data);
             console.log(convert_book);
             this.setState({book_info: convert_book})
         }
-        getBook(bookId,callback);
+        getBook(bookId, callback);
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <div className={"main_area"}>
                 <BookDetail book={this.state.book_info}/>
             </div>

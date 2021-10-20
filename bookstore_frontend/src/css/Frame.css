@@ -1,37 +1,37 @@
-.main_area{
-    margin:auto;
-    width:600px;
+.main_area {
+    margin: auto;
+    width: 600px;
 }
 
-.center_main_area{
-    margin:150px auto;
-    width:600px;
+.center_main_area {
+    margin: 150px auto;
+    width: 600px;
 }
 
-.banner_item{
-    align-items: center; 
+.banner_item {
+    align-items: center;
     justify-content: center;
 }
 
-.center_item{
+.center_item {
     margin: auto;
     width: 95%;
     padding: 2px;
 }
 
-.cover_rank{
-    position:absolute; 
-    top:0px; 
-    left:0px;
+.cover_rank {
+    position: absolute;
+    top: 0px;
+    left: 0px;
     height: 60px;
-    width:40px;
+    width: 40px;
 }
 
 
-.all_footer {  
-    bottom: 0px; 
+.all_footer {
+    bottom: 0px;
 }
 
-.book_img{
-    max-width:350px;
+.book_img {
+    max-width: 350px;
 }

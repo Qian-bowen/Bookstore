@@ -28,69 +28,64 @@ public class CartController {
     private BookService bookService;
 
     @Autowired
-    public CartController(CartService cartService,BookService bookService)
-    {
-        this.cartService=cartService;
-        this.bookService=bookService;
+    public CartController(CartService cartService, BookService bookService) {
+        this.cartService = cartService;
+        this.bookService = bookService;
     }
 
-    @RequestMapping(value="/bookdetail/add_cart",method = RequestMethod.POST)
-    public Msg storeCart(@RequestBody Map<String,Integer> params)
-    {
-        Integer user_id=SessionUtil.getUserId();
-        Integer book_id=params.get(Constant.BOOK_ID);
-        Integer piece=params.get(Constant.PIECE);
-        System.out.println("cart get:"+user_id+" book_id:"+book_id);
-        Cart cart=new Cart(user_id,book_id,piece);
-        boolean store=cartService.storeCart(cart);
+    @RequestMapping(value = "/bookdetail/add_cart", method = RequestMethod.POST)
+    public Msg storeCart(@RequestBody Map<String, Integer> params) {
+        Integer user_id = SessionUtil.getUserId();
+        Integer book_id = params.get(Constant.BOOK_ID);
+        Integer piece = params.get(Constant.PIECE);
+        System.out.println("cart get:" + user_id + " book_id:" + book_id);
+        Cart cart = new Cart(user_id, book_id, piece);
+        boolean store = cartService.storeCart(cart);
         Msg msg;
-        if(store)
-            msg = MsgUtil.makeMsg(MsgCode.SUCCESS,MsgUtil.ADD_CART_ITEM_MSG);
+        if (store)
+            msg = MsgUtil.makeMsg(MsgCode.SUCCESS, MsgUtil.ADD_CART_ITEM_MSG);
         else
-            msg=MsgUtil.makeMsg(MsgCode.ERROR);
+            msg = MsgUtil.makeMsg(MsgCode.ERROR);
         return msg;
     }
 
-    @RequestMapping(value="/cart")
-    public JSONObject getCart()
-    {
-        if(!SessionUtil.checkAuth())
+    @RequestMapping(value = "/cart")
+    public JSONObject getCart() {
+        if (!SessionUtil.checkAuth())
             return null;
 
         System.out.println("call push cart");
-        Integer user_id= SessionUtil.getUserId();
-        System.out.println("controller user_id:"+user_id);
-        List<Cart> carts=cartService.getCart(user_id);
+        Integer user_id = SessionUtil.getUserId();
+        System.out.println("controller user_id:" + user_id);
+        List<Cart> carts = cartService.getCart(user_id);
 
-        JSONObject cartJsonSend=new JSONObject();
-        List<Integer> cart_piece=new ArrayList<>();
-        List<JSONObject> books=new ArrayList<>();
+        JSONObject cartJsonSend = new JSONObject();
+        List<Integer> cart_piece = new ArrayList<>();
+        List<JSONObject> books = new ArrayList<>();
 
-        for(Cart cart : carts)
-        {
-            int book_id=cart.get_cart_id().get_book_id();
-            int piece=cart.get_piece();
-            Book book= bookService.findBookById(book_id);
+        for (Cart cart : carts) {
+            int book_id = cart.get_cart_id().get_book_id();
+            int piece = cart.get_piece();
+            Book book = bookService.findBookById(book_id);
             books.add(book.getBookJson());
             cart_piece.add(piece);
         }
 
-        cartJsonSend.put("user_id",user_id);
-        cartJsonSend.put("cart_piece",cart_piece);
-        cartJsonSend.put("books",books);
+        cartJsonSend.put("user_id", user_id);
+        cartJsonSend.put("cart_piece", cart_piece);
+        cartJsonSend.put("books", books);
 
         return cartJsonSend;
     }
 
-    @RequestMapping(value="/cart/modify")
-    public void modifyCartItem(@RequestBody CartJsonRec cartJsonRec)
-    {
-        if(!SessionUtil.checkAuth())
+    @RequestMapping(value = "/cart/modify")
+    public void modifyCartItem(@RequestBody CartJsonRec cartJsonRec) {
+        if (!SessionUtil.checkAuth())
             return;
-        int user_id=SessionUtil.getUserId();
-        System.out.println("cart modify controller:"+user_id+" "+cartJsonRec.book_id+" "+cartJsonRec.cart_op);
-        Operation cart_op=cartJsonRec.cart_op;
-        CartId cartId=new CartId(user_id,cartJsonRec.book_id);
-        cartService.modifyCartItem(cartId,cart_op);
+        int user_id = SessionUtil.getUserId();
+        System.out.println("cart modify controller:" + user_id + " " + cartJsonRec.book_id + " " + cartJsonRec.cart_op);
+        Operation cart_op = cartJsonRec.cart_op;
+        CartId cartId = new CartId(user_id, cartJsonRec.book_id);
+        cartService.modifyCartItem(cartId, cart_op);
     }
 }

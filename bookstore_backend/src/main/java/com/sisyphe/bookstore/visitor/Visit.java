@@ -19,25 +19,23 @@ import java.util.List;
 @Component
 @Configuration
 @EnableScheduling
-public class Visit{
-    private static Count count=new Count();
+public class Visit {
+    private static Count count = new Count();
 
     @Autowired
     private VisitDataRepository visitDataRepository;
 
     @PostConstruct
-    public void setValue()
-    {
-        Integer recordNum=visitDataRepository.getRecordNumber();
+    public void setValue() {
+        Integer recordNum = visitDataRepository.getRecordNumber();
         System.out.println(recordNum);
-        if(recordNum==0)
-        {
+        if (recordNum == 0) {
             //default set is zero
             return;
         }
-        Pageable pageable = PageRequest.of(0,1);
-        List<VisitData> visitData=visitDataRepository.getTopRecordByRecordTime(pageable);
-        if(visitData==null) return;
+        Pageable pageable = PageRequest.of(0, 1);
+        List<VisitData> visitData = visitDataRepository.getTopRecordByRecordTime(pageable);
+        if (visitData == null) return;
         count.setValue(visitData.get(0).getVisitNum());
     }
 
@@ -45,25 +43,23 @@ public class Visit{
      * write back every 5 minute
      */
     @Scheduled(fixedRate = 300000)
-    public void writeBack()
-    {
+    public void writeBack() {
         System.out.println("write back");
-        VisitData visitData=new VisitData(count.getCount(), LocalDateTime.now());
+        VisitData visitData = new VisitData(count.getCount(), LocalDateTime.now());
         visitDataRepository.saveAndFlush(visitData);
     }
 
     @PreDestroy
-    public void writeBackBeforeDestroy()
-    {
+    public void writeBackBeforeDestroy() {
         System.out.println("write back before destroy");
-        VisitData visitData=new VisitData(count.getCount(), LocalDateTime.now());
+        VisitData visitData = new VisitData(count.getCount(), LocalDateTime.now());
         visitDataRepository.saveAndFlush(visitData);
     }
 
-    public Visit(){}
+    public Visit() {
+    }
 
-    public synchronized int getCountValue()
-    {
+    public synchronized int getCountValue() {
         return count.incrementAndGet();
     }
 }

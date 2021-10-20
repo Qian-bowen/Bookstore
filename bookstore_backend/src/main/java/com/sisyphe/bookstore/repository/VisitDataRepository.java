@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface VisitDataRepository extends JpaRepository<VisitData,Integer> {
+public interface VisitDataRepository extends JpaRepository<VisitData, Integer> {
     @Query(value = "select count(v) from VisitData v")
     Integer getRecordNumber();
 

@@ -19,55 +19,47 @@ public class CartDaoImpl implements CartDao {
     CartRepository cartRepository;
 
     @Autowired
-    public CartDaoImpl(CartRepository cartRepository)
-    {
-        this.cartRepository=cartRepository;
+    public CartDaoImpl(CartRepository cartRepository) {
+        this.cartRepository = cartRepository;
     }
 
     @Override
-    public boolean storeCart(Cart cart)
-    {
+    public boolean storeCart(Cart cart) {
         System.out.println("dao impl store cart");
         cartRepository.save(cart);
         return true;
     }
 
     @Override
-    public List<Cart> getCart(int user_id)
-    {
+    public List<Cart> getCart(int user_id) {
         System.out.println("dao impl push cart");
-        List<Cart> cart=cartRepository.getCart();
+        List<Cart> cart = cartRepository.getCart();
         return cart;
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public void modifyCartItem(CartId cartId, Operation op)
-    {
-        switch(op)
-        {
-            case ADD:
-            {
-                Optional<Cart> cart=cartRepository.findById(cartId);
-                Cart origin_cart=cart.get();
+    public void modifyCartItem(CartId cartId, Operation op) {
+        switch (op) {
+            case ADD: {
+                Optional<Cart> cart = cartRepository.findById(cartId);
+                Cart origin_cart = cart.get();
                 origin_cart.add_piece();
                 //using save will update
                 cartRepository.save(origin_cart);
                 System.out.println("add item in cart");
                 break;
             }
-            case SUB:
-            {
-                Optional<Cart> cart=cartRepository.findById(cartId);
-                Cart origin_cart=cart.get();
-                if(origin_cart.get_piece()<=0) return;
+            case SUB: {
+                Optional<Cart> cart = cartRepository.findById(cartId);
+                Cart origin_cart = cart.get();
+                if (origin_cart.get_piece() <= 0) return;
                 origin_cart.sub_piece();
                 cartRepository.save(origin_cart);
                 System.out.println("sub item in cart");
                 break;
             }
-            case DEL:
-            {
+            case DEL: {
                 cartRepository.deleteById(cartId);
                 System.out.println("del item in cart");
                 break;

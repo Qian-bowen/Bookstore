@@ -13,5 +13,6 @@ public class RegisterJsonRec {
     public int user_type;
     public String admin_valid_pwd;
 
-    public RegisterJsonRec(){}
+    public RegisterJsonRec() {
+    }
 }

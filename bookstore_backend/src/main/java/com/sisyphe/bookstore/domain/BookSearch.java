@@ -6,11 +6,12 @@ public class BookSearch {
     SearchType type;
     String name;
 
-    public BookSearch(){}
-    public BookSearch(SearchType searchType, String bookName)
-    {
-        type= searchType;
-        name=bookName;
+    public BookSearch() {
+    }
+
+    public BookSearch(SearchType searchType, String bookName) {
+        type = searchType;
+        name = bookName;
     }
 
     public String getName() {

@@ -2,9 +2,9 @@ package com.sisyphe.bookstore.utils.msgutils;
 
 public enum MsgCode {
     SUCCESS(MsgUtil.SUCCESS, MsgUtil.SUCCESS_MSG),
-    ERROR(MsgUtil.ERROR,MsgUtil.ERROR_MSG),
-    LOGIN_USER_ERROR(MsgUtil.LOGIN_USER_ERROR,MsgUtil.LOGIN_USER_ERROR_MSG),
-    NOT_LOGGED_IN_ERROR(MsgUtil.NOT_LOGGED_IN_ERROR,MsgUtil.NOT_LOGGED_IN_ERROR_MSG);
+    ERROR(MsgUtil.ERROR, MsgUtil.ERROR_MSG),
+    LOGIN_USER_ERROR(MsgUtil.LOGIN_USER_ERROR, MsgUtil.LOGIN_USER_ERROR_MSG),
+    NOT_LOGGED_IN_ERROR(MsgUtil.NOT_LOGGED_IN_ERROR, MsgUtil.NOT_LOGGED_IN_ERROR_MSG);
 
     private int status;
     private String msg;

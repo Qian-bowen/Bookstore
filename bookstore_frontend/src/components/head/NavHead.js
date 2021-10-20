@@ -4,45 +4,45 @@ import {Selector} from "../tool/Choose";
 import * as userService from "../../services/userService";
 import {searchBookIntro} from "../../services/bookService";
 
-const option_item=["书名","作者","IBSN"];
+const option_item = ["书名", "作者", "IBSN"];
 
 
-class SearchBar extends React.Component{
+class SearchBar extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            searchStr:null
+        this.state = {
+            searchStr: null
         }
     }
 
-    changeSearch=(e)=>{
-        this.setState({searchStr:e.target.value});
+    changeSearch = (e) => {
+        this.setState({searchStr: e.target.value});
     }
 
-    searchCallback=(msg)=>{
+    searchCallback = (msg) => {
         console.log(msg);
         this.props.showSearchResult(msg);
     }
 
-    submitSearch=()=>{
-        if(this.state.searchStr==null||this.state.searchStr==="")
-        {
+    submitSearch = () => {
+        if (this.state.searchStr == null || this.state.searchStr === "") {
             return;
         }
-        searchBookIntro(this.state.searchStr,this.searchCallback);
+        searchBookIntro(this.state.searchStr, this.searchCallback);
     }
 
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <div className="columns">
                 <div className="column">
                 </div>
                 <div className="column is-two-thirds">
                     <div className={"field is-grouped"}>
-                        <input className="input is-link is-inverted" type="text" placeholder="输入名称进行搜索" onChange={this.changeSearch}/>
-                        <button className="button is-primary is-inverted is-rounded" onClick={this.submitSearch}>搜索</button>
+                        <input className="input is-link is-inverted" type="text" placeholder="输入名称进行搜索"
+                               onChange={this.changeSearch}/>
+                        <button className="button is-primary is-inverted is-rounded" onClick={this.submitSearch}>搜索
+                        </button>
                     </div>
                 </div>
                 <div className="column">
@@ -53,11 +53,11 @@ class SearchBar extends React.Component{
 }
 
 
-export default class NavHead extends React.Component{
+export default class NavHead extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            isAuthed:false,
+        this.state = {
+            isAuthed: false,
         }
 
     }
@@ -76,20 +76,18 @@ export default class NavHead extends React.Component{
         userService.checkSession(this.checkAuth);
     }
 
-    logout=()=>{
+    logout = () => {
         userService.logout();
         this.setState({isAuthed: false});
     }
 
-    showSearchResultCallback=(msg)=>{
+    showSearchResultCallback = (msg) => {
         this.props.showSearchResult(msg);
     }
 
 
-
-    render()
-    {
-        return(
+    render() {
+        return (
             <div className="block">
                 <section className="hero is-primary is-medium">
                     <div className="hero-head">
@@ -125,15 +123,17 @@ export default class NavHead extends React.Component{
                                         </a>
                                         <span className="navbar-item">
                                             {
-                                                (!this.state.isAuthed)?
+                                                (!this.state.isAuthed) ?
                                                     (
                                                         <Link to={"/login"}>
                                                             <a className="button is-primary is-inverted">
                                                                 <span>登录账户</span>
                                                             </a>
                                                         </Link>
-                                                    ): (
-                                                        <a className="button is-primary is-inverted" onClick={()=>{this.logout()}}>
+                                                    ) : (
+                                                        <a className="button is-primary is-inverted" onClick={() => {
+                                                            this.logout()
+                                                        }}>
                                                             <span>登出账户</span>
                                                         </a>
                                                     )

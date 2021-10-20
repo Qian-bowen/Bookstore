@@ -9,10 +9,9 @@ public class BookBuyComp {
     BigDecimal item_price;
 
 
-    public BookBuyComp(int bookId, Long total_num, BigDecimal item_price)
-    {
-        this.bookId=bookId;
-        this.total_num=total_num;
+    public BookBuyComp(int bookId, Long total_num, BigDecimal item_price) {
+        this.bookId = bookId;
+        this.total_num = total_num;
         this.item_price = item_price;
     }
 

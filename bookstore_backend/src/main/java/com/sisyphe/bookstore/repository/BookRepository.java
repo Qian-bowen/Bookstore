@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface BookRepository extends JpaRepository<Book,Integer> {
+public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query("select b from Book b")
     List<Book> getBooks(Pageable pageable);
 
-    @Transactional(propagation = Propagation.SUPPORTS,readOnly = true)
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     @Query(value = "select b from Book b where b.bookId = :id")
     Book getOne(@Param("id") Integer id);
 

@@ -30,22 +30,20 @@ public class BookController {
     private BookService bookService;
 
     @Autowired
-    public BookController(BookService bookService)
-    {
-        this.bookService=bookService;
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
     }
 
-    @RequestMapping(value={"/recmd","/manage"})
-    public String getBooks(@RequestBody Map<String,Integer> params) {
+    @RequestMapping(value = {"/recmd", "/manage"})
+    public String getBooks(@RequestBody Map<String, Integer> params) {
         System.out.println(params);
-        Integer fetch_num=params.get(Constant.FETCH_NUM);
-        Integer fetch_begin=params.get(Constant.FETCH_BEGIN);
-        System.out.println("fetch in outer:"+fetch_num+" "+fetch_begin);
-        List<Book> books=bookService.getBooks(fetch_num,fetch_begin);
+        Integer fetch_num = params.get(Constant.FETCH_NUM);
+        Integer fetch_begin = params.get(Constant.FETCH_BEGIN);
+        System.out.println("fetch in outer:" + fetch_num + " " + fetch_begin);
+        List<Book> books = bookService.getBooks(fetch_num, fetch_begin);
         //encode books
-        List<JSONObject> booksJson=new ArrayList<>();
-        for(Book book : books)
-        {
+        List<JSONObject> booksJson = new ArrayList<>();
+        for (Book book : books) {
             booksJson.add(book.getBookJson());
         }
         Gson gson = new Gson();
@@ -56,10 +54,9 @@ public class BookController {
 
     @RequestMapping("/book/search")
     public String searchBooks(@RequestBody BookSearch bookSearch) {
-        List<Book> books=bookService.searchBooks(bookSearch);
-        List<JSONObject> booksJson=new ArrayList<>();
-        for(Book book : books)
-        {
+        List<Book> books = bookService.searchBooks(bookSearch);
+        List<JSONObject> booksJson = new ArrayList<>();
+        for (Book book : books) {
             booksJson.add(book.getBookJson());
         }
         Gson gson = new Gson();
@@ -68,16 +65,16 @@ public class BookController {
     }
 
     @RequestMapping("/bookdetail")
-    public String getBook(@RequestBody Map<String,Integer> params){
-        Integer id=params.get(Constant.BOOK_ID);
-        System.out.println("query for book"+id);
-        Book book=bookService.findBookById(id);
+    public String getBook(@RequestBody Map<String, Integer> params) {
+        Integer id = params.get(Constant.BOOK_ID);
+        System.out.println("query for book" + id);
+        Book book = bookService.findBookById(id);
         Gson gson = new Gson();
         String book_json = gson.toJson(book.getBookJson());
         return book_json;
     }
 
-    @RequestMapping(value="/manage/admin/book/add",method = RequestMethod.POST)
+    @RequestMapping(value = "/manage/admin/book/add", method = RequestMethod.POST)
     public Msg addBook(@RequestParam("isbn") String isbn,
                        @RequestParam("name") String name,
                        @RequestParam("type") String type,
@@ -86,50 +83,46 @@ public class BookController {
                        @RequestParam("description") String description,
                        @RequestParam("inventory") Integer inventory,
                        @RequestParam("image") MultipartFile image) throws IOException {
-        if(SessionUtil.getUserType()!= Constant.ADMIN)
-        {
-            return MsgUtil.makeMsg(MsgCode.ERROR,MsgUtil.ADMIN_NO_AUTH);
+        if (SessionUtil.getUserType() != Constant.ADMIN) {
+            return MsgUtil.makeMsg(MsgCode.ERROR, MsgUtil.ADMIN_NO_AUTH);
         }
 
         System.out.println("add book");
 
 
-
-        Book book=new Book(isbn,name,type,author,price
-                ,description,inventory,image.getBytes());
-        boolean op=bookService.addBook(book);
-        if(op)
-            return MsgUtil.makeMsg(MsgCode.SUCCESS,"ADD BOOK SUCCESS!");
-        return MsgUtil.makeMsg(MsgCode.ERROR,"ADD BOOK FAIL!");
+        Book book = new Book(isbn, name, type, author, price
+                , description, inventory, image.getBytes());
+        boolean op = bookService.addBook(book);
+        if (op)
+            return MsgUtil.makeMsg(MsgCode.SUCCESS, "ADD BOOK SUCCESS!");
+        return MsgUtil.makeMsg(MsgCode.ERROR, "ADD BOOK FAIL!");
     }
 
-    @RequestMapping(value="/manage/admin/book/modify",method = RequestMethod.POST)
-    public Msg modifyBook(@RequestBody BookJson bookJson){
-        if(SessionUtil.getUserType()!= Constant.ADMIN)
-        {
-            return MsgUtil.makeMsg(MsgCode.ERROR,MsgUtil.ADMIN_NO_AUTH);
+    @RequestMapping(value = "/manage/admin/book/modify", method = RequestMethod.POST)
+    public Msg modifyBook(@RequestBody BookJson bookJson) {
+        if (SessionUtil.getUserType() != Constant.ADMIN) {
+            return MsgUtil.makeMsg(MsgCode.ERROR, MsgUtil.ADMIN_NO_AUTH);
         }
 
-        Book book=new Book(bookJson);
-        boolean op=bookService.modifyBook(book);
-        if(op)
-            return MsgUtil.makeMsg(MsgCode.SUCCESS,"MODIFY BOOK SUCCESS!");
-        return MsgUtil.makeMsg(MsgCode.ERROR,"MODIFY BOOK FAIL!");
+        Book book = new Book(bookJson);
+        boolean op = bookService.modifyBook(book);
+        if (op)
+            return MsgUtil.makeMsg(MsgCode.SUCCESS, "MODIFY BOOK SUCCESS!");
+        return MsgUtil.makeMsg(MsgCode.ERROR, "MODIFY BOOK FAIL!");
     }
 
-    @RequestMapping(value="/manage/admin/book/del",method = RequestMethod.POST)
-    public Msg delBook(@RequestBody Map<String,Integer> params){
-        if(SessionUtil.getUserType()!= Constant.ADMIN)
-        {
-            return MsgUtil.makeMsg(MsgCode.ERROR,MsgUtil.ADMIN_NO_AUTH);
+    @RequestMapping(value = "/manage/admin/book/del", method = RequestMethod.POST)
+    public Msg delBook(@RequestBody Map<String, Integer> params) {
+        if (SessionUtil.getUserType() != Constant.ADMIN) {
+            return MsgUtil.makeMsg(MsgCode.ERROR, MsgUtil.ADMIN_NO_AUTH);
         }
 
-        Integer book_id=params.get(Constant.BOOK_ID);
-        System.out.println("del book id:"+book_id);
-        boolean op=bookService.delBook(book_id);
-        if(op)
-            return MsgUtil.makeMsg(MsgCode.SUCCESS,"DEL BOOK SUCCESS!");
-        return MsgUtil.makeMsg(MsgCode.ERROR,"DEL BOOK FAIL!");
+        Integer book_id = params.get(Constant.BOOK_ID);
+        System.out.println("del book id:" + book_id);
+        boolean op = bookService.delBook(book_id);
+        if (op)
+            return MsgUtil.makeMsg(MsgCode.SUCCESS, "DEL BOOK SUCCESS!");
+        return MsgUtil.makeMsg(MsgCode.ERROR, "DEL BOOK FAIL!");
     }
 
 }

@@ -1,10 +1,10 @@
-import React,{useState} from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import * as orderService from '../services/orderService';
 import * as cartService from '../services/cartService';
 
 import {SimpleNav} from "../components/head/SimpleNav";
-import {BookPurchase,Counter,OrderForm} from "../components/CheckOut";
+import {BookPurchase, Counter, OrderForm} from "../components/CheckOut";
 import {history} from "../utils/history";
 import {convert_book_info} from "../services/bookService";
 import {modifyCarts} from "../services/cartService";
@@ -62,65 +62,71 @@ import {modifyCarts} from "../services/cartService";
 //     single_item1,single_item2,single_item3
 // ];
 
-const ADD=0;
-const SUB=1;
-const DEL=2;
+const ADD = 0;
+const SUB = 1;
+const DEL = 2;
 
-export default class CartView extends React.Component{
+export default class CartView extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            choose_all:false,
-            sum:0,
-            cart_show:[],
-            delete_butt:false,//whether show delete button
-            search:false,//whether in search mod
-            search_pool:[],//the item searched
-            checkout:false,
-            order:[]//final order
+        this.state = {
+            choose_all: false,
+            sum: 0,
+            cart_show: [],
+            delete_butt: false,//whether show delete button
+            search: false,//whether in search mod
+            search_pool: [],//the item searched
+            checkout: false,
+            order: []//final order
         };
     }
 
     componentDidMount() {
-        cartService.getCarts({},this.get_cart_content);
+        cartService.getCarts({}, this.get_cart_content);
     }
 
-    get_cart_content=(data)=>{
+    get_cart_content = (data) => {
         console.log(data);
-        let cart_pool=[];
-        let user_id=data['user_id'];
-        let books=data['books'];
-        let cart_piece=data['cart_piece'];
-        let books_len=books.length;
-        let piece_len=cart_piece.length;
-        console.log("book len:"+books_len);
-        let tmp_cart_id=0;
-        for(let i=0 ;i<books_len;++i)
-        {
-            let cur_book=convert_book_info(books[i]);
-            console.log("push book id:"+cur_book['id']);
+        let cart_pool = [];
+        let user_id = data['user_id'];
+        let books = data['books'];
+        let cart_piece = data['cart_piece'];
+        let books_len = books.length;
+        let piece_len = cart_piece.length;
+        console.log("book len:" + books_len);
+        let tmp_cart_id = 0;
+        for (let i = 0; i < books_len; ++i) {
+            let cur_book = convert_book_info(books[i]);
+            console.log("push book id:" + cur_book['id']);
 
-            let cart_item={book_id:cur_book['id'],name: cur_book['name'], piece: cart_piece[i] ,img:cur_book['img'],money: cur_book['price'],chosen:false,cart_id:tmp_cart_id};
+            let cart_item = {
+                book_id: cur_book['id'],
+                name: cur_book['name'],
+                piece: cart_piece[i],
+                img: cur_book['img'],
+                money: cur_book['price'],
+                chosen: false,
+                cart_id: tmp_cart_id
+            };
             cart_pool.push(cart_item);
             tmp_cart_id++;
         }
-        this.setState({cart_show:cart_pool});
+        this.setState({cart_show: cart_pool});
     }
 
     /*
     * calculate the sum money of all items checked
     * */
-    check_out=()=>{
-        let tmp_sum=0;
-        let cart_pool=this.state.cart_show;
-        cart_pool.map((it,key)=>{
-            if(it.chosen===true)
-            {
-                tmp_sum+=it.money*it.piece;
+    check_out = () => {
+        let tmp_sum = 0;
+        let cart_pool = this.state.cart_show;
+        cart_pool.map((it, key) => {
+            if (it.chosen === true) {
+                tmp_sum += it.money * it.piece;
             }
         });
-        this.setState((state)=>({
-            sum:tmp_sum
+        this.setState((state) => ({
+            sum: tmp_sum
         }))
     }
 
@@ -131,15 +137,15 @@ export default class CartView extends React.Component{
     /*
     * reverse the state: choose all && not choose all
     * */
-    on_choose_reverse=(props)=>{
-        let reset_chosen=!this.state.choose_all;
-        let cart_pool=this.state.cart_show;
-        this.setState((state)=>({
-            choose_all:reset_chosen
+    on_choose_reverse = (props) => {
+        let reset_chosen = !this.state.choose_all;
+        let cart_pool = this.state.cart_show;
+        this.setState((state) => ({
+            choose_all: reset_chosen
         }));
 
-        cart_pool.map((it,key)=>{
-            it.chosen=reset_chosen;
+        cart_pool.map((it, key) => {
+            it.chosen = reset_chosen;
         });
 
         this.check_out();
@@ -148,42 +154,43 @@ export default class CartView extends React.Component{
     /*
     * reverse the choose state of single item
     * */
-    on_choose_reverse_item=(cart_id)=>{
-        let cart_pool=this.state.cart_show;
-        cart_pool.map((it,key)=>{
-            if(cart_id===it.cart_id)
-            {
-                let reset_chosen=!it.chosen;
+    on_choose_reverse_item = (cart_id) => {
+        let cart_pool = this.state.cart_show;
+        cart_pool.map((it, key) => {
+            if (cart_id === it.cart_id) {
+                let reset_chosen = !it.chosen;
                 it.chosen = reset_chosen;
             }
         });
 
-        this.setState({cart_show:cart_pool},()=>{this.check_out();});
+        this.setState({cart_show: cart_pool}, () => {
+            this.check_out();
+        });
     }
 
     /*
     * show or hide delete button
     * */
-    on_reverse_delete_button=()=>{
-        let reset_butt=!this.state.delete_butt;
-        this.setState((state)=>({
-            delete_butt:reset_butt
+    on_reverse_delete_button = () => {
+        let reset_butt = !this.state.delete_butt;
+        this.setState((state) => ({
+            delete_butt: reset_butt
         }));
     }
 
     /*
     * remove item according to cart_id
     * */
-    on_remove_item=(cart_id)=>{
-        let cart_pool=this.state.cart_show;
+    on_remove_item = (cart_id) => {
+        let cart_pool = this.state.cart_show;
         let del_book_id;
-        del_book_id=cart_pool.find(item=>item.cart_id===cart_id).book_id;
-        console.log("del book id:"+del_book_id);
-        let obj={book_id:del_book_id,cart_op:DEL };
-        cart_pool=cart_pool.filter(item => item.cart_id !== cart_id);
+        del_book_id = cart_pool.find(item => item.cart_id === cart_id).book_id;
+        console.log("del book id:" + del_book_id);
+        let obj = {book_id: del_book_id, cart_op: DEL};
+        cart_pool = cart_pool.filter(item => item.cart_id !== cart_id);
 
         modifyCarts(obj);
-        this.setState({cart_show:cart_pool});
+        this.setState({cart_show: cart_pool});
         this.check_out();
     }
 
@@ -191,27 +198,26 @@ export default class CartView extends React.Component{
     * add the num of item by one
     * args: choice==0 increase, choose==1 decrease
     * */
-    on_step_change_item=(choice,cart_id)=>{
+    on_step_change_item = (choice, cart_id) => {
         let op;
-        let cart_pool=this.state.cart_show;
-        for(let it=0;it<cart_pool.length;++it) {
+        let cart_pool = this.state.cart_show;
+        for (let it = 0; it < cart_pool.length; ++it) {
             if (cart_id === cart_pool[it].cart_id) {
                 if (choice === 0) {
                     cart_pool[it].piece += 1;
-                    op=ADD;
-                }
-                else if (choice === 1 && cart_pool[it].piece > 0) {
+                    op = ADD;
+                } else if (choice === 1 && cart_pool[it].piece > 0) {
                     cart_pool[it].piece -= 1;
-                    op=SUB;
+                    op = SUB;
                     if (cart_pool[it].piece === 0) {
-                       this.on_remove_item(cart_id);
-                       return;
+                        this.on_remove_item(cart_id);
+                        return;
                     }
                 }
                 //send data to backend
-                let obj={book_id:cart_pool[it].book_id,cart_op:op };
+                let obj = {book_id: cart_pool[it].book_id, cart_op: op};
                 modifyCarts(obj);
-                this.setState({cart_show:cart_pool});
+                this.setState({cart_show: cart_pool});
                 break;
             }
         }
@@ -222,56 +228,55 @@ export default class CartView extends React.Component{
     * search item in cart
     * TODO:handle english string(convert to lowercase)
     * */
-    on_search_item=(substr)=>{
-        let cart_pool=this.state.cart_show;
+    on_search_item = (substr) => {
+        let cart_pool = this.state.cart_show;
         //substr is empty ,means not in search mod
-        if(substr==="")
-        {
+        if (substr === "") {
             this.setState({
-                search:false
+                search: false
             })
             return;
         }
 
         this.setState({
-            search:true,
-            search_pool:cart_pool.filter((it)=>it.name.search(substr)!==-1)
-        },()=>{this.check_out();});
+            search: true,
+            search_pool: cart_pool.filter((it) => it.name.search(substr) !== -1)
+        }, () => {
+            this.check_out();
+        });
     }
-
-
 
 
     /*
     * generate the order based on the chosen item
     * */
-    on_checkout=()=>{
-        let tmp_sum=this.state.sum;
-        let tmp_items_array=[];
-        let cart_pool=this.state.cart_show;
+    on_checkout = () => {
+        let tmp_sum = this.state.sum;
+        let tmp_items_array = [];
+        let cart_pool = this.state.cart_show;
 
-        for(let item=0;item<cart_pool.length;++item)
-        {
-            if(cart_pool[item].chosen===true)
-            {
-                let tmp_order_item={book_id:cart_pool[item].book_id,piece:cart_pool[item].piece};
+        for (let item = 0; item < cart_pool.length; ++item) {
+            if (cart_pool[item].chosen === true) {
+                let tmp_order_item = {book_id: cart_pool[item].book_id, piece: cart_pool[item].piece};
                 tmp_items_array.push(tmp_order_item);
             }
         }
 
-        this.setState({cart_show:cart_pool.filter((it)=>it.chosen===false)},
-            ()=>{this.check_out();});
+        this.setState({cart_show: cart_pool.filter((it) => it.chosen === false)},
+            () => {
+                this.check_out();
+            });
 
 
-        let submit_order={
-            total_price:tmp_sum,
-            orderItems:tmp_items_array
+        let submit_order = {
+            total_price: tmp_sum,
+            orderItems: tmp_items_array
         };
-        console.log("order to submit:"+submit_order);
-        orderService.submitOrder(submit_order,this.show_order);
+        console.log("order to submit:" + submit_order);
+        orderService.submitOrder(submit_order, this.show_order);
     }
 
-    show_order=(data)=>{
+    show_order = (data) => {
         console.log(data);
         alert(data.msg);
         // let order_id=data['order_id'];
@@ -301,14 +306,12 @@ export default class CartView extends React.Component{
     }
 
 
-
-
     /*
     * render  books in array
     * */
-    render_book_purchase=(tmp_cart)=>{
-        let bk_purchase=[];
-        tmp_cart.map((it,index)=>{
+    render_book_purchase = (tmp_cart) => {
+        let bk_purchase = [];
+        tmp_cart.map((it, index) => {
             bk_purchase.push(
                 <BookPurchase
                     item={it}
@@ -322,9 +325,8 @@ export default class CartView extends React.Component{
         return bk_purchase;
     }
 
-    render()
-    {
-        return(
+    render() {
+        return (
             <div>
                 <SimpleNav
                     on_reverse_delete_button={this.on_reverse_delete_button}
@@ -332,13 +334,13 @@ export default class CartView extends React.Component{
                 />
 
                 {
-                    (!this.state.search)?(
+                    (!this.state.search) ? (
                         <div className="block">
                             <div className="main_area">
                                 {this.render_book_purchase(this.state.cart_show)}
                             </div>
                         </div>
-                    ):(
+                    ) : (
                         <div className="block">
                             <div className="main_area">
                                 {
@@ -357,11 +359,11 @@ export default class CartView extends React.Component{
                 />
 
                 {
-                    (this.state.checkout)?(
+                    (this.state.checkout) ? (
                         <div className="main_area">
                             <OrderForm order={this.state.order}/>
                         </div>
-                    ):null
+                    ) : null
                 }
 
             </div>

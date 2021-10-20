@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface CartService {
     boolean storeCart(Cart cart);
+
     void modifyCartItem(CartId cartId, Operation op);
+
     List<Cart> getCart(int user_id);
 }

@@ -13,12 +13,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class InterceptorConfig implements WebMvcConfigurer {
 
     @Bean
-    public SessionValidateInterceptor sessionValidateInterceptor(){
+    public SessionValidateInterceptor sessionValidateInterceptor() {
         return new SessionValidateInterceptor();
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry){
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionValidateInterceptor()).addPathPatterns("/**")
                 .excludePathPatterns("/login").excludePathPatterns("/register").excludePathPatterns("/visitor/*");
     }
