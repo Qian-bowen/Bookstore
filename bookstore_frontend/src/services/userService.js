@@ -1,9 +1,10 @@
 import {postRequest} from "../utils/ajax";
 import React from "react";
 import {history} from "../utils/history";
+import {prefix} from "../config/config";
 
 export const login = (data) => {
-    const url = 'http://localhost:8080/login';
+    const url = prefix+'/login';
     const callback = (data) => {
         console.log("back:" + data.username);
         console.log("back:" + data.status);
@@ -19,7 +20,7 @@ export const login = (data) => {
 };
 
 export const logout = () => {
-    const url = 'http://localhost:8080/logout';
+    const url = prefix+'/logout';
     const callback = (data) => {
         if (data.status >= 0) {
             localStorage.removeItem('user');
@@ -34,7 +35,7 @@ export const logout = () => {
 
 export const register = (data) => {
     console.log("post in login:" + data);
-    const url = 'http://localhost:8080/register';
+    const url = prefix+'/register';
     const callback = (data) => {
         if (data.status >= 0) {
             history.push("/login");
@@ -47,6 +48,6 @@ export const register = (data) => {
 };
 
 export const checkSession = (callback) => {
-    const url = 'http://localhost:8080/checkSession';
+    const url = prefix+'/checkSession';
     postRequest(url, {}, callback);
 };

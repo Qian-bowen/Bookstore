@@ -33,7 +33,7 @@ export default class BookDetailView extends React.Component {
         const bookId = arr[0].substr(4);
         console.log("bookid:" + bookId);
         const callback = (data) => {
-            let convert_book = bookService.convert_book_info(data);
+            let convert_book = bookService.convert_bookdetail_info(data);
             console.log(convert_book);
             this.setState({book_info: convert_book})
         }

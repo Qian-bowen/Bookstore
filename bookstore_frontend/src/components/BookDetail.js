@@ -2,6 +2,7 @@ import React from 'react';
 import {Avatar} from "./tool/Avatar";
 import BookTag from "./tool/Tag";
 import {addCart} from "../services/cartService";
+import {submitBookComment} from "../services/bookService";
 
 class BookCard extends React.Component {
 
@@ -108,26 +109,15 @@ class BookComment extends React.Component {
     render() {
         return (
             <div className={"box"}>
-                <Avatar user={userinfo}/>
-                <CommentContent content={this.props.content}/>
+                {/*<Avatar user={userinfo}/>*/}
+                <div>用户Id:{this.props.remark.userId}</div>
+                <CommentContent content={this.props.remark.content}/>
             </div>
         );
     }
 }
 
-class AddComment extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
-    render() {
-        return (
-            <div className={"box"}>
-
-            </div>
-        );
-    }
-}
 
 class BookBriefIntro extends React.Component {
     constructor(props) {
@@ -150,6 +140,41 @@ class BookBriefIntro extends React.Component {
 export default class BookDetail extends React.Component {
     constructor(props) {
         super(props);
+        this.state={
+            comment:""
+        }
+    }
+
+    render_book_remark=(remark)=>{
+        if(remark==null) return;
+        let array=[];
+        remark.map((r)=>{
+            array.push(<BookComment remark={r}/>)
+        })
+        return array;
+    }
+
+    add_comment=()=>{
+        if(this.state.comment==="") {
+            alert("please enter something")
+            return
+        }
+        let bookId=this.props.book.id
+        let remark={
+            "bookId":bookId,
+            "content":this.state.comment
+        }
+        const callback=(back)=>{
+            if(back.status===0)
+            {
+                alert("add success");
+            }
+            else
+            {
+                alert("add fail")
+            }
+        }
+        submitBookComment(remark,callback);
     }
 
     render() {
@@ -186,9 +211,16 @@ export default class BookDetail extends React.Component {
 
                 <div className="box">
                     <p className="title is-4">读者评价</p>
-                    <BookComment/>
-                    <BookComment/>
+                    {
+                        this.render_book_remark(book.bookremark)
+                    }
                 </div>
+
+                <div className="control">
+                    <textarea className="textarea is-focused" placeholder="添加评论" onChange={(event)=>this.setState({comment:event.target.value})}></textarea>
+                    <button className="button is-info" onClick={()=>this.add_comment()}>评论</button>
+                </div>
+
             </div>
         );
     }

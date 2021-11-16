@@ -1,21 +1,22 @@
 import {postRequest} from "../utils/ajax";
 import * as Type from "../components/constant/Type";
+import {prefix} from "../config/config";
 
 export const submitOrder = (data, callback) => {
     console.log("post in submit order");
-    const url = 'http://localhost:8080/cart/order';
+    const url = prefix+'/cart/order';
     data = {"orderItems": data.orderItems};
     postRequest(url, data, callback);
 };
 
 export const getOrders = (fetch_num, fetch_begin, callback) => {
-    const url = 'http://localhost:8080/order/get_orders';
+    const url = prefix+'/order/get_orders';
     let data = {"fetch_num": fetch_num, "fetch_begin": fetch_begin};
     postRequest(url, data, callback);
 }
 
 export const searchOrderByName = (name, callback) => {
-    const url = 'http://localhost:8080/order/search';
+    const url = prefix+'/order/search';
     let data = {
         "type": 0,
         "user_id": null,
@@ -27,7 +28,7 @@ export const searchOrderByName = (name, callback) => {
 }
 
 export const searchOrderByTime = (begin_time, end_time, callback) => {
-    const url = 'http://localhost:8080/order/search';
+    const url = prefix+'/order/search';
     let data = {
         "type": 1,
         "user_id": null,
@@ -39,7 +40,7 @@ export const searchOrderByTime = (begin_time, end_time, callback) => {
 }
 
 export const searchPersonalOrder = (begin_time, end_time, callback) => {
-    const url = 'http://localhost:8080/order/search';
+    const url = prefix+'/order/search';
     let user = JSON.parse(localStorage.getItem('user'));
     console.log("user_id:" + user.userID + " type:" + Type.searchByType.by_user_id);
     let data = {
@@ -53,7 +54,7 @@ export const searchPersonalOrder = (begin_time, end_time, callback) => {
 }
 
 export const searchPersonalOrderByBook = (book_name, callback) => {
-    const url = 'http://localhost:8080/order/search';
+    const url = prefix+'/order/search';
     let user = JSON.parse(localStorage.getItem('user'));
     console.log("user_id:" + user.userID + " type:" + Type.searchByType.by_user_id);
     let data = {
@@ -67,7 +68,7 @@ export const searchPersonalOrderByBook = (book_name, callback) => {
 }
 
 export const searchPersonalOrderByTime = (begin_time, end_time, callback) => {
-    const url = 'http://localhost:8080/order/search';
+    const url = prefix+'/order/search';
     let user = JSON.parse(localStorage.getItem('user'));
     console.log("user_id:" + user.userID + " type:" + Type.searchByType.by_user_id);
     let data = {

@@ -1,12 +1,12 @@
 package com.sisyphe.bookstore.entity;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sisyphe.bookstore.Json.BookJson;
 import com.sisyphe.bookstore.utils.RedisUtil;
-import net.sf.json.JSONObject;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.persistence.*;

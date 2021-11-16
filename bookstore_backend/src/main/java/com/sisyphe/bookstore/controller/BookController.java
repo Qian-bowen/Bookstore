@@ -1,13 +1,15 @@
 package com.sisyphe.bookstore.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.sisyphe.bookstore.Json.BookJson;
 import com.sisyphe.bookstore.constant.Constant;
 import com.sisyphe.bookstore.domain.BookSearch;
+import com.sisyphe.bookstore.entity.BookRemark;
 import com.sisyphe.bookstore.utils.msgutils.Msg;
 import com.sisyphe.bookstore.utils.msgutils.MsgCode;
 import com.sisyphe.bookstore.utils.msgutils.MsgUtil;
 import com.sisyphe.bookstore.utils.sessionutils.SessionUtil;
-import net.sf.json.JSONObject;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -65,13 +67,15 @@ public class BookController {
     }
 
     @RequestMapping("/bookdetail")
-    public String getBook(@RequestBody Map<String, Integer> params) {
+    public Msg getBook(@RequestBody Map<String, Integer> params) {
         Integer id = params.get(Constant.BOOK_ID);
         System.out.println("query for book" + id);
         Book book = bookService.findBookById(id);
-        Gson gson = new Gson();
-        String book_json = gson.toJson(book.getBookJson());
-        return book_json;
+        List<BookRemark> bookRemarks = bookService.findBookRemarkByBookId(id);
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("book",book.getBookJson());
+        jsonObject.put("bookremark",BookRemark.toJsonArray(bookRemarks));
+        return new Msg(MsgCode.SUCCESS,jsonObject);
     }
 
     @RequestMapping(value = "/manage/admin/book/add", method = RequestMethod.POST)
@@ -123,6 +127,33 @@ public class BookController {
         if (op)
             return MsgUtil.makeMsg(MsgCode.SUCCESS, "DEL BOOK SUCCESS!");
         return MsgUtil.makeMsg(MsgCode.ERROR, "DEL BOOK FAIL!");
+    }
+
+    @RequestMapping(value = "/bookremark/add",method = RequestMethod.POST)
+    public Msg addBookRemark(@RequestBody Map<String, String> params)
+    {
+        if(!SessionUtil.checkAuth())
+        {
+            System.out.println("add remark fail not login");
+            return new Msg(MsgCode.ERROR);
+        }
+        Integer bookId=Integer.valueOf(params.get("bookId"));
+        String content=(String) params.get("content");
+        Integer userId=SessionUtil.getUserId();
+        BookRemark bookRemark=new BookRemark(bookId,userId,content);
+        bookService.addBookRemarkByBookId(bookRemark);
+        return new Msg(MsgCode.SUCCESS);
+    }
+
+    @RequestMapping(value = "/book/tag/search",method = RequestMethod.POST)
+    public Msg addBookRelate(@RequestBody Map<String, String> params)
+    {
+        String tag=(String) params.get("tag");
+        List<Book> bookList = bookService.getRelatedBook(tag);
+        JSONArray array=Book.book2json(bookList);
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("book",array);
+        return new Msg(MsgCode.SUCCESS,jsonObject);
     }
 
 }

@@ -24,4 +24,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query("select b from Book b where b.name=:name")
     List<Book> getBooksByExactName(@Param("name") String name);
 
+    @Query("select b from Book b join BookTag t on b.bookId=t.book_id where t.tag=:tag")
+    List<Book> getBooksByTag(@Param("tag") String tag);
 }

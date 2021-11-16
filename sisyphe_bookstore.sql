@@ -147,3 +147,22 @@ CREATE TABLE `visit_data` (
                         
                         PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `book_tag`;
+CREATE TABLE `book_tag` (
+						`id` int(11) NOT NULL AUTO_INCREMENT,
+                        `book_id` int(11) NOT NULL,
+						`tag` varchar(50) NOT NULL,
+                        PRIMARY KEY (`id`),
+                        FOREIGN KEY (`book_id`) REFERENCES `book` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+insert into `book_tag` values (1,4,'language');
+insert into `book_tag` values (2,4,'chinese');
+insert into `book_tag` values (3,4,'literature');
+insert into `book_tag` values (4,4,'novel');
+insert into `book_tag` values (5,9,'children');
+insert into `book_tag` values (6,9,'literature');
+insert into `book_tag` values (7,9,'chinese');
+insert into `book_tag` values (8,9,'fiction');
+insert into `book_tag` values (9,9,'novel');

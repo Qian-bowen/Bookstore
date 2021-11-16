@@ -2,6 +2,7 @@ package com.sisyphe.bookstore.service;
 
 import com.sisyphe.bookstore.domain.BookSearch;
 import com.sisyphe.bookstore.entity.Book;
+import com.sisyphe.bookstore.entity.BookRemark;
 
 import java.util.List;
 
@@ -19,4 +20,9 @@ public interface BookService {
     boolean delBook(Integer id);
 
     boolean reduceInventory(Integer id, Integer reduceNum);
+
+    List<BookRemark> findBookRemarkByBookId(Integer bookId);
+    void addBookRemarkByBookId(BookRemark br);
+
+    List<Book> getRelatedBook(String tag);
 }
